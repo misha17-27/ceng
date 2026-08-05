@@ -1,10 +1,22 @@
-# ceng.az - static/PHP build
+# ceng.az - static/PHP build (served from /yeni)
 Options -Indexes
 DirectoryIndex index.php index.html
 AddDefaultCharset UTF-8
 
 # Deny access to version-control metadata if present
 RedirectMatch 404 /\.git
+
+# IMPORTANT: having RewriteEngine On in this subfolder stops Apache from
+# inheriting the parent WordPress .htaccess rewrite rules, which otherwise
+# catch every /yeni/* request and return WordPress's 404 page.
+# Existing files and directories (assets, page folders) are served directly.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /yeni/
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+</IfModule>
 
 <IfModule mod_expires.c>
   ExpiresActive On
