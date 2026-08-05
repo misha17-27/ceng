@@ -1,0 +1,8 @@
+# OS / editor junk
+Thumbs.db
+ehthumbs.db
+.DS_Store
+Desktop.ini
+*~
+.idea/
+.vscode/
