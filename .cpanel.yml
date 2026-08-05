@@ -1,6 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/ceng/public_html/
+    # Deploy INTO the /yeni subfolder so the live site is https://ceng.az/yeni
+    # This only ever writes inside public_html/yeni and never touches the rest of public_html.
+    - export DEPLOYPATH=/home/ceng/public_html/yeni/
     - /bin/mkdir -p $DEPLOYPATH
     - /usr/bin/rsync -a --delete --exclude='.git' --exclude='.cpanel.yml' --exclude='README.md' ./ $DEPLOYPATH

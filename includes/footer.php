@@ -7,8 +7,8 @@
 		<div class="elementor-element elementor-element-3ac321b9 e-con-full e-flex e-con e-child" data-id="3ac321b9" data-element_type="container">
 				<div class="elementor-element elementor-element-6db94faf elementor-widget elementor-widget-image" data-id="6db94faf" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-																<a href="/">
-							<img width="414" height="153" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20414%20153'%3E%3C/svg%3E" class="attachment-full size-full wp-image-292" alt="" data-lazy-srcset="/wp-content/uploads/2025/03/logo-png-—-ag.png 414w, /wp-content/uploads/2025/03/logo-png-—-ag-300x111.png 300w" data-lazy-sizes="(max-width: 414px) 100vw, 414px" data-lazy-src="/wp-content/uploads/2025/03/logo-png-—-ag.png" /><noscript><img width="414" height="153" src="/wp-content/uploads/2025/03/logo-png-—-ag.png" class="attachment-full size-full wp-image-292" alt="" srcset="/wp-content/uploads/2025/03/logo-png-—-ag.png 414w, /wp-content/uploads/2025/03/logo-png-—-ag-300x111.png 300w" sizes="(max-width: 414px) 100vw, 414px" /></noscript>								</a>
+																<a href="/yeni/">
+							<img width="414" height="153" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20414%20153'%3E%3C/svg%3E" class="attachment-full size-full wp-image-292" alt="" data-lazy-srcset="/yeni/wp-content/uploads/2025/03/logo-png-—-ag.png 414w, /yeni/wp-content/uploads/2025/03/logo-png-—-ag-300x111.png 300w" data-lazy-sizes="(max-width: 414px) 100vw, 414px" data-lazy-src="/yeni/wp-content/uploads/2025/03/logo-png-—-ag.png" /><noscript><img width="414" height="153" src="/yeni/wp-content/uploads/2025/03/logo-png-—-ag.png" class="attachment-full size-full wp-image-292" alt="" srcset="/yeni/wp-content/uploads/2025/03/logo-png-—-ag.png 414w, /yeni/wp-content/uploads/2025/03/logo-png-—-ag-300x111.png 300w" sizes="(max-width: 414px) 100vw, 414px" /></noscript>								</a>
 															</div>
 				</div>
 				<div class="elementor-element elementor-element-6f1b0501 elementor-widget elementor-widget-text-editor" data-id="6f1b0501" data-element_type="widget" data-widget_type="text-editor.default">
@@ -24,18 +24,18 @@
 				<div class="elementor-element elementor-element-25a81e6 elementor-nav-menu__align-start elementor-nav-menu--dropdown-none elementor-widget elementor-widget-nav-menu" data-id="25a81e6" data-element_type="widget" data-settings="{&quot;layout&quot;:&quot;vertical&quot;,&quot;submenu_icon&quot;:{&quot;value&quot;:&quot;&lt;svg class=\&quot;e-font-icon-svg e-fas-caret-down\&quot; viewBox=\&quot;0 0 320 512\&quot; xmlns=\&quot;http:\/\/www.w3.org\/2000\/svg\&quot;&gt;&lt;path d=\&quot;M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z\&quot;&gt;&lt;\/path&gt;&lt;\/svg&gt;&quot;,&quot;library&quot;:&quot;fa-solid&quot;}}" data-widget_type="nav-menu.default">
 				<div class="elementor-widget-container">
 								<nav aria-label="Menu" class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-vertical e--pointer-none">
-				<ul id="menu-1-25a81e6" class="elementor-nav-menu sm-vertical"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-60 current_page_item menu-item-106"><a href="/" aria-current="page" class="elementor-item elementor-item-active">Ana səhifə</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107"><a href="/haqqimizda/" class="elementor-item">Haqqımızda</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-278"><a href="/xidmetlerimiz/" class="elementor-item">Xidmətlərimiz</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-269"><a href="/layiheler/" class="elementor-item">Layihələr</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108"><a href="/elaqe/" class="elementor-item">Əlaqə</a></li>
+				<ul id="menu-1-25a81e6" class="elementor-nav-menu sm-vertical"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-60 current_page_item menu-item-106"><a href="/yeni/" aria-current="page" class="elementor-item elementor-item-active">Ana səhifə</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107"><a href="/yeni/haqqimizda/" class="elementor-item">Haqqımızda</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-278"><a href="/yeni/xidmetlerimiz/" class="elementor-item">Xidmətlərimiz</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-269"><a href="/yeni/layiheler/" class="elementor-item">Layihələr</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108"><a href="/yeni/elaqe/" class="elementor-item">Əlaqə</a></li>
 </ul>			</nav>
 						<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
-				<ul id="menu-2-25a81e6" class="elementor-nav-menu sm-vertical"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-60 current_page_item menu-item-106"><a href="/" aria-current="page" class="elementor-item elementor-item-active" tabindex="-1">Ana səhifə</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107"><a href="/haqqimizda/" class="elementor-item" tabindex="-1">Haqqımızda</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-278"><a href="/xidmetlerimiz/" class="elementor-item" tabindex="-1">Xidmətlərimiz</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-269"><a href="/layiheler/" class="elementor-item" tabindex="-1">Layihələr</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108"><a href="/elaqe/" class="elementor-item" tabindex="-1">Əlaqə</a></li>
+				<ul id="menu-2-25a81e6" class="elementor-nav-menu sm-vertical"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-60 current_page_item menu-item-106"><a href="/yeni/" aria-current="page" class="elementor-item elementor-item-active" tabindex="-1">Ana səhifə</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107"><a href="/yeni/haqqimizda/" class="elementor-item" tabindex="-1">Haqqımızda</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-278"><a href="/yeni/xidmetlerimiz/" class="elementor-item" tabindex="-1">Xidmətlərimiz</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-269"><a href="/yeni/layiheler/" class="elementor-item" tabindex="-1">Layihələr</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108"><a href="/yeni/elaqe/" class="elementor-item" tabindex="-1">Əlaqə</a></li>
 </ul>			</nav>
 						</div>
 				</div>
@@ -53,13 +53,13 @@
 				<div class="elementor-widget-container">
 							<ul class="elementor-icon-list-items">
 							<li class="elementor-icon-list-item">
-											<a href="/">
+											<a href="/yeni/">
 
 											<span class="elementor-icon-list-text">Telefon: +994 70 8109889</span>
 											</a>
 									</li>
 								<li class="elementor-icon-list-item">
-											<a href="/cdn-cgi/l/email-protection#1d74737b725d7e78737a337c67">
+											<a href="/yeni/cdn-cgi/l/email-protection#1d74737b725d7e78737a337c67">
 
 											<span class="elementor-icon-list-text">Mail: <span class="__cf_email__" data-cfemail="6b02050d042b080e050c450a11">[email&#160;protected]</span></span>
 											</a>

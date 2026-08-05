@@ -6,7 +6,6 @@ AddDefaultCharset UTF-8
 # Deny access to version-control metadata if present
 RedirectMatch 404 /\.git
 
-
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/css "access plus 1 month"
