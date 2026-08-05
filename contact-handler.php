@@ -1,6 +1,6 @@
 <?php
 // Simple PHP mail handler replacing the WordPress/Elementor Pro form backend.
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: /yeni/elaqe/'); exit; }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: /elaqe/'); exit; }
 $f     = isset($_POST['form_fields']) && is_array($_POST['form_fields']) ? $_POST['form_fields'] : array();
 $name  = isset($f['email'])         ? trim($f['email'])         : '';   // "Ad" field (original key)
 $phone = isset($f['field_6f7b0a2']) ? trim($f['field_6f7b0a2']) : '';
@@ -15,5 +15,5 @@ if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) { $headers .= "Reply-To
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 @mail($to, $subject, $body, $headers);
 
-header('Location: /yeni/elaqe/?sent=1#contact');
+header('Location: /elaqe/?sent=1#contact');
 exit;

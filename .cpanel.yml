@@ -1,10 +1,9 @@
 ---
 deployment:
   tasks:
-    # Deploy INTO the /yeni subfolder -> live at https://ceng.az/yeni
-    # Uses cp (always present) instead of rsync. The glob '*' skips dotfiles,
-    # so .git is never copied; .htaccess is copied explicitly on the last line.
-    - export DEPLOYPATH=/home/ceng/public_html/yeni/
+    # Deploy into the yeni.ceng.az subdomain document root.
+    # (Adjust DEPLOYPATH if you set a different document root when creating the subdomain.)
+    - export DEPLOYPATH=/home/ceng/yeni.ceng.az/
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/cp -R * $DEPLOYPATH
     - /bin/cp -f .htaccess $DEPLOYPATH
