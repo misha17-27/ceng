@@ -7,6 +7,16 @@ $phone = isset($f['field_6f7b0a2']) ? trim($f['field_6f7b0a2']) : '';
 $email = isset($f['field_ded525d']) ? trim($f['field_ded525d']) : '';
 $msg   = isset($f['field_e389c4e']) ? trim($f['field_e389c4e']) : '';
 
+// Save the submission to the database (admin panel "Zayavki"), if configured.
+$dbfile = __DIR__ . '/admin/db.php';
+if (is_file($dbfile)) {
+    try {
+        $pdo = require $dbfile;
+        $st = $pdo->prepare('INSERT INTO submissions (name, phone, email, message, ip, created_at) VALUES (?,?,?,?,?,NOW())');
+        $st->execute([$name, $phone, $email, $msg, $_SERVER['REMOTE_ADDR'] ?? '']);
+    } catch (Throwable $e) { /* ignore, still send mail */ }
+}
+
 $to      = 'info@ceng.az';
 $subject = '=?UTF-8?B?' . base64_encode('Yeni muraciet - ceng.az') . '?=';
 $body    = "Ad: $name\nTelefon: $phone\nEmail: $email\nMesaj:\n$msg\n";

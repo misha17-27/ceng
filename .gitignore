@@ -1,3 +1,6 @@
+# Admin panel DB credentials (create on the server from config.sample.php)
+admin/config.php
+
 # OS / editor junk
 Thumbs.db
 ehthumbs.db
