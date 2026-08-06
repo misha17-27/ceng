@@ -45,18 +45,22 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         flash('Тексты сохранены.'); redirect('index.php?section=texts');
     }
     if ($section === 'contacts' && $act === 'save') {
-        foreach (['phone','phone2','email','address'] as $k) kv_set('contacts',$k,(string)($_POST[$k]??''));
+        foreach (['phone','phone2','email','address','hours','map',
+                  'soc1_name','soc1_url','soc2_name','soc2_url','soc3_name','soc3_url','soc4_name','soc4_url'] as $k)
+            kv_set('contacts',$k,(string)($_POST[$k]??''));
         flash('Контакты сохранены.'); redirect('index.php?section=contacts');
     }
-    if ($section === 'services') {
-        if ($act === 'save') {
-            if ($_POST['id']) { $db->prepare('UPDATE services SET title=?,descr=?,icon=?,sort=? WHERE id=?')
-                ->execute([$_POST['title'],$_POST['descr'],$_POST['icon'],(int)$_POST['sort'],(int)$_POST['id']]); }
-            else { $db->prepare('INSERT INTO services (title,descr,icon,sort) VALUES (?,?,?,?)')
-                ->execute([$_POST['title'],$_POST['descr'],$_POST['icon'],(int)$_POST['sort']]); }
-            flash('Услуга сохранена.');
-        } elseif ($act === 'del') { $db->prepare('DELETE FROM services WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); }
-        redirect('index.php?section=services');
+    if ($section === 'services' && $act === 'save') {
+        foreach (($_POST['svc'] ?? []) as $i => $row) {
+            $id = (int)($row['id'] ?? 0);
+            $title = trim($row['title'] ?? '');
+            if ($id && $title === '') { $db->prepare('DELETE FROM services WHERE id=?')->execute([$id]); continue; }
+            if ($title === '' && trim($row['slug'] ?? '') === '') continue;
+            $vals = [$row['slug']??'', $row['code']??'', $title, $row['short']??'', $row['descr']??'', $row['points']??'', $i];
+            if ($id) { $db->prepare('UPDATE services SET slug=?,code=?,title=?,short=?,descr=?,points=?,sort=? WHERE id=?')->execute([...$vals,$id]); }
+            else { $db->prepare('INSERT INTO services (slug,code,title,short,descr,points,sort) VALUES (?,?,?,?,?,?,?)')->execute($vals); }
+        }
+        flash('Услуги сохранены.'); redirect('index.php?section=services');
     }
     if ($section === 'projects') {
         if ($act === 'save') {
@@ -97,11 +101,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect('index.php?section=partners');
     }
     if ($section === 'pages' && $act === 'save') {
-        foreach (($_POST['title'] ?? []) as $slug=>$title) {
-            $db->prepare('UPDATE pages SET title=?, in_menu=? WHERE slug=?')
-               ->execute([$title, isset($_POST['in_menu'][$slug])?1:0, $slug]);
-        }
-        flash('Страницы сохранены.'); redirect('index.php?section=pages');
+        $slug = $_POST['slug'] ?? '';
+        $db->prepare('UPDATE pages SET title=?, hero_title=?, blue_short=?, blue_text=? WHERE slug=?')
+           ->execute([$_POST['title']??'', $_POST['hero_title']??'', $_POST['blue_short']??'', $_POST['blue_text']??'', $slug]);
+        $db->prepare('INSERT INTO seo_pages (slug,title,descr,robots,canonical) VALUES (?,?,?,?,?)
+                      ON DUPLICATE KEY UPDATE title=VALUES(title),descr=VALUES(descr),robots=VALUES(robots),canonical=VALUES(canonical)')
+           ->execute([$slug, $_POST['seo_title']??'', $_POST['seo_desc']??'', $_POST['robots']??'index,follow', $_POST['canonical']??'']);
+        flash('Страница сохранена.'); redirect('index.php?section=pages');
     }
     if ($section === 'seo' && $act === 'save') {
         $u = $db->prepare('UPDATE seo_pages SET title=?, descr=? WHERE slug=?');
@@ -156,28 +162,56 @@ if ($section === 'overview') {
 }
 
 elseif ($section === 'texts') {
-    $rows = $db->query('SELECT k,v FROM texts ORDER BY k')->fetchAll();
-    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
-    if (!$rows) echo '<p class="muted">Пока нет текстовых блоков (создаются установщиком).</p>';
-    foreach ($rows as $r) {
-        echo '<label>'.e($r['k']).'</label><textarea name="t['.e($r['k']).']">'.e($r['v']).'</textarea>';
-    }
-    echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
+    $t = fn($k)=>e(kv_get('texts',$k));
+    echo '<form method="post" class="panel"><h3>Основное</h3>'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<label>Короткое имя</label><input type="text" name="t[site_short]" value="'.$t('site_short').'">';
+    echo '<label>Полное имя</label><input type="text" name="t[site_full]" value="'.$t('site_full').'">';
+    echo '<label>Слоган</label><input type="text" name="t[site_slogan]" value="'.$t('site_slogan').'">';
+    echo '<div style="margin-top:16px"><button class="btn">Сохранить основное</button></div></form>';
+
+    echo '<form method="post" class="panel"><h3>Редактируемые тексты</h3>'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<label>Заголовок первого экрана</label><textarea name="t[hero_title]">'.$t('hero_title').'</textarea>';
+    echo '<label>Синий блок: короткий заголовок</label><textarea name="t[blue_short]">'.$t('blue_short').'</textarea>';
+    echo '<label>Синий блок: текст</label><textarea name="t[blue_text]" style="min-height:120px">'.$t('blue_text').'</textarea>';
+    echo '<div style="margin-top:16px"><button class="btn">Сохранить тексты</button></div></form>';
 }
 
 elseif ($section === 'contacts') {
     $g = fn($k)=>e(kv_get('contacts',$k));
     echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
-    echo '<div class="row"><div><label>Телефон (в шапке)</label><input type="text" name="phone" value="'.$g('phone').'"></div>';
-    echo '<div><label>Телефон 2 (в футере)</label><input type="text" name="phone2" value="'.$g('phone2').'"></div></div>';
-    echo '<div class="row"><div><label>E-mail</label><input type="text" name="email" value="'.$g('email').'"></div>';
-    echo '<div><label>Адрес</label><input type="text" name="address" value="'.$g('address').'"></div></div>';
-    echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
-    echo '<p class="muted">Эти значения выводятся в шапке и футере сайта (после привязки фронтенда).</p>';
+    echo '<label>Телефон</label><input type="text" name="phone" value="'.$g('phone').'">';
+    echo '<label>Телефон для ссылки tel:</label><input type="text" name="phone2" value="'.$g('phone2').'">';
+    echo '<label>E-mail</label><input type="text" name="email" value="'.$g('email').'">';
+    echo '<label>Адрес</label><input type="text" name="address" value="'.$g('address').'">';
+    echo '<label>Часы работы</label><input type="text" name="hours" value="'.$g('hours').'">';
+    echo '<label>Google Maps embed URL</label><input type="text" name="map" value="'.$g('map').'">';
+    for ($i=1;$i<=4;$i++) {
+        echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#0f9d76;font-weight:700">Соцсеть '.$i.'</legend>';
+        echo '<div class="row"><div><label>Название</label><input type="text" name="soc'.$i.'_name" value="'.$g('soc'.$i.'_name').'"></div>';
+        echo '<div><label>URL</label><input type="text" name="soc'.$i.'_url" value="'.$g('soc'.$i.'_url').'"></div></div></fieldset>';
+    }
+    echo '<div style="margin-top:18px"><button class="btn">Сохранить контакты</button></div></form>';
 }
 
-elseif ($section === 'services') { crud_list($db,'services','Услуга',
-    ['title'=>'Название','descr'=>'Описание','icon'=>'Иконка (класс/URL)','sort'=>'Порядок'], ['title','icon','sort']); }
+elseif ($section === 'services') {
+    $rows = $db->query('SELECT * FROM services ORDER BY sort,id')->fetchAll();
+    $slots = $rows;
+    for ($i=0;$i<2;$i++) $slots[] = ['id'=>'','slug'=>'','code'=>'','title'=>'','short'=>'','descr'=>'','points'=>''];
+    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
+    foreach ($slots as $i=>$s) {
+        echo '<div style="border-bottom:1px solid #eef2f1;padding-bottom:16px;margin-bottom:16px"><b style="color:#0f9d76">Услуга '.($i+1).'</b>';
+        echo '<input type="hidden" name="svc['.$i.'][id]" value="'.e($s['id']??'').'">';
+        echo '<label>Slug</label><input type="text" name="svc['.$i.'][slug]" value="'.e($s['slug']??'').'">';
+        echo '<label>Код</label><input type="text" name="svc['.$i.'][code]" value="'.e($s['code']??'').'">';
+        echo '<label>Название</label><input type="text" name="svc['.$i.'][title]" value="'.e($s['title']??'').'">';
+        echo '<label>Кратко</label><textarea name="svc['.$i.'][short]">'.e($s['short']??'').'</textarea>';
+        echo '<label>Описание</label><textarea name="svc['.$i.'][descr]">'.e($s['descr']??'').'</textarea>';
+        echo '<label>Пункты, каждый с новой строки</label><textarea name="svc['.$i.'][points]">'.e($s['points']??'').'</textarea>';
+        echo '</div>';
+    }
+    echo '<button class="btn" style="width:100%">Сохранить услуги</button></form>';
+    echo '<p class="muted">Чтобы удалить услугу — очисти её «Название» и сохрани.</p>';
+}
 
 elseif ($section === 'projects') { render_projects($db); }
 
@@ -185,15 +219,42 @@ elseif ($section === 'partners') { crud_list($db,'partners','Партнёр',
     ['name'=>'Название','image'=>'Логотип (URL)','url'=>'Ссылка','sort'=>'Порядок'], ['name','sort']); }
 
 elseif ($section === 'pages') {
-    $rows = $db->query('SELECT * FROM pages ORDER BY sort')->fetchAll();
-    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><table><tr><th>Slug</th><th>Заголовок</th><th>В меню</th></tr>';
-    foreach ($rows as $r) {
-        echo '<tr><td class="muted">/'.e(ltrim($r['slug'],'/')).'</td>';
-        echo '<td><input type="text" name="title['.e($r['slug']).']" value="'.e($r['title']).'"></td>';
-        echo '<td><input type="checkbox" name="in_menu['.e($r['slug']).']" '.($r['in_menu']?'checked':'').'></td></tr>';
+    $mkurl = fn($slug) => ($u = '/'.ltrim((string)$slug,'/')) === '/' ? '/' : rtrim($u,'/').'/';
+    if (isset($_GET['edit'])) {
+        $slug = (string)$_GET['edit'];
+        $st = $db->prepare('SELECT * FROM pages WHERE slug=?'); $st->execute([$slug]); $pg = $st->fetch();
+        $st2 = $db->prepare('SELECT * FROM seo_pages WHERE slug=?'); $st2->execute([$slug]);
+        $seo = $st2->fetch() ?: ['title'=>'','descr'=>'','robots'=>'index,follow','canonical'=>''];
+        if (!$pg) { echo '<div class="panel">Страница не найдена. <a href="index.php?section=pages">Назад</a></div>'; }
+        else {
+            $url = $mkurl($pg['slug']);
+            echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
+            echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: https://yeni.ceng.az'.e($url).'</p>';
+            echo '<label>Заголовок / пункт меню</label><input type="text" name="title" value="'.e($pg['title']).'">';
+            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#0f9d76;font-weight:700">Контент страницы</legend>';
+            echo '<label>Заголовок первого экрана</label><textarea name="hero_title">'.e($pg['hero_title']??'').'</textarea>';
+            echo '<label>Короткий заголовок синего блока</label><textarea name="blue_short">'.e($pg['blue_short']??'').'</textarea>';
+            echo '<label>Текст синего блока</label><textarea name="blue_text" style="min-height:120px">'.e($pg['blue_text']??'').'</textarea></fieldset>';
+            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#0f9d76;font-weight:700">SEO этой страницы</legend>';
+            echo '<label>SEO Title</label><input type="text" name="seo_title" value="'.e($seo['title']).'">';
+            echo '<label>Meta Description</label><textarea name="seo_desc">'.e($seo['descr']).'</textarea>';
+            echo '<div class="row"><div><label>Robots</label><input type="text" name="robots" value="'.e($seo['robots']??'index,follow').'"></div>';
+            echo '<div><label>Canonical</label><input type="text" name="canonical" value="'.e($seo['canonical']??'').'"></div></div></fieldset>';
+            echo '<div style="margin-top:18px"><button class="btn">Сохранить страницу</button> <a class="btn ghost" href="index.php?section=pages">Назад к списку</a> <a class="btn ghost" href="'.e($url).'" target="_blank">Открыть на сайте</a></div></form>';
+        }
+    } else {
+        $rows = $db->query('SELECT p.*, s.title AS seo_t FROM pages p LEFT JOIN seo_pages s ON s.slug=p.slug ORDER BY p.sort')->fetchAll();
+        echo '<div class="panel"><div class="muted" style="margin-bottom:12px">Все ('.count($rows).') &nbsp;|&nbsp; Опубликованные ('.count($rows).')</div>';
+        echo '<table><tr><th>Заголовок</th><th>URL</th><th>SEO</th><th></th></tr>';
+        foreach ($rows as $r) {
+            $url = $mkurl($r['slug']);
+            $dot = trim((string)($r['seo_t'] ?? '')) !== '' ? '#0f9d76' : '#cbd3d1';
+            echo '<tr><td><b>'.e($r['title']).'</b></td><td><span class="muted" style="background:#f0f3f2;padding:2px 8px;border-radius:6px">'.e($url).'</span></td>';
+            echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$dot.'"></span></td>';
+            echo '<td class="right" style="white-space:nowrap"><a class="btn sm ghost" href="index.php?section=pages&edit='.rawurlencode($r['slug']).'">Редактировать</a> <a class="btn sm ghost" href="'.e($url).'" target="_blank">Открыть</a></td></tr>';
+        }
+        echo '</table></div>';
     }
-    echo '</table><div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
-    echo '<p class="muted">Набор страниц фиксирован (это статические PHP-страницы). Здесь меняются заголовок и наличие в меню.</p>';
 }
 
 elseif ($section === 'seo') {

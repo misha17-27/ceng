@@ -45,4 +45,26 @@ add_col($db,$log,'projects','robots',"VARCHAR(40) DEFAULT 'index,follow'");
 add_col($db,$log,'projects','canonical','VARCHAR(255) NULL');
 add_col($db,$log,'projects','status',"VARCHAR(20) DEFAULT 'published'");
 
+$log('services columns:');
+add_col($db,$log,'services','slug','VARCHAR(160) NULL');
+add_col($db,$log,'services','code','VARCHAR(20) NULL');
+add_col($db,$log,'services','short','TEXT NULL');
+add_col($db,$log,'services','points','TEXT NULL');
+
+$log('pages columns:');
+add_col($db,$log,'pages','hero_title','TEXT NULL');
+add_col($db,$log,'pages','blue_short','TEXT NULL');
+add_col($db,$log,'pages','blue_text','TEXT NULL');
+add_col($db,$log,'seo_pages','robots',"VARCHAR(40) DEFAULT 'index,follow'");
+add_col($db,$log,'seo_pages','canonical','VARCHAR(255) NULL');
+
+$ic = $db->prepare("INSERT IGNORE INTO contacts (k,v) VALUES (?,?)");
+foreach (['hours'=>'B.e — Cümə, 09:00 – 18:00','map'=>'',
+          'soc1_name'=>'Facebook','soc1_url'=>'#','soc2_name'=>'Instagram','soc2_url'=>'#',
+          'soc3_name'=>'LinkedIn','soc3_url'=>'#','soc4_name'=>'','soc4_url'=>''] as $k=>$v) $ic->execute([$k,$v]);
+$it = $db->prepare("INSERT IGNORE INTO texts (k,v) VALUES (?,?)");
+foreach (['site_short'=>'CENG','site_full'=>'Caspian Engineering Group',
+          'site_slogan'=>'Keyfiyyətli tikinti və mühəndislik həlləri','blue_short'=>'','blue_text'=>''] as $k=>$v) $it->execute([$k,$v]);
+$log('✓ services/pages/seo columns + contacts/texts seeds');
+
 $log("\nDONE. Delete this file. Open /admin/?section=projects");
