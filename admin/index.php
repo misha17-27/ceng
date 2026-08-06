@@ -60,13 +60,31 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
     if ($section === 'projects') {
         if ($act === 'save') {
-            if ($_POST['id']) { $db->prepare('UPDATE projects SET title=?,slug=?,image=?,descr=?,sort=?,visible=? WHERE id=?')
-                ->execute([$_POST['title'],$_POST['slug'],$_POST['image'],$_POST['descr'],(int)$_POST['sort'],isset($_POST['visible'])?1:0,(int)$_POST['id']]); }
-            else { $db->prepare('INSERT INTO projects (title,slug,image,descr,sort,visible) VALUES (?,?,?,?,?,?)')
-                ->execute([$_POST['title'],$_POST['slug'],$_POST['image'],$_POST['descr'],(int)$_POST['sort'],isset($_POST['visible'])?1:0]); }
-            flash('Проект сохранён.');
-        } elseif ($act === 'del') { $db->prepare('DELETE FROM projects WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); }
-        redirect('index.php?section=projects');
+            $cover = trim($_POST['cover'] ?? '');
+            if ($p = admin_upload('cover_file')) $cover = $p;                 // uploaded cover overrides
+            $gallery = array_values(array_filter(array_map('trim', $_POST['gallery'] ?? []), fn($x)=>$x!==''));
+            foreach (admin_upload_multi('gallery_files') as $p) $gallery[] = $p;
+            $f = [
+              'title'=>$_POST['title']??'', 'slug'=>$_POST['slug']??'', 'category_id'=>($_POST['category_id']?:null),
+              'year'=>$_POST['year']??'', 'location'=>$_POST['location']??'', 'area'=>$_POST['area']??'',
+              'client'=>$_POST['client']??'', 'cover'=>$cover, 'gallery'=>json_encode($gallery, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
+              'descr'=>$_POST['descr']??'', 'content'=>$_POST['content']??'', 'scope'=>$_POST['scope']??'',
+              'seo_title'=>$_POST['seo_title']??'', 'seo_desc'=>$_POST['seo_desc']??'',
+              'robots'=>$_POST['robots']??'index,follow', 'canonical'=>$_POST['canonical']??'',
+              'sort'=>(int)($_POST['sort']??0), 'visible'=>isset($_POST['visible'])?1:0,
+              'status'=>$_POST['status']??'published',
+            ];
+            if (!empty($_POST['id'])) {
+                $set = implode(',', array_map(fn($k)=>"`$k`=?", array_keys($f)));
+                $st = $db->prepare("UPDATE projects SET $set WHERE id=?");
+                $st->execute([...array_values($f), (int)$_POST['id']]);
+            } else {
+                $cols = '`'.implode('`,`', array_keys($f)).'`';
+                $ph = implode(',', array_fill(0, count($f), '?'));
+                $db->prepare("INSERT INTO projects ($cols) VALUES ($ph)")->execute(array_values($f));
+            }
+            flash('Проект сохранён.'); redirect('index.php?section=projects');
+        } elseif ($act === 'del') { $db->prepare('DELETE FROM projects WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); redirect('index.php?section=projects'); }
     }
     if ($section === 'partners') {
         if ($act === 'save') {
@@ -161,9 +179,7 @@ elseif ($section === 'contacts') {
 elseif ($section === 'services') { crud_list($db,'services','Услуга',
     ['title'=>'Название','descr'=>'Описание','icon'=>'Иконка (класс/URL)','sort'=>'Порядок'], ['title','icon','sort']); }
 
-elseif ($section === 'projects') { crud_list($db,'projects','Проект',
-    ['title'=>'Название','slug'=>'Slug (URL)','image'=>'Картинка (URL)','descr'=>'Описание','sort'=>'Порядок','visible'=>'Показывать'],
-    ['title','slug','sort']); }
+elseif ($section === 'projects') { render_projects($db); }
 
 elseif ($section === 'partners') { crud_list($db,'partners','Партнёр',
     ['name'=>'Название','image'=>'Логотип (URL)','url'=>'Ссылка','sort'=>'Порядок'], ['name','sort']); }
@@ -261,4 +277,147 @@ function crud_list(PDO $db, string $table, string $noun, array $fields, array $c
         echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Удалить?\')">'.csrf_field().'<input type="hidden" name="action" value="del"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm red">✕</button></form></td></tr>';
     }
     echo '</table></div>';
+}
+
+
+/* ---- upload helpers ---- */
+function admin_move(string $tmp, string $name): ?string {
+    $dir = dirname(__DIR__) . '/wp-content/uploads/admin';
+    @mkdir($dir, 0755, true);
+    $name = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($name));
+    $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+    if (!in_array($ext, ['jpg','jpeg','png','webp','gif','svg'])) return null;
+    if (!is_uploaded_file($tmp)) return null;
+    $name = time() . '_' . $name;
+    return move_uploaded_file($tmp, "$dir/$name") ? '/wp-content/uploads/admin/' . $name : null;
+}
+function admin_upload(string $field): ?string {
+    if (empty($_FILES[$field]['name'])) return null;
+    return admin_move($_FILES[$field]['tmp_name'], $_FILES[$field]['name']);
+}
+function admin_upload_multi(string $field): array {
+    $out = [];
+    if (empty($_FILES[$field]['name'][0])) return $out;
+    foreach ($_FILES[$field]['name'] as $i => $name) {
+        if ($name === '') continue;
+        if ($p = admin_move($_FILES[$field]['tmp_name'][$i], $name)) $out[] = $p;
+    }
+    return $out;
+}
+
+/* ---- rich Projects section (list + editor) ---- */
+function render_projects(PDO $db): void {
+    $cats = $db->query('SELECT * FROM categories ORDER BY sort,name')->fetchAll();
+    $catName = []; foreach ($cats as $c) $catName[$c['id']] = $c['name'];
+    $mode = isset($_GET['edit']) ? 'edit' : (isset($_GET['new']) ? 'new' : 'list');
+
+    if ($mode === 'list') {
+        $rows = $db->query('SELECT * FROM projects ORDER BY sort,id')->fetchAll();
+        $pub = count(array_filter($rows, fn($r) => ($r['status'] ?? 'published') === 'published'));
+        echo '<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">';
+        echo '<div class="muted">Все ('.count($rows).') &nbsp;|&nbsp; Опубликованные ('.$pub.')</div>';
+        echo '<a class="btn" href="index.php?section=projects&new=1">+ Добавить проект</a></div>';
+        echo '<table><tr><th>Заголовок</th><th>Фото</th><th>Категория</th><th>Год</th><th>SEO</th><th></th></tr>';
+        if (!$rows) echo '<tr><td colspan="6" class="muted">Пока нет проектов.</td></tr>';
+        foreach ($rows as $r) {
+            $cover = $r['cover'] ?: ($r['image'] ?? '');
+            $seo = trim((string)($r['seo_title'] ?? '')) !== '' ? '#0f9d76' : '#cbd3d1';
+            echo '<tr><td><b>'.e($r['title']).'</b><br><span class="muted" style="font-size:12px">'.e($r['slug']).'</span></td>';
+            echo '<td>'.($cover ? '<img src="'.e($cover).'" style="width:74px;height:48px;object-fit:cover;border-radius:6px">' : '—').'</td>';
+            echo '<td>'.e($catName[$r['category_id']] ?? '—').'</td><td>'.e($r['year']).'</td>';
+            echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$seo.'"></span></td>';
+            echo '<td class="right" style="white-space:nowrap">';
+            echo '<a class="btn sm ghost" href="index.php?section=projects&edit='.$r['id'].'">Редактировать</a> ';
+            echo '<a class="btn sm ghost" href="/'.e(ltrim((string)$r['slug'],'/')).'/" target="_blank">Открыть</a> ';
+            echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Удалить проект?\')">'.csrf_field().'<input type="hidden" name="action" value="del"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm red">✕</button></form></td></tr>';
+        }
+        echo '</table></div>';
+        return;
+    }
+
+    $p = ['id'=>'','title'=>'','slug'=>'','category_id'=>'','year'=>'','location'=>'','area'=>'','client'=>'',
+          'cover'=>'','gallery'=>'[]','descr'=>'','content'=>'','scope'=>'','seo_title'=>'','seo_desc'=>'',
+          'robots'=>'index,follow','canonical'=>'','sort'=>0,'visible'=>1,'status'=>'published','image'=>''];
+    if ($mode === 'edit') { $st = $db->prepare('SELECT * FROM projects WHERE id=?'); $st->execute([(int)$_GET['edit']]); $p = array_merge($p, $st->fetch() ?: []); }
+    $gallery = json_decode($p['gallery'] ?: '[]', true) ?: [];
+    $cover = $p['cover'] ?: $p['image'];
+
+    echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field();
+    echo '<input type="hidden" name="action" value="save"><input type="hidden" name="id" value="'.e($p['id']).'">';
+    echo '<h3>'.($mode==='edit' ? 'Редактировать: '.e($p['title']) : 'Новый проект').'</h3>';
+
+    echo '<div class="row3"><div><label>Название</label><input type="text" name="title" value="'.e($p['title']).'"></div>';
+    echo '<div><label>Slug (URL)</label><input type="text" name="slug" value="'.e($p['slug']).'"></div>';
+    echo '<div><label>Категория</label><select name="category_id"><option value="">—</option>';
+    foreach ($cats as $c) echo '<option value="'.$c['id'].'"'.($p['category_id']==$c['id']?' selected':'').'>'.e($c['name']).'</option>';
+    echo '</select></div></div>';
+
+    echo '<div class="row3"><div><label>Год</label><input type="text" name="year" value="'.e($p['year']).'"></div>';
+    echo '<div><label>Локация</label><input type="text" name="location" value="'.e($p['location']).'"></div>';
+    echo '<div><label>Площадь</label><input type="text" name="area" value="'.e($p['area']).'"></div></div>';
+    echo '<label>Клиент</label><input type="text" name="client" value="'.e($p['client']).'">';
+
+    echo '<label>Обложка, путь</label><input type="text" name="cover" value="'.e($cover).'">';
+    if ($cover) echo '<div style="margin-top:8px"><img src="'.e($cover).'" style="max-width:200px;border-radius:8px"></div>';
+    echo '<label>Загрузить новую обложку</label><input type="file" name="cover_file" accept="image/*">';
+
+    echo '<label style="margin-top:20px;color:#0f9d76">Галерея проекта</label>';
+    echo '<div id="gal" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">';
+    foreach ($gallery as $g) echo gal_item((string)$g);
+    echo '</div>';
+    echo '<button type="button" class="btn ghost" style="margin-top:10px" onclick="addGal()">Добавить ещё</button>';
+    echo '<label>Загрузить новые изображения</label><input type="file" name="gallery_files[]" accept="image/*" multiple>';
+
+    echo '<label style="margin-top:20px">Краткое описание</label><textarea name="descr">'.e($p['descr']).'</textarea>';
+
+    echo '<label>Контент проекта</label>';
+    echo '<div class="rtbar"><button type="button" onmousedown="rt(event,\'bold\')"><b>B</b></button>';
+    echo '<button type="button" onmousedown="rt(event,\'italic\')"><i>I</i></button>';
+    echo '<button type="button" onmousedown="rt(event,\'underline\')"><u>U</u></button>';
+    echo '<button type="button" onmousedown="rt(event,\'insertUnorderedList\')">• список</button>';
+    echo '<button type="button" onmousedown="rt(event,\'insertOrderedList\')">1. список</button>';
+    echo '<button type="button" onmousedown="rtLink(event)">Ссылка</button></div>';
+    echo '<div id="rt" contenteditable="true" class="rtarea">'.$p['content'].'</div>';
+    echo '<textarea name="content" id="rtsrc" style="display:none">'.e($p['content']).'</textarea>';
+
+    echo '<label>Объём работ, каждый пункт с новой строки</label><textarea name="scope" style="min-height:110px">'.e($p['scope']).'</textarea>';
+
+    echo '<h4 style="color:#0f9d76;margin-top:22px">SEO этого проекта</h4>';
+    echo '<label>SEO Title</label><input type="text" name="seo_title" value="'.e($p['seo_title']).'">';
+    echo '<label>Meta Description</label><textarea name="seo_desc">'.e($p['seo_desc']).'</textarea>';
+    echo '<div class="row"><div><label>Robots</label><input type="text" name="robots" value="'.e($p['robots']).'"></div>';
+    echo '<div><label>Canonical</label><input type="text" name="canonical" value="'.e($p['canonical']).'"></div></div>';
+
+    echo '<div class="row3" style="margin-top:8px"><div><label>Порядок</label><input type="number" name="sort" value="'.e($p['sort']).'"></div>';
+    echo '<div><label>Статус</label><select name="status"><option value="published"'.($p['status']==='published'?' selected':'').'>Опубликовано</option><option value="draft"'.($p['status']==='draft'?' selected':'').'>Черновик</option></select></div>';
+    echo '<div><label>&nbsp;</label><label style="font-weight:400"><input type="checkbox" name="visible" '.(!empty($p['visible'])?'checked':'').'> Показывать</label></div></div>';
+
+    echo '<div style="margin-top:20px"><button class="btn">Сохранить проект</button> ';
+    echo '<a class="btn ghost" href="index.php?section=projects">Назад к списку</a></div>';
+    echo '</form>';
+    echo projects_js();
+}
+function gal_item(string $path): string {
+    return '<div class="gitem" style="border:1px solid #e6ebea;border-radius:10px;padding:8px;text-align:center">'
+        .'<img src="'.e($path).'" style="width:100%;height:90px;object-fit:cover;border-radius:6px">'
+        .'<input type="text" name="gallery[]" value="'.e($path).'" style="font-size:12px;margin-top:6px">'
+        .'<button type="button" class="btn sm red" style="margin-top:6px" onclick="this.parentNode.remove()">Удалить</button></div>';
+}
+function projects_js(): string {
+    return <<<'HTML'
+<style>.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}@media(max-width:700px){.row3{grid-template-columns:1fr}}
+.rtbar{display:flex;gap:6px;flex-wrap:wrap;border:1px solid #cfd8d6;border-bottom:0;border-radius:9px 9px 0 0;padding:8px;background:#f7faf9}
+.rtbar button{background:#fff;border:1px solid #d7dedc;border-radius:6px;padding:4px 10px;cursor:pointer}
+.rtarea{border:1px solid #cfd8d6;border-radius:0 0 9px 9px;min-height:140px;padding:12px;background:#fff}
+.gitem input{width:100%;border:1px solid #cfd8d6;border-radius:6px;padding:5px}</style>
+<script>
+function rt(e,cmd){e.preventDefault();document.execCommand(cmd,false,null);document.getElementById('rt').focus();}
+function rtLink(e){e.preventDefault();var u=prompt('URL ссылки:','https://');if(u)document.execCommand('createLink',false,u);}
+function syncRT(){document.getElementById('rtsrc').value=document.getElementById('rt').innerHTML;}
+document.querySelector('form').addEventListener('submit',syncRT);
+function addGal(){var d=document.createElement('div');d.className='gitem';d.style.cssText='border:1px solid #e6ebea;border-radius:10px;padding:8px;text-align:center';
+d.innerHTML='<input type="text" name="gallery[]" placeholder="/wp-content/uploads/..." style="width:100%;border:1px solid #cfd8d6;border-radius:6px;padding:6px"><button type="button" class="btn sm red" style="margin-top:6px" onclick="this.parentNode.remove()">Удалить</button>';
+document.getElementById('gal').appendChild(d);}
+</script>
+HTML;
 }
