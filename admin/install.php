@@ -53,12 +53,16 @@ $log('✓ tables created');
 
 /* seed admin */
 $em = (string)cfg('install_admin_email'); $pw = (string)cfg('install_admin_pass');
+$hash = password_hash($pw, PASSWORD_DEFAULT);
 $st = $db->prepare('SELECT id FROM admins WHERE email=?'); $st->execute([$em]);
 if (!$st->fetch()) {
-    $db->prepare('INSERT INTO admins (email,pass_hash) VALUES (?,?)')
-       ->execute([$em, password_hash($pw, PASSWORD_DEFAULT)]);
+    $db->prepare('INSERT INTO admins (email,pass_hash) VALUES (?,?)')->execute([$em, $hash]);
     $log("✓ admin created: $em");
-} else { $log("• admin already exists: $em"); }
+} else {
+    // Re-running the installer RESETS the password to install_admin_pass from config.php
+    $db->prepare('UPDATE admins SET pass_hash=? WHERE email=?')->execute([$hash, $em]);
+    $log("✓ admin password reset: $em");
+}
 
 /* seed contacts (from current footer/header) */
 $contacts = ['phone'=>'+994 70 230 06 90','phone2'=>'+994 70 8109889',
