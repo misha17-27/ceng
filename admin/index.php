@@ -503,14 +503,13 @@ function render_projects(PDO $db): void {
         echo '<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">';
         echo '<div class="muted">Все ('.count($rows).') &nbsp;|&nbsp; Опубликованные ('.$pub.')</div>';
         echo '<a class="btn" href="index.php?section=projects&new=1">+ Добавить проект</a></div>';
-        echo '<table><tr><th>Заголовок</th><th>Фото</th><th>Категория</th><th>SEO</th><th></th></tr>';
-        if (!$rows) echo '<tr><td colspan="5" class="muted">Пока нет проектов.</td></tr>';
+        echo '<table><tr><th>Заголовок</th><th>Фото</th><th>SEO</th><th></th></tr>';
+        if (!$rows) echo '<tr><td colspan="4" class="muted">Пока нет проектов.</td></tr>';
         foreach ($rows as $r) {
             $cover = $r['cover'] ?: ($r['image'] ?? '');
             $seo = trim((string)($r['seo_title'] ?? '')) !== '' ? '#0f9d76' : '#cbd3d1';
             echo '<tr><td><b>'.e($r['title']).'</b><br><span class="muted" style="font-size:12px">'.e($r['slug']).'</span></td>';
             echo '<td>'.($cover ? '<img src="'.e($cover).'" style="width:74px;height:48px;object-fit:cover;border-radius:6px">' : '—').'</td>';
-            echo '<td>'.e($catName[$r['category_id']] ?? '—').'</td>';
             echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$seo.'"></span></td>';
             echo '<td class="right" style="white-space:nowrap">';
             echo '<a class="btn sm ghost" href="index.php?section=projects&edit='.$r['id'].'">Редактировать</a> ';
@@ -532,11 +531,8 @@ function render_projects(PDO $db): void {
     echo '<input type="hidden" name="action" value="save"><input type="hidden" name="id" value="'.e($p['id']).'">';
     echo '<h3>'.($mode==='edit' ? 'Редактировать: '.e($p['title']) : 'Новый проект').'</h3>';
 
-    echo '<div class="row3"><div><label>Название</label><input type="text" name="title" value="'.e($p['title']).'"></div>';
-    echo '<div><label>Slug (URL)</label><input type="text" name="slug" value="'.e($p['slug']).'"></div>';
-    echo '<div><label>Категория</label><select name="category_id"><option value="">—</option>';
-    foreach ($cats as $c) echo '<option value="'.$c['id'].'"'.($p['category_id']==$c['id']?' selected':'').'>'.e($c['name']).'</option>';
-    echo '</select></div></div>';
+    echo '<div class="row"><div><label>Название</label><input type="text" name="title" value="'.e($p['title']).'"></div>';
+    echo '<div><label>Slug (URL)</label><input type="text" name="slug" value="'.e($p['slug']).'"></div></div>';
 
     echo '<label>Обложка, путь</label><input type="text" name="cover" value="'.e($cover).'">';
     if ($cover) echo '<div style="margin-top:8px"><img src="'.e($cover).'" style="max-width:200px;border-radius:8px"></div>';
