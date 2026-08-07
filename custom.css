@@ -1,0 +1,14 @@
+/* ceng.az custom overrides */
+
+/* Mobile (<=767px) */
+@media (max-width: 767px) {
+  /* Projects grid: 2 columns on phones */
+  .elementor-posts-container.elementor-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 15px !important; }
+
+  /* Stats counters (50+ / 100+ / 99%): 3 columns in a row on phones */
+  .elementor-element-8bceabb { flex-direction: row !important; flex-wrap: nowrap !important; gap: 6px !important; }
+  .elementor-element-8bceabb > .elementor-widget-counter { flex: 1 1 0 !important; width: auto !important; min-width: 0 !important; }
+  .elementor-element-8bceabb .elementor-counter-number-wrapper { font-size: 22px !important; justify-content: flex-start !important; }
+  .elementor-element-8bceabb .elementor-counter-title { font-size: 10px !important; line-height: 1.2 !important; }
+}
