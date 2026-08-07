@@ -81,4 +81,24 @@ foreach (['smtp_host'=>'','smtp_port'=>'587','smtp_user'=>'','smtp_pass'=>'',
           'turnstile_site'=>'','turnstile_secret'=>''] as $k=>$v) $is->execute([$k,$v]);
 $log('✓ admins roles + SMTP + Turnstile settings');
 
+$covers = [
+    'bine-stadium' => '/wp-content/uploads/2025/04/img_22141_slide2.jpg',
+    'bakcell-arena' => '/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg',
+    'sr-group-co' => '/wp-content/uploads/2025/04/srgroup.jpg',
+    'wyndham-garden-baku' => '/wp-content/uploads/2025/04/Screenshot_5.webp',
+    'agsu-dairy-factory' => '/wp-content/uploads/2025/04/0003.jpg',
+    'grand-park-plaza' => '/wp-content/uploads/2025/04/Picture19.jpg',
+    'mogan-hotel-baku' => '/wp-content/uploads/2025/04/getlstd-property-pho.jpg',
+    'socar-midstream-office' => '/wp-content/uploads/2025/04/bp-xezer-centre.jpg',
+    'intercontinental-hotel-baku' => '/wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1.webp',
+    'qalaalti-hotel' => '/wp-content/uploads/2025/04/1563191831.2.jpg',
+    'khazar-residence' => '/wp-content/uploads/2025/04/3893-1724920571cfqF6.jpg',
+    'savalan-winers' => '/wp-content/uploads/2025/04/main_factory_img.webp',
+    'skywell-showroom' => '/wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n.jpg',
+    'the-pool-house' => '/wp-content/uploads/2025/03/204119242.webp',
+];
+$uc = $db->prepare("UPDATE projects SET cover=? WHERE slug=? AND (cover IS NULL OR cover='')");
+foreach ($covers as $slug=>$img) $uc->execute([$img,$slug]);
+$log('✓ project covers seeded (14)');
+
 $log("\nDONE. Delete this file. Open /admin/?section=projects");
