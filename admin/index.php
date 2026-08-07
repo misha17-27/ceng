@@ -33,6 +33,7 @@ if ($section === 'login') {
 /* ---- everything below requires auth ---- */
 require_login();
 if (!isset(SECTIONS[$section])) $section = 'overview';
+if (in_array($section, ADMIN_ONLY, true) && !is_admin()) { flash('Недостаточно прав (нужна роль Администратор).','err'); redirect('index.php?section=overview'); }
 csrf_check();
 $db = pdo();
 
@@ -119,15 +120,77 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         elseif ($act === 'del') { $db->prepare('DELETE FROM submissions WHERE id=?')->execute([(int)$_POST['id']]); flash('Заявка удалена.'); }
         redirect('index.php?section=submissions');
     }
-    if ($section === 'security' && $act === 'passwd') {
+    if ($section === 'profile') {
         $a = current_admin();
-        $st = $db->prepare('SELECT pass_hash FROM admins WHERE id=?'); $st->execute([$a['id']]); $row=$st->fetch();
-        if (!password_verify($_POST['old'] ?? '', $row['pass_hash'] ?? '')) flash('Текущий пароль неверный.', 'err');
-        elseif (strlen($_POST['new'] ?? '') < 6) flash('Новый пароль слишком короткий.', 'err');
-        elseif (($_POST['new'] ?? '') !== ($_POST['new2'] ?? '')) flash('Пароли не совпадают.', 'err');
-        else { $db->prepare('UPDATE admins SET pass_hash=? WHERE id=?')
-                  ->execute([password_hash($_POST['new'], PASSWORD_DEFAULT), $a['id']]); flash('Пароль изменён.'); }
-        redirect('index.php?section=security');
+        if ($act === 'save') {
+            $db->prepare('UPDATE admins SET name=?, email=? WHERE id=?')->execute([$_POST['name']??'', trim($_POST['email']??''), $a['id']]);
+            $_SESSION['admin']['name'] = $_POST['name'] ?? ''; $_SESSION['admin']['email'] = trim($_POST['email'] ?? '');
+            flash('Профиль сохранён.');
+        } elseif ($act === 'passwd') {
+            $st = $db->prepare('SELECT pass_hash FROM admins WHERE id=?'); $st->execute([$a['id']]); $row=$st->fetch();
+            if (!password_verify($_POST['old'] ?? '', $row['pass_hash'] ?? '')) flash('Текущий пароль неверный.', 'err');
+            elseif (strlen($_POST['new'] ?? '') < 6) flash('Новый пароль слишком короткий (мин. 6).', 'err');
+            elseif (($_POST['new'] ?? '') !== ($_POST['new2'] ?? '')) flash('Пароли не совпадают.', 'err');
+            else { $db->prepare('UPDATE admins SET pass_hash=? WHERE id=?')->execute([password_hash($_POST['new'], PASSWORD_DEFAULT), $a['id']]); flash('Пароль изменён.'); }
+        }
+        redirect('index.php?section=profile');
+    }
+    if ($section === 'security' && $act === 'save') {
+        kv_set('settings','turnstile_site', trim($_POST['turnstile_site']??''));
+        if (($_POST['turnstile_secret']??'') !== '') kv_set('settings','turnstile_secret', trim($_POST['turnstile_secret']));
+        flash('Настройки безопасности сохранены.'); redirect('index.php?section=security');
+    }
+    if ($section === 'smtp') {
+        if ($act === 'save') {
+            foreach (['smtp_host','smtp_port','smtp_user','smtp_from','smtp_from_name','smtp_secure'] as $k) kv_set('settings',$k,(string)($_POST[$k]??''));
+            if (($_POST['smtp_pass']??'') !== '') kv_set('settings','smtp_pass',(string)$_POST['smtp_pass']);
+            flash('Настройки SMTP сохранены.'); redirect('index.php?section=smtp');
+        } elseif ($act === 'test') {
+            $err=''; $to = trim($_POST['test_to'] ?? '');
+            if (smtp_send($to, 'Тест SMTP — ceng.az', "Это тестовое письмо из админ-панели.\nЕсли вы его получили — SMTP настроен верно.", $err))
+                flash('Тестовое письмо отправлено на '.$to);
+            else flash('Ошибка отправки: '.$err, 'err');
+            redirect('index.php?section=smtp');
+        }
+    }
+    if ($section === 'users') {
+        if (!empty($_POST['delete_id'])) {
+            $id = (int)$_POST['delete_id'];
+            if ($id !== (int)current_admin()['id']) { $db->prepare('DELETE FROM admins WHERE id=?')->execute([$id]); flash('Пользователь удалён.'); }
+            else flash('Нельзя удалить самого себя.', 'err');
+            redirect('index.php?section=users');
+        }
+        if ($act === 'add') {
+            $em = trim($_POST['email'] ?? '');
+            if (!filter_var($em, FILTER_VALIDATE_EMAIL)) flash('Некорректный e-mail.', 'err');
+            elseif (strlen($_POST['password'] ?? '') < 8) flash('Пароль минимум 8 символов.', 'err');
+            else {
+                $chk = $db->prepare('SELECT id FROM admins WHERE email=?'); $chk->execute([$em]);
+                if ($chk->fetch()) flash('Пользователь с таким e-mail уже есть.', 'err');
+                else { $db->prepare('INSERT INTO admins (name,email,pass_hash,role,active) VALUES (?,?,?,?,1)')
+                    ->execute([$_POST['name']??'', $em, password_hash($_POST['password'], PASSWORD_DEFAULT), ($_POST['role']??'editor')==='admin'?'admin':'editor']);
+                    flash('Пользователь добавлен.'); }
+            }
+            redirect('index.php?section=users');
+        } elseif ($act === 'save') {
+            $me = current_admin()['id'];
+            foreach (($_POST['u'] ?? []) as $id => $row) {
+                $id = (int)$id;
+                $role = ($row['role'] ?? 'editor') === 'admin' ? 'admin' : 'editor';
+                $active = isset($row['active']) ? 1 : 0;
+                if ($id === (int)$me) { $active = 1; $role = 'admin'; } // don't lock yourself out
+                $db->prepare('UPDATE admins SET name=?, role=?, active=? WHERE id=?')->execute([$row['name']??'', $role, $active, $id]);
+                if (($row['password'] ?? '') !== '') {
+                    if (strlen($row['password']) >= 8) $db->prepare('UPDATE admins SET pass_hash=? WHERE id=?')->execute([password_hash($row['password'], PASSWORD_DEFAULT), $id]);
+                }
+            }
+            flash('Изменения сохранены.'); redirect('index.php?section=users');
+        } elseif ($act === 'del') {
+            $id = (int)$_POST['id'];
+            if ($id !== (int)current_admin()['id']) { $db->prepare('DELETE FROM admins WHERE id=?')->execute([$id]); flash('Пользователь удалён.'); }
+            else flash('Нельзя удалить самого себя.', 'err');
+            redirect('index.php?section=users');
+        }
     }
     if ($section === 'images' && $act === 'upload' && !empty($_FILES['file']['name'])) {
         $dir = dirname(__DIR__) . '/wp-content/uploads/admin';
@@ -295,13 +358,75 @@ elseif ($section === 'images') {
 }
 
 elseif ($section === 'security') {
-    echo '<form method="post" class="panel" style="max-width:460px">'.csrf_field().'<input type="hidden" name="action" value="passwd">';
-    echo '<h3>Сменить пароль</h3>';
+    $site = kv_get('settings','turnstile_site'); $hasSecret = kv_get('settings','turnstile_secret') !== '';
+    $on = ($site !== '' && $hasSecret);
+    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<h3>Cloudflare Turnstile (капча) <span style="font-size:12px;background:'.($on?'#0f9d76':'#c9ced0').';color:#fff;padding:3px 10px;border-radius:20px;vertical-align:middle">'.($on?'включена':'выключена').'</span></h3>';
+    echo '<p class="muted">Защищает форму на сайте и вход в панель от ботов.</p>';
+    echo '<label>Site Key (публичный ключ)</label><input type="text" name="turnstile_site" value="'.e($site).'">';
+    echo '<label>Secret Key (секретный ключ)</label><input type="password" name="turnstile_secret" placeholder="'.($hasSecret?'•••••••• (оставь пустым — не менять)':'').'">';
+    echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
+    echo '<div class="panel"><h3>Где взять ключи</h3><ol class="muted"><li>Зайдите в <b>dash.cloudflare.com</b> → раздел <b>Turnstile</b>.</li><li>Нажмите <b>Add widget</b>.</li><li>Domain — укажите <b>ceng.az</b> и <b>yeni.ceng.az</b>.</li><li>Widget Mode — <b>Managed</b>.</li><li>Скопируйте Site Key и Secret Key в поля выше.</li></ol></div>';
+    echo '<div class="panel"><h3>Что уже защищено</h3><ul class="muted"><li>Пароли хранятся в виде необратимого хэша.</li><li>Все формы защищены от CSRF.</li><li>Проверка типа файлов при загрузке.</li><li>Защита от подстановки заголовков в письмах.</li></ul></div>';
+}
+
+elseif ($section === 'profile') {
+    $a = current_admin();
+    echo '<form method="post" class="panel" style="max-width:520px">'.csrf_field().'<input type="hidden" name="action" value="save"><h3>Мой профиль</h3>';
+    echo '<label>Имя</label><input type="text" name="name" value="'.e($a['name'] ?? '').'">';
+    echo '<label>E-mail</label><input type="email" name="email" value="'.e($a['email'] ?? '').'">';
+    echo '<div class="muted" style="margin-top:8px">Роль: <b>'.($a['role']==='admin'?'Администратор':'Редактор').'</b></div>';
+    echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
+    echo '<form method="post" class="panel" style="max-width:520px">'.csrf_field().'<input type="hidden" name="action" value="passwd"><h3>Сменить пароль</h3>';
     echo '<label>Текущий пароль</label><input type="password" name="old" required>';
     echo '<label>Новый пароль</label><input type="password" name="new" required>';
     echo '<label>Повторите новый</label><input type="password" name="new2" required>';
-    echo '<div style="margin-top:16px"><button class="btn">Изменить</button></div></form>';
-    echo '<div class="panel"><h3>Рекомендации</h3><ul class="muted"><li>Удали <code>install.php</code> после установки.</li><li>Используй сложный пароль.</li><li>Панель доступна по HTTPS.</li></ul></div>';
+    echo '<div style="margin-top:16px"><button class="btn">Изменить пароль</button></div></form>';
+}
+
+elseif ($section === 'smtp') {
+    $g = fn($k)=>e(kv_get('settings',$k));
+    $mode = kv_get('settings','smtp_host')!=='' ? 'SMTP' : 'стандартная функция mail()';
+    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<h3>Настройки SMTP <span class="muted" style="font-size:13px;font-weight:400">— способ отправки сейчас: <b>'.e($mode).'</b></span></h3>';
+    echo '<div class="row3"><div><label>SMTP-сервер</label><input type="text" name="smtp_host" value="'.$g('smtp_host').'" placeholder="mail.ceng.az"></div>';
+    echo '<div><label>Порт</label><input type="text" name="smtp_port" value="'.$g('smtp_port').'"></div>';
+    echo '<div><label>Шифрование</label><select name="smtp_secure">';
+    foreach (['tls'=>'STARTTLS (587)','ssl'=>'SSL/TLS (465)','none'=>'Без шифрования'] as $v=>$l) echo '<option value="'.$v.'"'.(kv_get('settings','smtp_secure')===$v?' selected':'').'>'.$l.'</option>';
+    echo '</select></div></div>';
+    echo '<div class="row"><div><label>Пользователь (обычно полный адрес почты)</label><input type="text" name="smtp_user" value="'.$g('smtp_user').'"></div>';
+    echo '<div><label>Пароль</label><input type="password" name="smtp_pass" placeholder="'.(kv_get('settings','smtp_pass')!==''?'•••••• (оставь пустым — не менять)':'').'"></div></div>';
+    echo '<div class="row"><div><label>Адрес отправителя</label><input type="text" name="smtp_from" value="'.$g('smtp_from').'"></div>';
+    echo '<div><label>Имя отправителя</label><input type="text" name="smtp_from_name" value="'.$g('smtp_from_name').'"></div></div>';
+    echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
+    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="test"><h3>Проверка отправки</h3><p class="muted">Отправим тестовое письмо, чтобы убедиться, что настройки верные.</p>';
+    echo '<div style="display:flex;gap:12px;align-items:flex-end"><div style="flex:1"><label>Адрес получателя</label><input type="email" name="test_to" value="'.e(current_admin()['email'] ?? '').'" required></div><button class="btn ghost">Отправить тест</button></div></form>';
+    echo '<div class="panel"><h3>Где взять данные</h3><p class="muted">В cPanel → <b>Email Accounts</b> → у нужного ящика нажмите <b>Connect Devices</b>. Там сервер, порт и способ шифрования. Пользователь — полный адрес почты, пароль — от этого ящика.</p></div>';
+}
+
+elseif ($section === 'users') {
+    $me = current_admin()['id'];
+    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="add"><h3>Добавить пользователя</h3>';
+    echo '<p class="muted">Роль «Администратор» даёт доступ к управлению пользователями. «Редактор» — только контент.</p>';
+    echo '<div class="row"><div><label>Имя</label><input type="text" name="name"></div><div><label>E-mail</label><input type="email" name="email" required></div></div>';
+    echo '<div class="row"><div><label>Пароль (мин. 8 символов)</label><input type="text" name="password" required></div>';
+    echo '<div><label>Роль</label><select name="role"><option value="editor">Редактор</option><option value="admin">Администратор</option></select></div></div>';
+    echo '<div style="margin-top:16px"><button class="btn">Добавить</button></div></form>';
+
+    $rows = $db->query('SELECT * FROM admins ORDER BY id')->fetchAll();
+    echo '<form method="post" class="panel"><h3>Все пользователи</h3><p class="muted">Поле пароля оставьте пустым, если менять его не нужно.</p>'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<table><tr><th>Имя</th><th>E-mail</th><th>Роль</th><th>Новый пароль</th><th>Активен</th><th>Вход</th><th></th></tr>';
+    foreach ($rows as $r) {
+        $self = (int)$r['id'] === (int)$me;
+        echo '<tr><td><input type="text" name="u['.$r['id'].'][name]" value="'.e($r['name'] ?? '').'" style="width:130px"></td>';
+        echo '<td>'.e($r['email']).($self?' <span style="font-size:11px;background:#d7f3ea;color:#0c8666;padding:2px 8px;border-radius:20px">это вы</span>':'').'</td>';
+        echo '<td><select name="u['.$r['id'].'][role]"'.($self?' disabled':'').'><option value="admin"'.(($r['role']??'admin')==='admin'?' selected':'').'>Администратор</option><option value="editor"'.(($r['role']??'')==='editor'?' selected':'').'>Редактор</option></select></td>';
+        echo '<td><input type="text" name="u['.$r['id'].'][password]" placeholder="—" style="width:120px"></td>';
+        echo '<td style="text-align:center"><input type="checkbox" name="u['.$r['id'].'][active]" '.((int)($r['active']??1)?'checked':'').($self?' disabled':'').'></td>';
+        echo '<td class="muted">'.e($r['last_login'] ?? '—').'</td>';
+        echo '<td class="right">'.($self?'':'<button class="btn sm red" name="delete_id" value="'.$r['id'].'" formnovalidate onclick="return confirm(\'Удалить пользователя?\')">Удалить</button>').'</td></tr>';
+    }
+    echo '</table><div style="margin-top:16px"><button class="btn">Сохранить изменения</button></div></form>';
 }
 
 layout_bottom();

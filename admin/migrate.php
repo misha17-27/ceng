@@ -67,4 +67,18 @@ foreach (['site_short'=>'CENG','site_full'=>'Caspian Engineering Group',
           'site_slogan'=>'Keyfiyyətli tikinti və mühəndislik həlləri','blue_short'=>'','blue_text'=>''] as $k=>$v) $it->execute([$k,$v]);
 $log('✓ services/pages/seo columns + contacts/texts seeds');
 
+$log('admins columns (users/roles):');
+add_col($db,$log,'admins','name','VARCHAR(120) NULL');
+add_col($db,$log,'admins','role',"VARCHAR(20) DEFAULT 'admin'");
+add_col($db,$log,'admins','active','TINYINT DEFAULT 1');
+add_col($db,$log,'admins','last_login','DATETIME NULL');
+$db->exec("UPDATE admins SET role='admin' WHERE role IS NULL OR role=''");
+$db->exec("UPDATE admins SET active=1 WHERE active IS NULL");
+
+$is = $db->prepare("INSERT IGNORE INTO settings (k,v) VALUES (?,?)");
+foreach (['smtp_host'=>'','smtp_port'=>'587','smtp_user'=>'','smtp_pass'=>'',
+          'smtp_from'=>'info@ceng.az','smtp_from_name'=>'Ceng.az','smtp_secure'=>'tls',
+          'turnstile_site'=>'','turnstile_secret'=>''] as $k=>$v) $is->execute([$k,$v]);
+$log('✓ admins roles + SMTP + Turnstile settings');
+
 $log("\nDONE. Delete this file. Open /admin/?section=projects");

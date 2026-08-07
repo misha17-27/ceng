@@ -32,14 +32,18 @@ function attempt_login(string $email, string $pass): bool {
     $st = pdo()->prepare('SELECT * FROM admins WHERE email = ? LIMIT 1');
     $st->execute([trim($email)]);
     $u = $st->fetch();
-    if ($u && password_verify($pass, $u['pass_hash'])) {
+    if ($u && (int)($u['active'] ?? 1) === 1 && password_verify($pass, $u['pass_hash'])) {
         boot_session();
         session_regenerate_id(true);
-        $_SESSION['admin'] = ['id'=>(int)$u['id'], 'email'=>$u['email']];
+        $_SESSION['admin'] = ['id'=>(int)$u['id'], 'email'=>$u['email'],
+                              'name'=>$u['name'] ?? '', 'role'=>$u['role'] ?? 'admin'];
+        try { pdo()->prepare('UPDATE admins SET last_login=NOW() WHERE id=?')->execute([(int)$u['id']]); } catch (Throwable $e) {}
         return true;
     }
     return false;
 }
+function is_admin(): bool { $a = current_admin(); return ($a['role'] ?? 'admin') === 'admin'; }
+function require_admin(): void { require_login(); if (!is_admin()) { flash('Недостаточно прав (нужна роль Администратор).','err'); redirect('index.php?section=overview'); } }
 function logout(): void { boot_session(); $_SESSION = []; session_destroy(); }
 
 /* CSRF */
@@ -80,6 +84,46 @@ function kv_set(string $table, string $key, string $val): void {
     $st->execute([$key,$val]);
 }
 
+/* Minimal SMTP sender (STARTTLS/SSL). Returns true on success, sets &$err on failure.
+   Falls back is handled by caller (use mail() when smtp_host empty). */
+function smtp_send(string $to, string $subject, string $body, string &$err = ''): bool {
+    $host = kv_get('settings','smtp_host');
+    if ($host === '') { $err = 'SMTP-сервер не заполнен'; return false; }
+    $port   = (int)(kv_get('settings','smtp_port') ?: 587);
+    $user   = kv_get('settings','smtp_user');
+    $pass   = kv_get('settings','smtp_pass');
+    $secure = kv_get('settings','smtp_secure') ?: 'tls';
+    $from   = kv_get('settings','smtp_from') ?: $user;
+    $fname  = kv_get('settings','smtp_from_name') ?: 'Ceng.az';
+    $target = $secure === 'ssl' ? "ssl://$host" : $host;
+    $fp = @fsockopen($target, $port, $eno, $estr, 15);
+    if (!$fp) { $err = "Подключение не удалось: $estr ($eno)"; return false; }
+    stream_set_timeout($fp, 15);
+    $get = function() use ($fp) { $d=''; while (($l=fgets($fp,515))!==false) { $d.=$l; if (strlen($l)<4 || $l[3]===' ') break; } return $d; };
+    $cmd = function($c) use ($fp,$get) { fwrite($fp, $c."\r\n"); return $get(); };
+    $ok  = fn($r,$code)=> str_starts_with(trim($r), $code);
+    $get();
+    $cmd("EHLO ceng.az");
+    if ($secure === 'tls') {
+        if (!$ok($cmd("STARTTLS"),'220') || !stream_socket_enable_crypto($fp,true,STREAM_CRYPTO_METHOD_TLS_CLIENT)) { $err='STARTTLS не удалось'; fclose($fp); return false; }
+        $cmd("EHLO ceng.az");
+    }
+    if ($user !== '') {
+        $cmd("AUTH LOGIN"); $cmd(base64_encode($user));
+        if (!$ok($cmd(base64_encode($pass)),'235')) { $err='Авторизация SMTP не прошла (проверь логин/пароль)'; fclose($fp); return false; }
+    }
+    $cmd("MAIL FROM:<$from>");
+    $cmd("RCPT TO:<$to>");
+    if (!$ok($cmd("DATA"),'354')) { $err='Сервер не принял DATA'; fclose($fp); return false; }
+    $hdr = "From: =?UTF-8?B?".base64_encode($fname)."?= <$from>\r\nTo: <$to>\r\n"
+         . "Subject: =?UTF-8?B?".base64_encode($subject)."?=\r\nMIME-Version: 1.0\r\n"
+         . "Content-Type: text/plain; charset=UTF-8\r\n\r\n";
+    $r = $cmd($hdr . str_replace("\r\n.", "\r\n..", $body) . "\r\n.");
+    $cmd("QUIT"); fclose($fp);
+    if (!$ok($r,'250')) { $err='Письмо не отправлено: '.trim($r); return false; }
+    return true;
+}
+
 const SECTIONS = [
     'overview'    => ['Обзор', '▤'],
     'texts'       => ['Тексты сайта', '¶'],
@@ -88,11 +132,20 @@ const SECTIONS = [
     'projects'    => ['Проекты', '◧'],
     'partners'    => ['Партнёры', '⬡'],
     'images'      => ['Изображения', '❏'],
-    'contacts'    => ['Контакты', '☏'],
-    'submissions' => ['Заявки', '✉'],
+    'contacts'    => ['Контакты и соцсети', '☏'],
+    'submissions' => ['Заявки с сайта', '✉'],
     'seo'         => ['SEO', '☌'],
+    'smtp'        => ['Почта (SMTP)', '✉'],
     'security'    => ['Безопасность', '⚿'],
+    'users'       => ['Пользователи', '☺'],
+    'profile'     => ['Мой профиль', '☺'],
 ];
+const GROUPS = [
+    'ОСНОВНОЕ'  => ['overview'],
+    'КОНТЕНТ'   => ['texts','pages','services','projects','partners','images','contacts','submissions'],
+    'НАСТРОЙКИ' => ['seo','smtp','security','users','profile'],
+];
+const ADMIN_ONLY = ['users','smtp','security'];
 
 function layout_top(string $active, string $title): void {
     $admin = current_admin();
@@ -100,11 +153,16 @@ function layout_top(string $active, string $title): void {
     echo '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'.e($title).' — CENG admin</title>';
     echo '<style>'.admin_css().'</style></head><body><div class="wrap">';
     echo '<aside class="side"><div class="brand"><span class="logo">CE</span><b>CASPIAN<br>ENGINEERING</b></div><nav>';
-    foreach (SECTIONS as $key => [$label,$ic]) {
-        $cls = $key === $active ? ' class="on"' : '';
-        echo '<a'.$cls.' href="index.php?section='.$key.'"><i>'.$ic.'</i>'.e($label).'</a>';
+    foreach (GROUPS as $glabel => $keys) {
+        echo '<div class="navgroup">'.e($glabel).'</div>';
+        foreach ($keys as $key) {
+            if (in_array($key, ADMIN_ONLY, true) && !is_admin()) continue;
+            [$label,$ic] = SECTIONS[$key];
+            $cls = $key === $active ? ' class="on"' : '';
+            echo '<a'.$cls.' href="index.php?section='.$key.'"><i>'.$ic.'</i>'.e($label).'</a>';
+        }
     }
-    echo '</nav><div class="who">Вы вошли как<br><b>'.e($admin['email'] ?? '').'</b></div></aside>';
+    echo '</nav><div class="who">Вы вошли как<br><b>'.e($admin['name'] ?: ($admin['email'] ?? '')).'</b></div></aside>';
     echo '<main><header class="bar"><h1>'.e($title).'</h1><div>';
     echo '<a class="btn ghost" href="/" target="_blank">Открыть сайт</a> ';
     echo '<a class="btn" href="index.php?section=logout">Выйти</a></div></header><div class="body">';
@@ -119,7 +177,8 @@ a{text-decoration:none}.wrap{display:flex;min-height:100vh}
 .side{width:250px;background:#0f2b25;color:#cfe3dd;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
 .brand{display:flex;gap:10px;align-items:center;padding:20px 18px;font-size:12px;line-height:1.15;color:#fff;border-bottom:1px solid #1c3d35}
 .brand .logo{background:#0f9d76;color:#fff;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:800}
-.side nav{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow:auto}
+.side nav{display:flex;flex-direction:column;padding:6px 0 14px;flex:1;overflow:auto}
+.navgroup{color:#5f7d75;font-size:11px;letter-spacing:.08em;padding:15px 20px 5px;font-weight:700}
 .side nav a{color:#bcd4cd;padding:12px 20px;font-size:14px;display:flex;gap:12px;align-items:center}
 .side nav a i{width:18px;font-style:normal;opacity:.8}
 .side nav a:hover{background:#163a32;color:#fff}
