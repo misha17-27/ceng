@@ -19,7 +19,7 @@ if ($section === 'login') {
     }
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход — CENG admin</title><style>'.admin_css().'</style></head><body>';
     echo '<div class="login"><form class="box" method="post">';
-    echo '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span class="logo" style="background:#0f9d76;color:#fff;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:800">CE</span><b style="font-size:12px;line-height:1.15">CASPIAN<br>ENGINEERING</b></div>';
+    echo '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span class="logo" style="background:#011640;color:#fff;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:800">CE</span><b style="font-size:12px;line-height:1.15">CASPIAN<br>ENGINEERING</b></div>';
     echo '<h2>Вход в панель</h2><div class="sub">Управление контентом сайта</div>';
     if ($err) echo '<div style="background:#b91c1c;color:#fff;padding:10px;border-radius:8px;margin-bottom:12px">'.e($err).'</div>';
     echo csrf_field();
@@ -249,7 +249,7 @@ elseif ($section === 'contacts') {
     echo '<label>Часы работы</label><input type="text" name="hours" value="'.$g('hours').'">';
     echo '<label>Google Maps embed URL</label><input type="text" name="map" value="'.$g('map').'">';
     for ($i=1;$i<=4;$i++) {
-        echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#0f9d76;font-weight:700">Соцсеть '.$i.'</legend>';
+        echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#011640;font-weight:700">Соцсеть '.$i.'</legend>';
         echo '<div class="row"><div><label>Название</label><input type="text" name="soc'.$i.'_name" value="'.$g('soc'.$i.'_name').'"></div>';
         echo '<div><label>URL</label><input type="text" name="soc'.$i.'_url" value="'.$g('soc'.$i.'_url').'"></div></div></fieldset>';
     }
@@ -262,7 +262,7 @@ elseif ($section === 'services') {
     for ($i=0;$i<2;$i++) $slots[] = ['id'=>'','slug'=>'','code'=>'','title'=>'','short'=>'','descr'=>'','points'=>''];
     echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
     foreach ($slots as $i=>$s) {
-        echo '<div style="border-bottom:1px solid #eef2f1;padding-bottom:16px;margin-bottom:16px"><b style="color:#0f9d76">Услуга '.($i+1).'</b>';
+        echo '<div style="border-bottom:1px solid #eef2f1;padding-bottom:16px;margin-bottom:16px"><b style="color:#011640">Услуга '.($i+1).'</b>';
         echo '<input type="hidden" name="svc['.$i.'][id]" value="'.e($s['id']??'').'">';
         echo '<label>Slug</label><input type="text" name="svc['.$i.'][slug]" value="'.e($s['slug']??'').'">';
         echo '<label>Код</label><input type="text" name="svc['.$i.'][code]" value="'.e($s['code']??'').'">';
@@ -294,11 +294,11 @@ elseif ($section === 'pages') {
             echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
             echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: https://yeni.ceng.az'.e($url).'</p>';
             echo '<label>Заголовок / пункт меню</label><input type="text" name="title" value="'.e($pg['title']).'">';
-            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#0f9d76;font-weight:700">Контент страницы</legend>';
+            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">Контент страницы</legend>';
             echo '<label>Заголовок первого экрана</label><textarea name="hero_title">'.e($pg['hero_title']??'').'</textarea>';
             echo '<label>Короткий заголовок синего блока</label><textarea name="blue_short">'.e($pg['blue_short']??'').'</textarea>';
             echo '<label>Текст синего блока</label><textarea name="blue_text" style="min-height:120px">'.e($pg['blue_text']??'').'</textarea></fieldset>';
-            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#0f9d76;font-weight:700">SEO этой страницы</legend>';
+            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">SEO этой страницы</legend>';
             echo '<label>SEO Title</label><input type="text" name="seo_title" value="'.e($seo['title']).'">';
             echo '<label>Meta Description</label><textarea name="seo_desc">'.e($seo['descr']).'</textarea>';
             echo '<div class="row"><div><label>Robots</label><input type="text" name="robots" value="'.e($seo['robots']??'index,follow').'"></div>';
@@ -311,7 +311,7 @@ elseif ($section === 'pages') {
         echo '<table><tr><th>Заголовок</th><th>URL</th><th>SEO</th><th></th></tr>';
         foreach ($rows as $r) {
             $url = $mkurl($r['slug']);
-            $dot = trim((string)($r['seo_t'] ?? '')) !== '' ? '#0f9d76' : '#cbd3d1';
+            $dot = trim((string)($r['seo_t'] ?? '')) !== '' ? '#011640' : '#cbd3d1';
             echo '<tr><td><b>'.e($r['title']).'</b></td><td><span class="muted" style="background:#f0f3f2;padding:2px 8px;border-radius:6px">'.e($url).'</span></td>';
             echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$dot.'"></span></td>';
             echo '<td class="right" style="white-space:nowrap"><a class="btn sm ghost" href="index.php?section=pages&edit='.rawurlencode($r['slug']).'">Редактировать</a> <a class="btn sm ghost" href="'.e($url).'" target="_blank">Открыть</a></td></tr>';
@@ -361,7 +361,7 @@ elseif ($section === 'security') {
     $site = kv_get('settings','turnstile_site'); $hasSecret = kv_get('settings','turnstile_secret') !== '';
     $on = ($site !== '' && $hasSecret);
     echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
-    echo '<h3>Cloudflare Turnstile (капча) <span style="font-size:12px;background:'.($on?'#0f9d76':'#c9ced0').';color:#fff;padding:3px 10px;border-radius:20px;vertical-align:middle">'.($on?'включена':'выключена').'</span></h3>';
+    echo '<h3>Cloudflare Turnstile (капча) <span style="font-size:12px;background:'.($on?'#011640':'#c9ced0').';color:#fff;padding:3px 10px;border-radius:20px;vertical-align:middle">'.($on?'включена':'выключена').'</span></h3>';
     echo '<p class="muted">Защищает форму на сайте и вход в панель от ботов.</p>';
     echo '<label>Site Key (публичный ключ)</label><input type="text" name="turnstile_site" value="'.e($site).'">';
     echo '<label>Secret Key (секретный ключ)</label><input type="password" name="turnstile_secret" placeholder="'.($hasSecret?'•••••••• (оставь пустым — не менять)':'').'">';
@@ -419,7 +419,7 @@ elseif ($section === 'users') {
     foreach ($rows as $r) {
         $self = (int)$r['id'] === (int)$me;
         echo '<tr><td><input type="text" name="u['.$r['id'].'][name]" value="'.e($r['name'] ?? '').'" style="width:130px"></td>';
-        echo '<td>'.e($r['email']).($self?' <span style="font-size:11px;background:#d7f3ea;color:#0c8666;padding:2px 8px;border-radius:20px">это вы</span>':'').'</td>';
+        echo '<td>'.e($r['email']).($self?' <span style="font-size:11px;background:#dbe6f5;color:#0a2a5c;padding:2px 8px;border-radius:20px">это вы</span>':'').'</td>';
         echo '<td><select name="u['.$r['id'].'][role]"'.($self?' disabled':'').'><option value="admin"'.(($r['role']??'admin')==='admin'?' selected':'').'>Администратор</option><option value="editor"'.(($r['role']??'')==='editor'?' selected':'').'>Редактор</option></select></td>';
         echo '<td><input type="text" name="u['.$r['id'].'][password]" placeholder="—" style="width:120px"></td>';
         echo '<td style="text-align:center"><input type="checkbox" name="u['.$r['id'].'][active]" '.((int)($r['active']??1)?'checked':'').($self?' disabled':'').'></td>';
@@ -507,7 +507,7 @@ function render_projects(PDO $db): void {
         if (!$rows) echo '<tr><td colspan="4" class="muted">Пока нет проектов.</td></tr>';
         foreach ($rows as $r) {
             $cover = $r['cover'] ?: ($r['image'] ?? '');
-            $seo = trim((string)($r['seo_title'] ?? '')) !== '' ? '#0f9d76' : '#cbd3d1';
+            $seo = trim((string)($r['seo_title'] ?? '')) !== '' ? '#011640' : '#cbd3d1';
             echo '<tr><td><b>'.e($r['title']).'</b><br><span class="muted" style="font-size:12px">'.e($r['slug']).'</span></td>';
             echo '<td>'.($cover ? '<img src="'.e($cover).'" style="width:74px;height:48px;object-fit:cover;border-radius:6px">' : '—').'</td>';
             echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$seo.'"></span></td>';
@@ -538,7 +538,7 @@ function render_projects(PDO $db): void {
     if ($cover) echo '<div style="margin-top:8px"><img src="'.e($cover).'" style="max-width:200px;border-radius:8px"></div>';
     echo '<label>Загрузить новую обложку</label><input type="file" name="cover_file" accept="image/*">';
 
-    echo '<label style="margin-top:20px;color:#0f9d76">Галерея проекта</label>';
+    echo '<label style="margin-top:20px;color:#011640">Галерея проекта</label>';
     echo '<div id="gal" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">';
     foreach ($gallery as $g) echo gal_item((string)$g);
     echo '</div>';
@@ -559,7 +559,7 @@ function render_projects(PDO $db): void {
 
     echo '<label>Объём работ, каждый пункт с новой строки</label><textarea name="scope" style="min-height:110px">'.e($p['scope']).'</textarea>';
 
-    echo '<h4 style="color:#0f9d76;margin-top:22px">SEO этого проекта</h4>';
+    echo '<h4 style="color:#011640;margin-top:22px">SEO этого проекта</h4>';
     echo '<label>SEO Title</label><input type="text" name="seo_title" value="'.e($p['seo_title']).'">';
     echo '<label>Meta Description</label><textarea name="seo_desc">'.e($p['seo_desc']).'</textarea>';
     echo '<div class="row"><div><label>Robots</label><input type="text" name="robots" value="'.e($p['robots']).'"></div>';
