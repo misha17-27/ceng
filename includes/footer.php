@@ -90,3 +90,43 @@
 				</div>
 				</div>
 				</footer>
+
+<?php
+/* Mobile-menu socials pulled from admin Контакты (soc1..soc4). Hidden container; JS moves it into the open menu. */
+$__soc = '';
+$__dbf = $_SERVER['DOCUMENT_ROOT'] . '/admin/db.php';
+if (is_file($__dbf)) {
+    try {
+        $__p = require $__dbf;
+        $__r = $__p->query("SELECT k,v FROM contacts WHERE k LIKE 'soc%'")->fetchAll(PDO::FETCH_KEY_PAIR);
+        for ($i = 1; $i <= 4; $i++) {
+            $n = trim($__r['soc'.$i.'_name'] ?? '');
+            $u = trim($__r['soc'.$i.'_url']  ?? '');
+            if ($n !== '' && $u !== '' && $u !== '#') {
+                $__soc .= '<a href="'.htmlspecialchars($u, ENT_QUOTES).'" target="_blank" rel="noopener">'.htmlspecialchars($n, ENT_QUOTES).'</a>';
+            }
+        }
+    } catch (Throwable $e) {}
+}
+if ($__soc !== '') echo '<div id="mob-socials" style="display:none">'.$__soc.'</div>';
+?>
+<script>
+(function () {
+  var toggle = document.querySelector('.elementor-menu-toggle');
+  var dd = document.querySelector('.elementor-nav-menu--dropdown');
+  if (!toggle || !dd) return;
+  var soc = document.getElementById('mob-socials');
+  if (soc) { dd.appendChild(soc); }
+  function sync() {
+    var open = toggle.getAttribute('aria-expanded') === 'true' || toggle.classList.contains('elementor-active');
+    document.body.classList.toggle('mobmenu-open', open);
+    if (soc) soc.style.display = open ? 'flex' : 'none';
+  }
+  toggle.addEventListener('click', function () { setTimeout(sync, 20); });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.elementor-nav-menu--dropdown .elementor-item')) {
+      document.body.classList.remove('mobmenu-open');
+    }
+  });
+})();
+</script>

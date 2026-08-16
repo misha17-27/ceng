@@ -12,3 +12,28 @@
   .elementor-element-8bceabb .elementor-counter-number-wrapper { font-size: 22px !important; justify-content: flex-start !important; }
   .elementor-element-8bceabb .elementor-counter-title { font-size: 10px !important; line-height: 1.2 !important; }
 }
+
+/* Full-screen mobile menu popup (menu on top, socials at the bottom) */
+@media (max-width: 1024px) {
+  body.mobmenu-open { overflow: hidden; }
+  body.mobmenu-open .elementor-nav-menu--dropdown {
+    position: fixed !important; left: 0 !important; top: 0 !important;
+    width: 100vw !important; height: 100vh !important; height: 100dvh !important;
+    max-height: 100dvh !important; background: #fff !important; z-index: 9990 !important;
+    display: flex !important; flex-direction: column !important;
+    padding: 84px 20px 24px !important; overflow-y: auto !important; border: 0 !important;
+  }
+  body.mobmenu-open .elementor-nav-menu--dropdown .elementor-nav-menu { width: 100%; }
+  body.mobmenu-open .elementor-nav-menu--dropdown .elementor-item {
+    text-align: center !important; font-size: 20px !important; padding: 18px 0 !important;
+  }
+  /* keep the header (logo + close X) above the overlay */
+  header.elementor-location-header { position: relative; z-index: 9995; }
+  .elementor-menu-toggle { z-index: 9996; position: relative; }
+  /* socials pinned to the bottom of the open menu */
+  #mob-socials { margin-top: auto; display: flex; gap: 26px; justify-content: center;
+    align-items: center; padding: 22px 0 6px; flex-wrap: wrap; }
+  #mob-socials a { color: #011640; font-weight: 700; font-size: 15px; text-decoration: none; }
+  #mob-socials a:hover { color: #ef7f1a; }
+}
+
