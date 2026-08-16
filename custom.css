@@ -4,18 +4,17 @@
 
 /* Mobile (<=767px) */
 @media (max-width: 767px) {
-  /* Projects grid: 2 columns on phones, images fit the card, readable title */
-  .elementor-posts-container.elementor-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  /* Projects grid: 1 per row on phones, image fits the card, 18px title */
+  .elementor-posts-container.elementor-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   .elementor-posts-container.elementor-grid .elementor-post { overflow: hidden; }
-  .elementor-posts-container.elementor-grid .elementor-post__thumbnail { width: 100% !important; height: 120px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__thumbnail { width: 100% !important; height: 200px !important; }
   .elementor-posts-container.elementor-grid .elementor-post__thumbnail img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
-  .elementor-posts-container.elementor-grid .elementor-post__text { padding: 10px 8px !important; }
-  .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 13px !important; line-height: 1.25 !important; margin: 0 0 4px !important; }
-  .elementor-posts-container.elementor-grid .elementor-post__read-more { font-size: 11px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__text { padding: 12px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 18px !important; line-height: 1.3 !important; margin: 0 0 6px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__read-more { font-size: 13px !important; }
 
-  /* Partners carousel: 3 logos per row on phones */
-  .elementor-widget-image-carousel .swiper-slide { width: 33.333% !important; }
-  .elementor-widget-image-carousel .swiper-slide img { max-width: 92% !important; height: auto !important; margin: 0 auto; }
+  /* Partners carousel logo sizing (count handled by Swiper re-init in footer.php) */
+  .elementor-widget-image-carousel .swiper-slide img { max-width: 90% !important; height: auto !important; margin: 0 auto; }
 
   /* Stats counters (50+ / 100+ / 99%): 3 columns in a row on phones */
   .elementor-element-8bceabb { flex-direction: row !important; flex-wrap: nowrap !important; gap: 6px !important; }

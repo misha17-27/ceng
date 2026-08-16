@@ -135,3 +135,23 @@ if ($__soc !== '') echo '<div id="mob-socials" style="display:none">'.$__soc.'</
   });
 })();
 </script>
+<script>
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    var wrap = document.querySelector('.elementor-widget-image-carousel .swiper, .elementor-widget-image-carousel .swiper-container');
+    if (!wrap || typeof window.Swiper !== 'function') return;
+    try { if (wrap.swiper) wrap.swiper.destroy(true, true); } catch (e) {}
+    try {
+      new window.Swiper(wrap, {
+        loop: true,
+        allowTouchMove: true,
+        speed: 800,
+        spaceBetween: 24,
+        slidesPerView: 3,
+        autoplay: { delay: 2000, disableOnInteraction: false, pauseOnMouseEnter: true },
+        breakpoints: { 0: { slidesPerView: 3 }, 768: { slidesPerView: 4 }, 1024: { slidesPerView: 5 } }
+      });
+    } catch (e) {}
+  }, 900);
+});
+</script>
