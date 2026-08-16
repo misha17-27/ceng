@@ -1,16 +1,29 @@
 /* ceng.az custom overrides */
+#mob-logo { display: none; }
+#mob-socials { display: none; }
 
 /* Mobile (<=767px) */
 @media (max-width: 767px) {
-  /* Projects grid: 2 columns on phones */
-  .elementor-posts-container.elementor-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 15px !important; }
+  /* Projects grid: 2 columns on phones, images fit the card, readable title */
+  .elementor-posts-container.elementor-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post { overflow: hidden; }
+  .elementor-posts-container.elementor-grid .elementor-post__thumbnail { width: 100% !important; height: 120px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__thumbnail img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__text { padding: 10px 8px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 13px !important; line-height: 1.25 !important; margin: 0 0 4px !important; }
+  .elementor-posts-container.elementor-grid .elementor-post__read-more { font-size: 11px !important; }
+
+  /* Partners carousel: 3 logos per row on phones */
+  .elementor-widget-image-carousel .swiper-slide { width: 33.333% !important; }
+  .elementor-widget-image-carousel .swiper-slide img { max-width: 92% !important; height: auto !important; margin: 0 auto; }
 
   /* Stats counters (50+ / 100+ / 99%): 3 columns in a row on phones */
   .elementor-element-8bceabb { flex-direction: row !important; flex-wrap: nowrap !important; gap: 6px !important; }
   .elementor-element-8bceabb > .elementor-widget-counter { flex: 1 1 0 !important; width: auto !important; min-width: 0 !important; }
-  .elementor-element-8bceabb .elementor-counter-number-wrapper { font-size: 22px !important; justify-content: flex-start !important; }
-  .elementor-element-8bceabb .elementor-counter-title { font-size: 10px !important; line-height: 1.2 !important; }
+  .elementor-element-8bceabb .elementor-widget-counter,
+  .elementor-element-8bceabb .elementor-counter { text-align: center !important; }
+  .elementor-element-8bceabb .elementor-counter-number-wrapper { font-size: 22px !important; justify-content: center !important; }
+  .elementor-element-8bceabb .elementor-counter-title { font-size: 10px !important; line-height: 1.2 !important; text-align: center !important; }
 }
 
 /* Full-screen mobile menu popup (menu on top, socials at the bottom) */
@@ -30,6 +43,8 @@
   /* keep the header (logo + close X) above the overlay */
   header.elementor-location-header { position: relative; z-index: 9995; }
   .elementor-menu-toggle { z-index: 9996; position: relative; }
+  /* logo at the top of the open menu */
+  body.mobmenu-open #mob-logo { display: block; margin: 0 auto 18px; max-height: 46px; max-width: 180px; }
   /* socials pinned to the bottom of the open menu */
   #mob-socials { margin-top: auto; display: flex; gap: 26px; justify-content: center;
     align-items: center; padding: 22px 0 6px; flex-wrap: wrap; }

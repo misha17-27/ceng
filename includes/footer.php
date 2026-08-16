@@ -115,6 +115,11 @@ if ($__soc !== '') echo '<div id="mob-socials" style="display:none">'.$__soc.'</
   var toggle = document.querySelector('.elementor-menu-toggle');
   var dd = document.querySelector('.elementor-nav-menu--dropdown');
   if (!toggle || !dd) return;
+  if (!document.getElementById('mob-logo')) {
+    var lg = document.createElement('img');
+    lg.id = 'mob-logo'; lg.src = '/wp-content/uploads/2025/03/logo-png.png'; lg.alt = 'CENG';
+    dd.insertBefore(lg, dd.firstChild);
+  }
   var soc = document.getElementById('mob-socials');
   if (soc) { dd.appendChild(soc); }
   function sync() {
