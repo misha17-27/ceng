@@ -14,8 +14,10 @@ if ($section === 'login') {
     $err = '';
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         csrf_check();
-        if (attempt_login($_POST['email'] ?? '', $_POST['password'] ?? '')) redirect('index.php');
-        $err = 'Неверный e-mail или пароль.';
+        require_once __DIR__ . '/turnstile.php';
+        if (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) $err = 'Подтвердите, что вы не робот.';
+        elseif (attempt_login($_POST['email'] ?? '', $_POST['password'] ?? '')) redirect('index.php');
+        else $err = 'Неверный e-mail или пароль.';
     }
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход — CENG admin</title><style>'.admin_css().'</style></head><body>';
     echo '<div class="login"><form class="box" method="post">';
@@ -25,6 +27,8 @@ if ($section === 'login') {
     echo csrf_field();
     echo '<label>E-mail</label><input type="email" name="email" required autofocus>';
     echo '<label>Пароль</label><input type="password" name="password" required>';
+    require_once __DIR__ . '/turnstile.php';
+    echo '<div style="margin-top:14px;display:flex;justify-content:center">'; turnstile_widget(); echo '</div>';
     echo '<button class="btn" style="width:100%;margin-top:20px" type="submit">Войти</button>';
     echo '</form></div></body></html>';
     exit;

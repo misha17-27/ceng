@@ -221,7 +221,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 					<textarea class="elementor-field-textual elementor-field  elementor-size-sm" name="form_fields[field_e389c4e]" id="form-field-field_e389c4e" rows="5" placeholder="Mesaj"></textarea>				</div>
 								<div class="elementor-field-type-recaptcha elementor-field-group elementor-column elementor-field-group-field_c46a8a2 elementor-col-100">
 					<div class="elementor-field" id="form-field-field_c46a8a2"><div class="elementor-g-recaptcha" data-sitekey="6LeLoBcrAAAAAOUvjZ0ZDnveeWe5s66ubSDGV8ya" data-type="v2_checkbox" data-theme="light" data-size="normal"></div></div>				</div>
-								<div class="elementor-field-group elementor-column elementor-field-type-submit elementor-col-100 e-form__buttons elementor-sm-100">
+								<?php @include $_SERVER['DOCUMENT_ROOT'].'/admin/turnstile.php'; if(function_exists('turnstile_widget')){echo '<div class="elementor-field-group elementor-col-100" style="display:flex;justify-content:center;margin-bottom:12px">'; turnstile_widget(); echo '</div>';} ?><div class="elementor-field-group elementor-column elementor-field-type-submit elementor-col-100 e-form__buttons elementor-sm-100">
 					<button class="elementor-button elementor-size-sm" type="submit">
 						<span class="elementor-button-content-wrapper">
 																						<span class="elementor-button-text">Göndər</span>

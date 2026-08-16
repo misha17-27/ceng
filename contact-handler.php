@@ -1,6 +1,14 @@
 <?php
 // Simple PHP mail handler replacing the WordPress/Elementor Pro form backend.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: /elaqe/'); exit; }
+
+// Cloudflare Turnstile (captcha) check, if configured in admin -> Безопасность.
+$tsfile = __DIR__ . '/admin/turnstile.php';
+if (is_file($tsfile)) {
+    require_once $tsfile;
+    if (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) { header('Location: /elaqe/?captcha=1#contact'); exit; }
+}
+
 $f     = isset($_POST['form_fields']) && is_array($_POST['form_fields']) ? $_POST['form_fields'] : array();
 $name  = isset($f['email'])         ? trim($f['email'])         : '';   // "Ad" field (original key)
 $phone = isset($f['field_6f7b0a2']) ? trim($f['field_6f7b0a2']) : '';
