@@ -19,7 +19,7 @@ if ($section === 'login') {
     }
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход — CENG admin</title><style>'.admin_css().'</style></head><body>';
     echo '<div class="login"><form class="box" method="post">';
-    echo '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span class="logo" style="background:#011640;color:#fff;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:800">CE</span><b style="font-size:12px;line-height:1.15">CASPIAN<br>ENGINEERING</b></div>';
+    echo '<div style="margin-bottom:14px"><img src="/admin/logo.png" alt="CENG" style="max-height:46px;max-width:220px"></div>';
     echo '<h2>Вход в панель</h2><div class="sub">Управление контентом сайта</div>';
     if ($err) echo '<div style="background:#b91c1c;color:#fff;padding:10px;border-radius:8px;margin-bottom:12px">'.e($err).'</div>';
     echo csrf_field();

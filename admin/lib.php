@@ -152,7 +152,7 @@ function layout_top(string $active, string $title): void {
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8">';
     echo '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'.e($title).' — CENG admin</title>';
     echo '<style>'.admin_css().'</style></head><body><div class="wrap">';
-    echo '<aside class="side"><div class="brand"><span class="logo">CE</span><b>CASPIAN<br>ENGINEERING</b></div><nav>';
+    echo '<aside class="side"><div class="brand"><img src="/admin/logo.png" alt="CENG" style="max-height:38px;max-width:180px;filter:brightness(0) invert(1)"></div><nav>';
     foreach (GROUPS as $glabel => $keys) {
         echo '<div class="navgroup">'.e($glabel).'</div>';
         foreach ($keys as $key) {
