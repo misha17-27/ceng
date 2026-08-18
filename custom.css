@@ -2,14 +2,17 @@
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
-/* Partners carousel — smooth continuous ticker with tidy logos */
-.elementor-widget-image-carousel .swiper-wrapper { transition-timing-function: linear !important; align-items: center; }
-.elementor-widget-image-carousel .swiper-slide { display: flex !important; align-items: center; justify-content: center; height: auto; }
+/* Partners carousel — framed logo cards, continuous ticker */
+.elementor-widget-image-carousel .swiper-wrapper { transition-timing-function: linear !important; align-items: stretch; }
+.elementor-widget-image-carousel .swiper-slide { display: flex !important; align-items: center; justify-content: center; height: auto; padding: 8px; }
 .elementor-widget-image-carousel .swiper-slide img {
-  max-height: 52px; width: auto !important; object-fit: contain;
-  filter: grayscale(100%); opacity: 0.72; transition: filter 0.3s ease, opacity 0.3s ease;
+  width: 100% !important; height: 110px; object-fit: contain;
+  background: #fff; border: 1px solid #e6ebea; border-radius: 14px;
+  padding: 22px 20px; box-sizing: border-box;
+  box-shadow: 0 6px 18px rgba(1, 22, 64, 0.08);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
-.elementor-widget-image-carousel .swiper-slide img:hover { filter: grayscale(0); opacity: 1; }
+.elementor-widget-image-carousel .swiper-slide img:hover { box-shadow: 0 10px 26px rgba(1, 22, 64, 0.14); transform: translateY(-3px); }
 .elementor-widget-image-carousel .swiper-pagination,
 .elementor-widget-image-carousel .elementor-swiper-button { display: none !important; }
 
@@ -24,8 +27,8 @@
   .elementor-posts-container.elementor-grid .elementor-post__title { font-size: 18px !important; line-height: 1.3 !important; margin: 0 0 6px !important; }
   .elementor-posts-container.elementor-grid .elementor-post__read-more { font-size: 13px !important; }
 
-  /* Partners carousel logo sizing (count handled by Swiper re-init in footer.php) */
-  .elementor-widget-image-carousel .swiper-slide img { max-width: 90% !important; height: auto !important; margin: 0 auto; }
+  /* Partners carousel: smaller framed cards on phones */
+  .elementor-widget-image-carousel .swiper-slide img { height: 84px !important; padding: 16px 14px !important; }
 
   /* Stats counters (50+ / 100+ / 99%): 3 columns in a row on phones */
   .elementor-element-8bceabb { flex-direction: row !important; flex-wrap: nowrap !important; gap: 6px !important; }
