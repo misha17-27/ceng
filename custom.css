@@ -4,6 +4,9 @@
 html, body { overflow-x: hidden !important; max-width: 100%; }
 img, iframe, video, .swiper { max-width: 100%; }
 
+/* Site-wide side padding so content never touches the edges (bg stays full-width, content insets) */
+.e-con.e-parent { padding-left: clamp(16px, 4vw, 60px) !important; padding-right: clamp(16px, 4vw, 60px) !important; }
+
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
