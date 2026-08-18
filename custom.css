@@ -2,6 +2,17 @@
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
+/* Partners carousel — smooth continuous ticker with tidy logos */
+.elementor-widget-image-carousel .swiper-wrapper { transition-timing-function: linear !important; align-items: center; }
+.elementor-widget-image-carousel .swiper-slide { display: flex !important; align-items: center; justify-content: center; height: auto; }
+.elementor-widget-image-carousel .swiper-slide img {
+  max-height: 52px; width: auto !important; object-fit: contain;
+  filter: grayscale(100%); opacity: 0.72; transition: filter 0.3s ease, opacity 0.3s ease;
+}
+.elementor-widget-image-carousel .swiper-slide img:hover { filter: grayscale(0); opacity: 1; }
+.elementor-widget-image-carousel .swiper-pagination,
+.elementor-widget-image-carousel .elementor-swiper-button { display: none !important; }
+
 /* Mobile (<=767px) */
 @media (max-width: 767px) {
   /* Projects grid: 1 per row on phones, image fits the card, 18px title */

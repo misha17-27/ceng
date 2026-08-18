@@ -145,10 +145,11 @@ window.addEventListener('load', function () {
       new window.Swiper(wrap, {
         loop: true,
         allowTouchMove: true,
-        speed: 800,
-        spaceBetween: 24,
+        freeMode: true,
+        speed: 3500,
+        spaceBetween: 30,
         slidesPerView: 3,
-        autoplay: { delay: 2000, disableOnInteraction: false, pauseOnMouseEnter: true },
+        autoplay: { delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true },
         breakpoints: { 0: { slidesPerView: 3 }, 768: { slidesPerView: 4 }, 1024: { slidesPerView: 5 } }
       });
     } catch (e) {}
