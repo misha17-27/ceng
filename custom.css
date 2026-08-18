@@ -1,4 +1,9 @@
 /* ceng.az custom overrides */
+
+/* Kill horizontal scroll site-wide (full-width 100vw sections overflow by the scrollbar width) */
+html, body { overflow-x: hidden !important; max-width: 100%; }
+img, iframe, video, .swiper { max-width: 100%; }
+
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
