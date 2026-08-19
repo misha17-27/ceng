@@ -71,27 +71,32 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         if ($act === 'save') {
             $cover = trim($_POST['cover'] ?? '');
             if ($p = admin_upload('cover_file')) $cover = $p;                 // uploaded cover overrides
+            $video = trim($_POST['video'] ?? '');
+            if ($p = admin_upload('video_file')) $video = $p;                 // uploaded video overrides
             $gallery = array_values(array_filter(array_map('trim', $_POST['gallery'] ?? []), fn($x)=>$x!==''));
             foreach (admin_upload_multi('gallery_files') as $p) $gallery[] = $p;
             $f = [
               'title'=>$_POST['title']??'', 'slug'=>$_POST['slug']??'', 'category_id'=>($_POST['category_id']?:null),
               'year'=>$_POST['year']??'', 'location'=>$_POST['location']??'', 'area'=>$_POST['area']??'',
-              'client'=>$_POST['client']??'', 'cover'=>$cover, 'gallery'=>json_encode($gallery, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
+              'client'=>$_POST['client']??'', 'cover'=>$cover, 'video'=>$video, 'gallery'=>json_encode($gallery, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
               'descr'=>$_POST['descr']??'', 'content'=>$_POST['content']??'', 'scope'=>$_POST['scope']??'',
               'seo_title'=>$_POST['seo_title']??'', 'seo_desc'=>$_POST['seo_desc']??'',
               'robots'=>$_POST['robots']??'index,follow', 'canonical'=>$_POST['canonical']??'',
               'sort'=>(int)($_POST['sort']??0), 'visible'=>isset($_POST['visible'])?1:0,
               'status'=>$_POST['status']??'published',
             ];
-            if (!empty($_POST['id'])) {
-                $set = implode(',', array_map(fn($k)=>"`$k`=?", array_keys($f)));
-                $st = $db->prepare("UPDATE projects SET $set WHERE id=?");
-                $st->execute([...array_values($f), (int)$_POST['id']]);
-            } else {
-                $cols = '`'.implode('`,`', array_keys($f)).'`';
-                $ph = implode(',', array_fill(0, count($f), '?'));
-                $db->prepare("INSERT INTO projects ($cols) VALUES ($ph)")->execute(array_values($f));
-            }
+            $saveProj = function(array $f) use ($db) {
+                if (!empty($_POST['id'])) {
+                    $set = implode(',', array_map(fn($k)=>"`$k`=?", array_keys($f)));
+                    $db->prepare("UPDATE projects SET $set WHERE id=?")->execute([...array_values($f), (int)$_POST['id']]);
+                } else {
+                    $cols = '`'.implode('`,`', array_keys($f)).'`';
+                    $ph = implode(',', array_fill(0, count($f), '?'));
+                    $db->prepare("INSERT INTO projects ($cols) VALUES ($ph)")->execute(array_values($f));
+                }
+            };
+            try { $saveProj($f); }
+            catch (Throwable $e) { unset($f['video']); $saveProj($f); } // video column may not exist yet (run migrate.php)
             flash('Проект сохранён.'); redirect('index.php?section=projects');
         } elseif ($act === 'del') { $db->prepare('DELETE FROM projects WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); redirect('index.php?section=projects'); }
     }
@@ -196,13 +201,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             redirect('index.php?section=users');
         }
     }
-    if ($section === 'images' && $act === 'upload' && !empty($_FILES['file']['name'])) {
-        $dir = dirname(__DIR__) . '/wp-content/uploads/admin';
-        @mkdir($dir, 0755, true);
-        $name = preg_replace('/[^A-Za-z0-9._-]/','_', basename($_FILES['file']['name']));
-        $ok = in_array(strtolower(pathinfo($name,PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif','svg']);
-        if ($ok && move_uploaded_file($_FILES['file']['tmp_name'], "$dir/$name")) flash('Загружено: /wp-content/uploads/admin/'.$name);
-        else flash('Не удалось загрузить (только jpg/png/webp/gif/svg).', 'err');
+    if ($section === 'images' && $act === 'upload') {
+        if ($p = admin_upload('file')) flash('Загружено: ' . $p);
+        else flash('Не удалось загрузить (jpg/png/webp/gif/svg/mp4/webm/ogg/mov).', 'err');
         redirect('index.php?section=images');
     }
 }
@@ -349,15 +350,41 @@ elseif ($section === 'submissions') {
 }
 
 elseif ($section === 'images') {
-    $base = dirname(__DIR__) . '/wp-content/uploads/admin';
+    $root  = dirname(__DIR__);
+    $updir = $root . '/wp-content/uploads';
     echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field().'<input type="hidden" name="action" value="upload">';
-    echo '<label>Загрузить изображение</label><input type="file" name="file" accept="image/*" required>';
-    echo '<div style="margin-top:14px"><button class="btn">Загрузить</button></div><p class="muted">Файлы кладутся в /wp-content/uploads/admin/. Скопируй URL и вставь в проект/партнёра.</p></form>';
-    echo '<div class="panel"><h3>Загруженные</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px">';
-    foreach (glob($base.'/*') ?: [] as $f) {
-        $u = '/wp-content/uploads/admin/'.rawurlencode(basename($f));
-        echo '<div style="text-align:center"><img src="'.e($u).'" style="max-width:100%;height:90px;object-fit:contain;background:#f4f6f6;border-radius:8px"><div class="muted" style="font-size:11px;word-break:break-all">'.e(basename($f)).'</div></div>';
+    echo '<label>Загрузить изображение или видео</label><input type="file" name="file" accept="image/*,video/*" required>';
+    echo '<div style="margin-top:14px"><button class="btn">Загрузить</button></div><p class="muted">jpg/png/webp/gif/svg/mp4/webm. Файлы кладутся в /wp-content/uploads/admin/. Клик по URL — выделить и скопировать.</p></form>';
+
+    $vidext = ['mp4','webm','ogg','mov'];
+    $files = [];
+    if (is_dir($updir)) {
+        try {
+            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($updir, FilesystemIterator::SKIP_DOTS));
+            foreach ($it as $f) {
+                if (!$f->isFile()) continue;
+                $ext = strtolower($f->getExtension());
+                if (!in_array($ext, array_merge(['jpg','jpeg','png','webp','gif','svg'], $vidext))) continue;
+                if (preg_match('/-\d+x\d+\.[a-z0-9]+$/i', $f->getFilename())) continue; // skip resized thumbnails
+                $files[] = ['path'=>$f->getPathname(), 'mtime'=>$f->getMTime(), 'video'=>in_array($ext, $vidext)];
+            }
+        } catch (Throwable $e) {}
     }
+    usort($files, fn($a,$b) => $b['mtime'] <=> $a['mtime']);
+    $files = array_slice($files, 0, 200);
+
+    echo '<div class="panel"><h3>Медиа сайта ('.count($files).')</h3>';
+    echo '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px">';
+    foreach ($files as $m) {
+        $rel = str_replace('\\','/', substr($m['path'], strlen($root)));
+        $url = '/' . implode('/', array_map('rawurlencode', explode('/', ltrim($rel,'/'))));
+        echo '<div style="border:1px solid #eef2f1;border-radius:8px;padding:8px;text-align:center">';
+        if ($m['video']) echo '<video src="'.e($url).'#t=0.1" preload="metadata" style="width:100%;height:92px;object-fit:cover;border-radius:6px;background:#000"></video>';
+        else echo '<img src="'.e($url).'" loading="lazy" style="width:100%;height:92px;object-fit:contain;background:#f4f6f6;border-radius:6px">';
+        echo '<input type="text" readonly value="'.e($url).'" onclick="this.select();document.execCommand(\'copy\')" title="Кликни, чтобы скопировать" style="width:100%;font-size:10px;margin-top:6px;border:1px solid #cfd8d6;border-radius:5px;padding:4px;cursor:pointer">';
+        echo '</div>';
+    }
+    if (!$files) echo '<p class="muted">Медиа не найдено.</p>';
     echo '</div></div>';
 }
 
@@ -476,7 +503,7 @@ function admin_move(string $tmp, string $name): ?string {
     @mkdir($dir, 0755, true);
     $name = preg_replace('/[^A-Za-z0-9._-]/', '_', basename($name));
     $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-    if (!in_array($ext, ['jpg','jpeg','png','webp','gif','svg'])) return null;
+    if (!in_array($ext, ['jpg','jpeg','png','webp','gif','svg','mp4','webm','ogg','mov'])) return null;
     if (!is_uploaded_file($tmp)) return null;
     $name = time() . '_' . $name;
     return move_uploaded_file($tmp, "$dir/$name") ? '/wp-content/uploads/admin/' . $name : null;
@@ -525,7 +552,7 @@ function render_projects(PDO $db): void {
     }
 
     $p = ['id'=>'','title'=>'','slug'=>'','category_id'=>'','year'=>'','location'=>'','area'=>'','client'=>'',
-          'cover'=>'','gallery'=>'[]','descr'=>'','content'=>'','scope'=>'','seo_title'=>'','seo_desc'=>'',
+          'cover'=>'','video'=>'','gallery'=>'[]','descr'=>'','content'=>'','scope'=>'','seo_title'=>'','seo_desc'=>'',
           'robots'=>'index,follow','canonical'=>'','sort'=>0,'visible'=>1,'status'=>'published','image'=>''];
     if ($mode === 'edit') { $st = $db->prepare('SELECT * FROM projects WHERE id=?'); $st->execute([(int)$_GET['edit']]); $p = array_merge($p, $st->fetch() ?: []); }
     $gallery = json_decode($p['gallery'] ?: '[]', true) ?: [];
@@ -548,6 +575,11 @@ function render_projects(PDO $db): void {
     echo '</div>';
     echo '<button type="button" class="btn ghost" style="margin-top:10px" onclick="addGal()">Добавить ещё</button>';
     echo '<label>Загрузить новые изображения</label><input type="file" name="gallery_files[]" accept="image/*" multiple>';
+
+    echo '<label style="margin-top:20px;color:#011640">Видео проекта (URL или загрузка)</label>';
+    echo '<input type="text" name="video" value="'.e($p['video']).'" placeholder="/wp-content/uploads/admin/... или https://...">';
+    if (!empty($p['video'])) echo '<div style="margin-top:8px"><video src="'.e($p['video']).'" controls style="max-width:300px;border-radius:8px;background:#000"></video></div>';
+    echo '<label>Загрузить видео (mp4/webm)</label><input type="file" name="video_file" accept="video/*">';
 
     echo '<label style="margin-top:20px">Краткое описание</label><textarea name="descr">'.e($p['descr']).'</textarea>';
 
