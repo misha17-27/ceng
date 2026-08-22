@@ -162,6 +162,16 @@ const ADMIN_ONLY = ['users','smtp','security'];
 /* Per-page editable content fields: slug => [ [text_key, label, type(text|area)], ... ]
    These render inside the page editor (Страницы) and drive the site via t(). */
 const PAGE_FIELDS = [
+    '/' => [
+        ['home_hero',           'Заголовок на первом экране (слайдер)', 'text'],
+        ['home_about_label',    'Блок «О компании» · надзаголовок (HAQQIMIZDA)', 'text'],
+        ['home_about_title',    'Блок «О компании» · заголовок', 'text'],
+        ['home_about_text',     'Блок «О компании» · текст', 'rich'],
+        ['home_gallery_title',  'Заголовок секции «Qalereya»', 'text'],
+        ['home_projects_title', 'Заголовок секции «Layihələr»', 'text'],
+        ['home_projects_text',  'Секция «Layihələr» · текст', 'rich'],
+        ['home_partners_title', 'Заголовок секции «Partnyorlar»', 'text'],
+    ],
     'haqqimizda' => [
         ['haqq_label', 'Надзаголовок («Şirkət haqqında»)', 'text'],
         ['haqq_title', 'Большой заголовок', 'text'],
