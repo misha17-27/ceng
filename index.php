@@ -231,7 +231,7 @@ Relax and enjoy yourself!</h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-886f486 elementor-widget elementor-widget-text-editor" data-id="886f486" data-element_type="widget" data-widget_type="text-editor.default">
 				<div class="elementor-widget-container">
-<?php echo t('home_projects_text','<?php echo t(\'home_about_text\',\'<p>Azərbaycanın tikinti və mühəndislik sahəsində aparıcı şirkətlərindən biridir. Biz layihələndirmə, avadanlıq təchizatı, tikinti və satış sonrası xidmətlər təklif edirik. Müştərilərimizə kompleks həllər təqdim etməklə, yüksək keyfiyyət və peşəkarlıq vəd edirik.</p>\'); ?>
+<?php echo t('home_about_text','<p>Azərbaycanın tikinti və mühəndislik sahəsində aparıcı şirkətlərindən biridir. Biz layihələndirmə, avadanlıq təchizatı, tikinti və satış sonrası xidmətlər təklif edirik. Müştərilərimizə kompleks həllər təqdim etməklə, yüksək keyfiyyət və peşəkarlıq vəd edirik.</p>'); ?>
 </div>
 				</div>
 				<div class="elementor-element elementor-element-60095c5 elementor-widget elementor-widget-button" data-id="60095c5" data-element_type="widget" data-widget_type="button.default">
@@ -254,7 +254,7 @@ Relax and enjoy yourself!</h1>				</div>
 					<div data-rocket-location-hash="29743844a7df5f50a85b29dbbb22a255" class="e-con-inner">
 				<div class="elementor-element elementor-element-06cc2a3 elementor-widget elementor-widget-heading" data-id="06cc2a3" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"><?php te(\'home_gallery_title\',\'Qalereya\'); ?></h2>				</div>
+					<h2 class="elementor-heading-title elementor-size-default"><?php te('home_gallery_title','Qalereya'); ?></h2>				</div>
 				</div>
 					</div>
 				</div>
@@ -263,19 +263,19 @@ Relax and enjoy yourself!</h1>				</div>
 		<div class="elementor-element elementor-element-881af2e e-con-full e-flex e-con e-child" data-id="881af2e" data-element_type="container">
 				<div class="elementor-element elementor-element-71531a0 elementor-widget elementor-widget-image" data-id="71531a0" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="671" height="789" src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20671%20789\'%3E%3C/svg%3E" class="attachment-full size-full wp-image-355" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/1-11-1.webp 671w, /wp-content/uploads/2025/04/1-11-1-255x300.webp 255w" data-lazy-sizes="(max-width: 671px) 100vw, 671px" data-lazy-src="/wp-content/uploads/2025/04/1-11-1.webp" /><noscript><img decoding="async" width="671" height="789" src="/wp-content/uploads/2025/04/1-11-1.webp" class="attachment-full size-full wp-image-355" alt="" srcset="/wp-content/uploads/2025/04/1-11-1.webp 671w, /wp-content/uploads/2025/04/1-11-1-255x300.webp 255w" sizes="(max-width: 671px) 100vw, 671px" /></noscript>															</div>
+															<img decoding="async" width="671" height="789" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20671%20789'%3E%3C/svg%3E" class="attachment-full size-full wp-image-355" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/1-11-1.webp 671w, /wp-content/uploads/2025/04/1-11-1-255x300.webp 255w" data-lazy-sizes="(max-width: 671px) 100vw, 671px" data-lazy-src="/wp-content/uploads/2025/04/1-11-1.webp" /><noscript><img decoding="async" width="671" height="789" src="/wp-content/uploads/2025/04/1-11-1.webp" class="attachment-full size-full wp-image-355" alt="" srcset="/wp-content/uploads/2025/04/1-11-1.webp 671w, /wp-content/uploads/2025/04/1-11-1-255x300.webp 255w" sizes="(max-width: 671px) 100vw, 671px" /></noscript>															</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-4dfbcd3 e-con-full e-flex e-con e-child" data-id="4dfbcd3" data-element_type="container">
 				<div class="elementor-element elementor-element-dd3d0f4 elementor-widget elementor-widget-image" data-id="dd3d0f4" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="672" height="906" src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20672%20906\'%3E%3C/svg%3E" class="attachment-full size-full wp-image-356" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/2-10-1.webp 672w, /wp-content/uploads/2025/04/2-10-1-223x300.webp 223w" data-lazy-sizes="(max-width: 672px) 100vw, 672px" data-lazy-src="/wp-content/uploads/2025/04/2-10-1.webp" /><noscript><img decoding="async" width="672" height="906" src="/wp-content/uploads/2025/04/2-10-1.webp" class="attachment-full size-full wp-image-356" alt="" srcset="/wp-content/uploads/2025/04/2-10-1.webp 672w, /wp-content/uploads/2025/04/2-10-1-223x300.webp 223w" sizes="(max-width: 672px) 100vw, 672px" /></noscript>															</div>
+															<img decoding="async" width="672" height="906" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20672%20906'%3E%3C/svg%3E" class="attachment-full size-full wp-image-356" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/2-10-1.webp 672w, /wp-content/uploads/2025/04/2-10-1-223x300.webp 223w" data-lazy-sizes="(max-width: 672px) 100vw, 672px" data-lazy-src="/wp-content/uploads/2025/04/2-10-1.webp" /><noscript><img decoding="async" width="672" height="906" src="/wp-content/uploads/2025/04/2-10-1.webp" class="attachment-full size-full wp-image-356" alt="" srcset="/wp-content/uploads/2025/04/2-10-1.webp 672w, /wp-content/uploads/2025/04/2-10-1-223x300.webp 223w" sizes="(max-width: 672px) 100vw, 672px" /></noscript>															</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-6217418 e-con-full e-flex e-con e-child" data-id="6217418" data-element_type="container">
 				<div class="elementor-element elementor-element-5a8af16 elementor-widget elementor-widget-image" data-id="5a8af16" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="671" height="789" src="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20671%20789\'%3E%3C/svg%3E" class="attachment-full size-full wp-image-358" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/3-8-1.webp 671w, /wp-content/uploads/2025/04/3-8-1-255x300.webp 255w" data-lazy-sizes="(max-width: 671px) 100vw, 671px" data-lazy-src="/wp-content/uploads/2025/04/3-8-1.webp" /><noscript><img loading="lazy" decoding="async" width="671" height="789" src="/wp-content/uploads/2025/04/3-8-1.webp" class="attachment-full size-full wp-image-358" alt="" srcset="/wp-content/uploads/2025/04/3-8-1.webp 671w, /wp-content/uploads/2025/04/3-8-1-255x300.webp 255w" sizes="(max-width: 671px) 100vw, 671px" /></noscript>															</div>
+															<img decoding="async" width="671" height="789" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20671%20789'%3E%3C/svg%3E" class="attachment-full size-full wp-image-358" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/3-8-1.webp 671w, /wp-content/uploads/2025/04/3-8-1-255x300.webp 255w" data-lazy-sizes="(max-width: 671px) 100vw, 671px" data-lazy-src="/wp-content/uploads/2025/04/3-8-1.webp" /><noscript><img loading="lazy" decoding="async" width="671" height="789" src="/wp-content/uploads/2025/04/3-8-1.webp" class="attachment-full size-full wp-image-358" alt="" srcset="/wp-content/uploads/2025/04/3-8-1.webp 671w, /wp-content/uploads/2025/04/3-8-1-255x300.webp 255w" sizes="(max-width: 671px) 100vw, 671px" /></noscript>															</div>
 				</div>
 				</div>
 					</div>
@@ -363,11 +363,11 @@ Relax and enjoy yourself!</h1>				</div>
 					<div data-rocket-location-hash="32d722be7f4e1876e3ebf9595dd564ba" class="e-con-inner">
 				<div class="elementor-element elementor-element-3088a19 elementor-widget elementor-widget-heading" data-id="3088a19" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"><?php te(\'home_projects_title\',\'Layihələr\'); ?></h2>				</div>
+					<h2 class="elementor-heading-title elementor-size-default"><?php te('home_projects_title','Layihələr'); ?></h2>				</div>
 				</div>
 				<div class="elementor-element elementor-element-7ec889c4 elementor-widget elementor-widget-text-editor" data-id="7ec889c4" data-element_type="widget" data-widget_type="text-editor.default">
 				<div class="elementor-widget-container">
-									Biz müxtəlif sənaye və infrastruktur layihələrində iştirak etmişik. Burada bəzi uğurlu layihələrimizi görə bilərsiniz.'); ?>
+<?php echo t('home_projects_text','Biz müxtəlif sənaye və infrastruktur layihələrində iştirak etmişik. Burada bəzi uğurlu layihələrimizi görə bilərsiniz.'); ?>
 </div>
 				</div>
 					</div>
