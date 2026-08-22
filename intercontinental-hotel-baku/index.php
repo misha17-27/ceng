@@ -1,3 +1,4 @@
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/includes/data.php'; ?>
 <!doctype html>
 <html lang="az">
 <head>
