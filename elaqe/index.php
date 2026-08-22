@@ -125,11 +125,11 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-afe5d33 e-con-full e-flex e-con e-child" data-id="afe5d33" data-element_type="container">
 				<div class="elementor-element elementor-element-47577666 elementor-widget elementor-widget-heading" data-id="47577666" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">ƏLAQƏ</h1>				</div>
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('elaqe_title','ƏLAQƏ'); ?></h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-cb16d7b elementor-widget elementor-widget-heading" data-id="cb16d7b" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">ƏTRAFLI MƏLUMAT ÜÇÜN <br>BİZİMLƏ ƏLAQƏ saxlayın</h2>				</div>
+					<h2 class="elementor-heading-title elementor-size-default"><?php echo t('elaqe_subtitle','ƏTRAFLI MƏLUMAT ÜÇÜN <br>BİZİMLƏ ƏLAQƏ saxlayın'); ?></h2>				</div>
 				</div>
 				</div>
 					</div>
@@ -147,7 +147,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 							<li class="elementor-icon-list-item">
 											<a href="/elaqe/">
 
-											<span class="elementor-icon-list-text">+994 70 230 06 90</span>
+											<span class="elementor-icon-list-text"><?php echo esc_html(site_contacts()['phone']); ?></span>
 											</a>
 									</li>
 						</ul>
@@ -163,10 +163,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				<div class="elementor-widget-container">
 							<ul class="elementor-icon-list-items">
 							<li class="elementor-icon-list-item">
-											<a href="/cdn-cgi/l/email-protection#90f9fef6ffd0f3f5fef7bef1ea">
-
-											<span class="elementor-icon-list-text"><span class="__cf_email__" data-cfemail="d4bdbab2bb94b7b1bab3fab5ae">[email&#160;protected]</span></span>
-											</a>
+											<a href="mailto:<?php echo esc_html(site_contacts()['email']); ?>"><span class="elementor-icon-list-text"><?php echo esc_html(site_contacts()['email']); ?></span></a>
 									</li>
 						</ul>
 						</div>
@@ -181,7 +178,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				<div class="elementor-widget-container">
 							<ul class="elementor-icon-list-items">
 							<li class="elementor-icon-list-item">
-										<span class="elementor-icon-list-text">Bakı, Əhməd Rəcəbli</span>
+										<span class="elementor-icon-list-text"><?php echo esc_html(site_contacts()['address']); ?></span>
 									</li>
 						</ul>
 						</div>
@@ -196,7 +193,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-46740af e-con-full e-flex e-con e-child" data-id="46740af" data-element_type="container">
 				<div class="elementor-element elementor-element-a30b2e3 elementor-widget elementor-widget-heading" data-id="a30b2e3" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h3 class="elementor-heading-title elementor-size-default">Bizimlə əlaqə</h3>				</div>
+					<h3 class="elementor-heading-title elementor-size-default"><?php te('elaqe_form_title','Bizimlə əlaqə'); ?></h3>				</div>
 				</div>
 				<div class="elementor-element elementor-element-35d6c642 elementor-button-align-end elementor-mobile-button-align-stretch elementor-widget elementor-widget-form" data-id="35d6c642" data-element_type="widget" data-settings="{&quot;button_width_mobile&quot;:&quot;100&quot;,&quot;step_next_label&quot;:&quot;Next&quot;,&quot;step_previous_label&quot;:&quot;Previous&quot;,&quot;step_type&quot;:&quot;number_text&quot;,&quot;step_icon_shape&quot;:&quot;circle&quot;}" data-widget_type="form.default">
 				<div class="elementor-widget-container">

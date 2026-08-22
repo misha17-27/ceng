@@ -201,6 +201,17 @@ const PAGE_FIELDS = [
         ['haqq_text',  'Основной текст (второй блок)', 'rich'],
         ['img_haqq_photo', 'Фото нижнего блока (CTA)', 'img'],
     ],
+    'xidmetlerimiz' => [
+        ['xid_label',   'Надзаголовок («Şirkət haqqında»)', 'text'],
+        ['xid_title',   'Большой заголовок', 'text'],
+        ['xid_intro',   'Вводный текст', 'rich'],
+        ['xid_content', 'Список услуг (основной блок)', 'rich'],
+    ],
+    'elaqe' => [
+        ['elaqe_title',      'Большой заголовок (ƏLAQƏ)', 'text'],
+        ['elaqe_subtitle',   'Подзаголовок (можно с <br>)', 'area'],
+        ['elaqe_form_title', 'Заголовок формы («Bizimlə əlaqə»)', 'text'],
+    ],
 ];
 
 function layout_top(string $active, string $title): void {
