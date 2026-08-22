@@ -13,6 +13,18 @@ function cfg(string $k, $default = null) {
     return $c[$k] ?? $default;
 }
 function e($s): string { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+
+/* Friendly Russian labels for auto-registered text keys (falls back to the key). */
+function text_label(string $k): string {
+    static $m = [
+        'haqq_label' => 'Haqqımızda · надзаголовок («Şirkət haqqında»)',
+        'haqq_title' => 'Haqqımızda · большой заголовок',
+        'haqq_cta'   => 'Haqqımızda · призыв (нижний блок)',
+        'haqq_intro' => 'Haqqımızda · вводный текст (справа сверху)',
+        'haqq_text'  => 'Haqqımızda · основной текст (второй блок)',
+    ];
+    return $m[$k] ?? $k;
+}
 function redirect(string $to): void { header('Location: ' . $to); exit; }
 
 function boot_session(): void {

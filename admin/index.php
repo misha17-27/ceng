@@ -247,7 +247,7 @@ elseif ($section === 'texts') {
     $rest = array_filter($db->query('SELECT k,v FROM texts ORDER BY k')->fetchAll(), fn($r)=>!in_array($r['k'],$shown));
     if ($rest) {
         echo '<form method="post" class="panel"><h3>Тексты страниц</h3><p class="muted">Появляются автоматически, когда открывается страница сайта. Ключ = где текст находится.</p>'.csrf_field().'<input type="hidden" name="action" value="save">';
-        foreach ($rest as $r) echo '<label>'.e($r['k']).'</label><textarea name="t['.e($r['k']).']">'.e($r['v']).'</textarea>';
+        foreach ($rest as $r) echo '<label>'.e(text_label($r['k'])).'</label><textarea name="t['.e($r['k']).']">'.e($r['v']).'</textarea>';
         echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
     }
 }
