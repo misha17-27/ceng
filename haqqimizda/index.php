@@ -159,7 +159,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				<div class="elementor-widget-container">
 							<div class="elementor-cta">
 					<div class="elementor-cta__bg-wrapper">
-				<div data-bg="/wp-content/uploads/2025/03/38-Years.png" class="elementor-cta__bg elementor-bg rocket-lazyload" style="" role="img" aria-label="38-Years.png"></div>
+				<div data-bg="<?php echo t('img_haqq_photo','/wp-content/uploads/2025/03/38-Years.png'); ?>" class="elementor-cta__bg elementor-bg rocket-lazyload" style="" role="img" aria-label="38-Years.png"></div>
 				<div class="elementor-cta__bg-overlay"></div>
 			</div>
 							<div class="elementor-cta__content">

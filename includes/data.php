@@ -22,9 +22,12 @@ function t(string $key, string $default = ''): string {
         $cache = [];
         if ($pdo) { try { $cache = $pdo->query('SELECT k,v FROM texts')->fetchAll(PDO::FETCH_KEY_PAIR); } catch (Throwable $e) {} }
     }
-    if (array_key_exists($key, $cache)) return (string)$cache[$key];
+    if (array_key_exists($key, $cache)) {
+        $v = (string)$cache[$key];
+        return ($v === '' && $default !== '') ? $default : $v;   // empty DB value falls back to default
+    }
     // register the default so it shows up (and becomes editable) in the admin
-    if ($pdo) { try { $pdo->prepare('INSERT IGNORE INTO texts (k,v) VALUES (?,?)')->execute([$key, $default]); } catch (Throwable $e) {} }
+    if ($default !== '' && $pdo) { try { $pdo->prepare('INSERT IGNORE INTO texts (k,v) VALUES (?,?)')->execute([$key, $default]); } catch (Throwable $e) {} }
     $cache[$key] = $default;
     return $default;
 }

@@ -171,6 +171,14 @@ const PAGE_FIELDS = [
         ['home_projects_title', 'Заголовок секции «Layihələr»', 'text'],
         ['home_projects_text',  'Секция «Layihələr» · текст', 'rich'],
         ['home_partners_title', 'Заголовок секции «Partnyorlar»', 'text'],
+        ['img_home_slide1',  'Слайд 1 · фоновое фото', 'img'],
+        ['img_home_slide2',  'Слайд 2 · фоновое фото', 'img'],
+        ['img_home_slide3',  'Слайд 3 · фоновое фото', 'img'],
+        ['img_home_about',   'Блок «О компании» · фото', 'img'],
+        ['img_home_adv',     'Блок «Üstünlüklərimiz» · фоновое фото', 'img'],
+        ['img_home_gal1',    'Галерея · фото 1', 'img'],
+        ['img_home_gal2',    'Галерея · фото 2', 'img'],
+        ['img_home_gal3',    'Галерея · фото 3', 'img'],
     ],
     'haqqimizda' => [
         ['haqq_label', 'Надзаголовок («Şirkət haqqında»)', 'text'],
@@ -178,6 +186,7 @@ const PAGE_FIELDS = [
         ['haqq_cta',   'Призыв (нижний блок)', 'area'],
         ['haqq_intro', 'Вводный текст (справа сверху)', 'rich'],
         ['haqq_text',  'Основной текст (второй блок)', 'rich'],
+        ['img_haqq_photo', 'Фото нижнего блока (CTA)', 'img'],
     ],
 ];
 

@@ -113,7 +113,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if ($section === 'pages' && $act === 'save') {
         $slug = $_POST['slug'] ?? '';
         $db->prepare('UPDATE pages SET title=? WHERE slug=?')->execute([$_POST['title']??'', $slug]);
-        foreach (PAGE_FIELDS[$slug] ?? [] as [$key,,]) kv_set('texts', $key, (string)($_POST['f'][$key] ?? ''));
+        foreach (PAGE_FIELDS[$slug] ?? [] as [$key,,$type]) {
+            $val = (string)($_POST['f'][$key] ?? '');
+            if ($type === 'img' && !empty($_FILES['fimg']['name'][$key])) {
+                if ($p = admin_move($_FILES['fimg']['tmp_name'][$key], $_FILES['fimg']['name'][$key])) $val = $p;
+            }
+            kv_set('texts', $key, $val);
+        }
         $db->prepare('INSERT INTO seo_pages (slug,title,descr,robots,canonical) VALUES (?,?,?,?,?)
                       ON DUPLICATE KEY UPDATE title=VALUES(title),descr=VALUES(descr),robots=VALUES(robots),canonical=VALUES(canonical)')
            ->execute([$slug, $_POST['seo_title']??'', $_POST['seo_desc']??'', $_POST['robots']??'index,follow', $_POST['canonical']??'']);
@@ -297,18 +303,34 @@ elseif ($section === 'pages') {
         if (!$pg) { echo '<div class="panel">Страница не найдена. <a href="index.php?section=pages">Назад</a></div>'; }
         else {
             $url = $mkurl($pg['slug']);
-            echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
+            echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
             echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: https://yeni.ceng.az'.e($url).'</p>';
             echo '<label>Заголовок / пункт меню</label><input type="text" name="title" value="'.e($pg['title']).'">';
             $fields = PAGE_FIELDS[$pg['slug']] ?? [];
             if ($fields) {
                 echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">Контент страницы</legend>';
                 $hasRich = false;
+                $imgs = array_filter($fields, fn($f)=>$f[2]==='img');
                 foreach ($fields as [$key,$label,$type]) {
+                    if ($type === 'img') continue; // rendered in the images block below
                     $val = kv_get('texts', $key);
                     if ($type === 'rich') { rich_field('f['.$key.']', $val, $label); $hasRich = true; }
                     elseif ($type === 'text') echo '<label>'.e($label).'</label><input type="text" name="f['.e($key).']" value="'.e($val).'">';
                     else echo '<label>'.e($label).'</label><textarea name="f['.e($key).']" style="min-height:90px">'.e($val).'</textarea>';
+                }
+                if ($imgs) {
+                    echo '<div style="margin-top:20px;font-weight:700;color:#011640">Изображения страницы</div>';
+                    echo '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:10px">';
+                    foreach ($imgs as [$key,$label,]) {
+                        $val = kv_get('texts', $key);
+                        echo '<div style="border:1px solid #e6ebea;border-radius:10px;padding:12px">';
+                        echo '<div style="font-weight:600;font-size:13px;margin-bottom:8px">'.e($label).'</div>';
+                        if ($val) echo '<img src="'.e($val).'" style="width:100%;height:110px;object-fit:cover;border-radius:8px;background:#f4f6f6">';
+                        echo '<input type="text" name="f['.e($key).']" value="'.e($val).'" placeholder="/wp-content/uploads/..." style="font-size:11px;margin-top:8px">';
+                        echo '<div class="muted" style="font-size:11px;margin:6px 0 2px">Заменить файлом:</div><input type="file" name="fimg['.e($key).']" accept="image/*" style="font-size:12px">';
+                        echo '</div>';
+                    }
+                    echo '</div>';
                 }
                 echo '</fieldset>';
                 if ($hasRich) echo rich_editor_assets();
