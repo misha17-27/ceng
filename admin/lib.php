@@ -159,6 +159,18 @@ const GROUPS = [
 ];
 const ADMIN_ONLY = ['users','smtp','security'];
 
+/* Per-page editable content fields: slug => [ [text_key, label, type(text|area)], ... ]
+   These render inside the page editor (Страницы) and drive the site via t(). */
+const PAGE_FIELDS = [
+    'haqqimizda' => [
+        ['haqq_label', 'Надзаголовок («Şirkət haqqında»)', 'text'],
+        ['haqq_title', 'Большой заголовок', 'text'],
+        ['haqq_cta',   'Призыв (нижний блок)', 'area'],
+        ['haqq_intro', 'Вводный текст (справа сверху)', 'area'],
+        ['haqq_text',  'Основной текст (второй блок, с тегами <p>)', 'area'],
+    ],
+];
+
 function layout_top(string $active, string $title): void {
     $admin = current_admin();
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8">';

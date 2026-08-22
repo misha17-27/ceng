@@ -112,8 +112,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
     if ($section === 'pages' && $act === 'save') {
         $slug = $_POST['slug'] ?? '';
-        $db->prepare('UPDATE pages SET title=?, hero_title=?, blue_short=?, blue_text=? WHERE slug=?')
-           ->execute([$_POST['title']??'', $_POST['hero_title']??'', $_POST['blue_short']??'', $_POST['blue_text']??'', $slug]);
+        $db->prepare('UPDATE pages SET title=? WHERE slug=?')->execute([$_POST['title']??'', $slug]);
+        foreach (PAGE_FIELDS[$slug] ?? [] as [$key,,]) kv_set('texts', $key, (string)($_POST['f'][$key] ?? ''));
         $db->prepare('INSERT INTO seo_pages (slug,title,descr,robots,canonical) VALUES (?,?,?,?,?)
                       ON DUPLICATE KEY UPDATE title=VALUES(title),descr=VALUES(descr),robots=VALUES(robots),canonical=VALUES(canonical)')
            ->execute([$slug, $_POST['seo_title']??'', $_POST['seo_desc']??'', $_POST['robots']??'index,follow', $_POST['canonical']??'']);
@@ -242,14 +242,7 @@ elseif ($section === 'texts') {
     echo '<label>Синий блок: короткий заголовок</label><textarea name="t[blue_short]">'.$t('blue_short').'</textarea>';
     echo '<label>Синий блок: текст</label><textarea name="t[blue_text]" style="min-height:120px">'.$t('blue_text').'</textarea>';
     echo '<div style="margin-top:16px"><button class="btn">Сохранить тексты</button></div></form>';
-
-    $shown = ['site_short','site_full','site_slogan','hero_title','blue_short','blue_text','about_title','footer_slogan'];
-    $rest = array_filter($db->query('SELECT k,v FROM texts ORDER BY k')->fetchAll(), fn($r)=>!in_array($r['k'],$shown));
-    if ($rest) {
-        echo '<form method="post" class="panel"><h3>Тексты страниц</h3><p class="muted">Появляются автоматически, когда открывается страница сайта. Ключ = где текст находится.</p>'.csrf_field().'<input type="hidden" name="action" value="save">';
-        foreach ($rest as $r) echo '<label>'.e(text_label($r['k'])).'</label><textarea name="t['.e($r['k']).']">'.e($r['v']).'</textarea>';
-        echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
-    }
+    echo '<p class="muted">Тексты конкретных страниц редактируются в разделе «Страницы» → выбери страницу.</p>';
 }
 
 elseif ($section === 'contacts') {
@@ -307,10 +300,19 @@ elseif ($section === 'pages') {
             echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
             echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: https://yeni.ceng.az'.e($url).'</p>';
             echo '<label>Заголовок / пункт меню</label><input type="text" name="title" value="'.e($pg['title']).'">';
-            echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">Контент страницы</legend>';
-            echo '<label>Заголовок первого экрана</label><textarea name="hero_title">'.e($pg['hero_title']??'').'</textarea>';
-            echo '<label>Короткий заголовок синего блока</label><textarea name="blue_short">'.e($pg['blue_short']??'').'</textarea>';
-            echo '<label>Текст синего блока</label><textarea name="blue_text" style="min-height:120px">'.e($pg['blue_text']??'').'</textarea></fieldset>';
+            $fields = PAGE_FIELDS[$pg['slug']] ?? [];
+            if ($fields) {
+                echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">Контент страницы</legend>';
+                foreach ($fields as [$key,$label,$type]) {
+                    $val = kv_get('texts', $key);
+                    echo '<label>'.e($label).'</label>';
+                    if ($type === 'text') echo '<input type="text" name="f['.e($key).']" value="'.e($val).'">';
+                    else echo '<textarea name="f['.e($key).']" style="min-height:90px">'.e($val).'</textarea>';
+                }
+                echo '</fieldset>';
+            } else {
+                echo '<div style="background:#fff8e6;border:1px solid #f0e0a0;border-radius:10px;padding:12px 16px;margin-top:16px" class="muted">Контент этой страницы ещё не подключён к редактированию — подключаем по мере готовности. SEO ниже уже работает.</div>';
+            }
             echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">SEO этой страницы</legend>';
             echo '<label>SEO Title</label><input type="text" name="seo_title" value="'.e($seo['title']).'">';
             echo '<label>Meta Description</label><textarea name="seo_desc">'.e($seo['descr']).'</textarea>';
