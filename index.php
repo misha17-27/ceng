@@ -136,9 +136,9 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				<div class="elementor-element elementor-element-3afbade elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="3afbade" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="index.html#">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide1_btn_url','#')); ?>">
 						<span class="elementor-button-content-wrapper">
-									<span class="elementor-button-text">Daha ətraflı</span>
+									<span class="elementor-button-text"><?php te('home_slide1_btn','Daha ətraflı'); ?></span>
 					</span>
 					</a>
 				</div>
@@ -154,20 +154,20 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-5bd1836 e-con-full e-flex e-con e-child" data-id="5bd1836" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 				<div class="elementor-element elementor-element-d45b48a elementor-widget elementor-widget-heading" data-id="d45b48a" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">NEVV METT
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide2_title','NEVV METT'); ?>
 </h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-60ad796 elementor-widget elementor-widget-heading" data-id="60ad796" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">Get around by train, bus, car, ferry, cruise ship, bicycle, skis, or sleigh.
-Relax and enjoy yourself!</h1>				</div>
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide2_text','Get around by train, bus, car, ferry, cruise ship, bicycle, skis, or sleigh.
+Relax and enjoy yourself!'); ?></h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-d1f1e2b elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="d1f1e2b" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="index.html#">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide2_btn_url','#')); ?>">
 						<span class="elementor-button-content-wrapper">
-									<span class="elementor-button-text">Daha ətraflı</span>
+									<span class="elementor-button-text"><?php te('home_slide2_btn','Daha ətraflı'); ?></span>
 					</span>
 					</a>
 				</div>
@@ -183,20 +183,20 @@ Relax and enjoy yourself!</h1>				</div>
 		<div class="elementor-element elementor-element-eb37385 e-con-full e-flex e-con e-child" data-id="eb37385" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 				<div class="elementor-element elementor-element-d82523f elementor-widget elementor-widget-heading" data-id="d82523f" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">LAKELAND ROUTES
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide3_title','LAKELAND ROUTES'); ?>
 </h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-c742bde elementor-widget elementor-widget-heading" data-id="c742bde" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">Explore Helsinki and the Finnish lake on an unforgettable road trip alone or with your loved ones.
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide3_text','Explore Helsinki and the Finnish lake on an unforgettable road trip alone or with your loved ones.'); ?>
 </h1>				</div>
 				</div>
 				<div class="elementor-element elementor-element-808e5b3 elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="808e5b3" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="index.html#">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide3_btn_url','#')); ?>">
 						<span class="elementor-button-content-wrapper">
-									<span class="elementor-button-text">Daha ətraflı</span>
+									<span class="elementor-button-text"><?php te('home_slide3_btn','Daha ətraflı'); ?></span>
 					</span>
 					</a>
 				</div>
@@ -237,11 +237,11 @@ Relax and enjoy yourself!</h1>				</div>
 				<div class="elementor-element elementor-element-60095c5 elementor-widget elementor-widget-button" data-id="60095c5" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="index.html#">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_about_btn_url','#')); ?>">
 						<span class="elementor-button-content-wrapper">
 						<span class="elementor-button-icon">
 				<svg aria-hidden="true" class="e-font-icon-svg e-fas-angle-double-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"></path></svg>			</span>
-									<span class="elementor-button-text">Daha ətraflı</span>
+									<span class="elementor-button-text"><?php te('home_about_btn','Daha ətraflı'); ?></span>
 					</span>
 					</a>
 				</div>
@@ -476,7 +476,7 @@ Relax and enjoy yourself!</h1>				</div>
 						<span class="elementor-button-content-wrapper">
 						<span class="elementor-button-icon">
 				<svg aria-hidden="true" class="e-font-icon-svg e-fas-angle-double-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"></path></svg>			</span>
-									<span class="elementor-button-text">Daha ətraflı</span>
+									<span class="elementor-button-text"><?php te('home_projects_btn','Daha ətraflı'); ?></span>
 					</span>
 					</a>
 				</div>
