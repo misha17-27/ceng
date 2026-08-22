@@ -303,13 +303,15 @@ elseif ($section === 'pages') {
             $fields = PAGE_FIELDS[$pg['slug']] ?? [];
             if ($fields) {
                 echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:14px 16px;margin-top:16px"><legend style="color:#011640;font-weight:700">Контент страницы</legend>';
+                $hasRich = false;
                 foreach ($fields as [$key,$label,$type]) {
                     $val = kv_get('texts', $key);
-                    echo '<label>'.e($label).'</label>';
-                    if ($type === 'text') echo '<input type="text" name="f['.e($key).']" value="'.e($val).'">';
-                    else echo '<textarea name="f['.e($key).']" style="min-height:90px">'.e($val).'</textarea>';
+                    if ($type === 'rich') { rich_field('f['.$key.']', $val, $label); $hasRich = true; }
+                    elseif ($type === 'text') echo '<label>'.e($label).'</label><input type="text" name="f['.e($key).']" value="'.e($val).'">';
+                    else echo '<label>'.e($label).'</label><textarea name="f['.e($key).']" style="min-height:90px">'.e($val).'</textarea>';
                 }
                 echo '</fieldset>';
+                if ($hasRich) echo rich_editor_assets();
             } else {
                 echo '<div style="background:#fff8e6;border:1px solid #f0e0a0;border-radius:10px;padding:12px 16px;margin-top:16px" class="muted">Контент этой страницы ещё не подключён к редактированию — подключаем по мере готовности. SEO ниже уже работает.</div>';
             }
@@ -641,6 +643,50 @@ document.querySelector('form').addEventListener('submit',syncRT);
 function addGal(){var d=document.createElement('div');d.className='gitem';d.style.cssText='border:1px solid #e6ebea;border-radius:10px;padding:8px;text-align:center';
 d.innerHTML='<input type="text" name="gallery[]" placeholder="/wp-content/uploads/..." style="width:100%;border:1px solid #cfd8d6;border-radius:6px;padding:6px"><button type="button" class="btn sm red" style="margin-top:6px" onclick="this.parentNode.remove()">Удалить</button>';
 document.getElementById('gal').appendChild(d);}
+</script>
+HTML;
+}
+
+
+/* ---- reusable rich text editor (contenteditable + toolbar) ---- */
+function rich_field(string $name, string $value, string $label): void {
+    $btns = [['bold','<b>B</b>'],['italic','<i>I</i>'],['underline','<u>U</u>'],
+             ['insertUnorderedList','&bull; список'],['insertOrderedList','1. список'],
+             ['formatBlock:blockquote','&laquo;&nbsp;&raquo;'],['createLink','Ссылка'],['removeFormat','T&times;']];
+    $bar = '';
+    foreach ($btns as $b) $bar .= '<button type="button" data-cmd="'.$b[0].'">'.$b[1].'</button>';
+    $l  = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+    $n  = htmlspecialchars($name,  ENT_QUOTES, 'UTF-8');
+    $tv = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    echo "<label>$l</label><div class=\"rte-wrap\"><div class=\"rte-bar\">$bar</div>"
+       . "<div class=\"rte\" contenteditable=\"true\">$value</div>"
+       . "<textarea name=\"$n\" style=\"display:none\">$tv</textarea></div>";
+}
+function rich_editor_assets(): string {
+    return <<<'HTML'
+<style>
+.rte-wrap{margin-bottom:14px}
+.rte-bar{display:flex;gap:6px;flex-wrap:wrap;border:1px solid #cfd8d6;border-bottom:0;border-radius:9px 9px 0 0;padding:8px;background:#f7faf9}
+.rte-bar button{background:#fff;border:1px solid #d7dedc;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px}
+.rte{border:1px solid #cfd8d6;border-radius:0 0 9px 9px;min-height:130px;padding:12px;background:#fff;line-height:1.5}
+.rte:focus{outline:2px solid #011640;outline-offset:-2px}
+.rte p{margin:0 0 10px}
+</style>
+<script>
+document.addEventListener('mousedown', function (e) {
+  var b = e.target.closest('.rte-bar button'); if (!b) return;
+  e.preventDefault();
+  var cmd = b.getAttribute('data-cmd');
+  if (cmd === 'createLink') { var u = prompt('URL ссылки:', 'https://'); if (u) document.execCommand('createLink', false, u); }
+  else if (cmd.indexOf('formatBlock:') === 0) { document.execCommand('formatBlock', false, cmd.split(':')[1]); }
+  else document.execCommand(cmd, false, null);
+});
+document.addEventListener('submit', function (e) {
+  if (!e.target.querySelectorAll) return;
+  e.target.querySelectorAll('.rte').forEach(function (ed) {
+    var ta = ed.parentNode.querySelector('textarea'); if (ta) ta.value = ed.innerHTML;
+  });
+}, true);
 </script>
 HTML;
 }
