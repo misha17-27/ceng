@@ -16,6 +16,9 @@ RedirectMatch 404 /\.git
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
+
+  # Projects created in the admin panel (no static folder): /my-project/ -> project-view.php
+  RewriteRule ^([a-z0-9-]+)/?$ project-view.php?slug=$1 [L,QSA]
 </IfModule>
 
 <IfModule mod_expires.c>

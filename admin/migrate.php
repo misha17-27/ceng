@@ -38,4 +38,25 @@ $uc = $db->prepare("UPDATE projects SET cover=? WHERE slug=? AND (cover IS NULL 
 foreach ($covers as $s=>$img) $uc->execute([$img,$s]);
 $log('✓ covers ensured');
 
+// SEO title + description per project (Azerbaijani, tailored to CENG services); only fills empties
+$seo = [
+ 'bine-stadium' => ['Bine Stadium — mühəndislik və tikinti həlləri | CENG', 'Bine Stadium layihəsində CENG layihələndirmə, mühəndislik sistemləri və tikinti işlərini yüksək keyfiyyətlə həyata keçirib.'],
+ 'bakcell-arena' => ['Bakcell Arena — tikinti və mühəndislik | CENG', 'Bakcell Arena obyektində CENG layihələndirmə, avadanlıq təchizatı və tikinti işlərini peşəkar səviyyədə icra edib.'],
+ 'sr-group-co' => ['SR Group CO — mühəndislik həlləri | CENG', 'SR Group CO layihəsi üzrə CENG mühəndislik, layihələndirmə və tikinti xidmətlərini kompleks şəkildə təqdim edib.'],
+ 'wyndham-garden-baku' => ['Wyndham Garden Baku — otel tikintisi | CENG', 'Wyndham Garden Baku otelində CENG layihələndirmə, mühəndislik sistemləri və tikinti işlərini yüksək standartlarla yerinə yetirib.'],
+ 'agsu-dairy-factory' => ['Ağsu Süd Zavodu — sənaye tikintisi | CENG', 'Ağsu süd zavodu layihəsində CENG sənaye avadanlığının təchizatı, mühəndislik və tikinti işlərini icra edib.'],
+ 'grand-park-plaza' => ['Grand Park Plaza — tikinti və mühəndislik | CENG', 'Grand Park Plaza obyektində CENG layihələndirmə, mühəndislik sistemləri və tikinti xidmətlərini təqdim edib.'],
+ 'mogan-hotel-baku' => ['Mogan Hotel Baku — otel layihəsi | CENG', 'Mogan Hotel Baku layihəsində CENG layihələndirmə, avadanlıq təchizatı və tikinti işlərini peşəkarlıqla həyata keçirib.'],
+ 'socar-midstream-office' => ['SOCAR Midstream Office — mühəndislik | CENG', 'SOCAR Midstream ofisi üzrə CENG mühəndislik sistemləri, layihələndirmə və tikinti işlərini yüksək keyfiyyətlə icra edib.'],
+ 'intercontinental-hotel-baku' => ['InterContinental Baku — otel tikintisi | CENG', 'InterContinental Hotel Baku layihəsində CENG layihələndirmə, mühəndislik və tikinti həllərini kompleks təqdim edib.'],
+ 'qalaalti-hotel' => ['Qalaaltı Hotel — tikinti və mühəndislik | CENG', 'Qalaaltı Hotel layihəsində CENG layihələndirmə, avadanlıq təchizatı və tikinti işlərini peşəkar səviyyədə yerinə yetirib.'],
+ 'khazar-residence' => ['Khazar Residence — yaşayış kompleksi | CENG', 'Khazar Residence layihəsində CENG mühəndislik sistemləri, layihələndirmə və tikinti işlərini yüksək keyfiyyətlə icra edib.'],
+ 'savalan-winers' => ['Savalan Winery — sənaye mühəndisliyi | CENG', 'Savalan şərab zavodu layihəsində CENG avadanlıq təchizatı, mühəndislik və tikinti işlərini həyata keçirib.'],
+ 'skywell-showroom' => ['Skywell Showroom — tikinti həlləri | CENG', 'Skywell showroom layihəsində CENG layihələndirmə, mühəndislik və tikinti xidmətlərini peşəkarlıqla təqdim edib.'],
+ 'the-pool-house' => ['The Pool House — mühəndislik və tikinti | CENG', 'The Pool House layihəsində CENG layihələndirmə, mühəndislik sistemləri və tikinti işlərini yüksək standartlarla icra edib.'],
+];
+$us = $db->prepare("UPDATE projects SET seo_title=?, seo_desc=? WHERE slug=? AND (seo_title IS NULL OR seo_title='')");
+foreach ($seo as $slug=>$v) $us->execute([$v[0],$v[1],$slug]);
+$log('✓ project SEO ensured (14)');
+
 $log("\nDONE. Re-runnable. Do NOT delete from the repo (token-protected).");
