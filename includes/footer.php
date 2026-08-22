@@ -1,4 +1,4 @@
-<?php /* Shared site footer. Byte-identical across all pages. */ ?>
+<?php /* Shared site footer. */ require_once $_SERVER['DOCUMENT_ROOT'].'/includes/data.php'; $C = site_contacts(); ?>
 <footer data-elementor-type="footer" data-elementor-id="33" class="elementor elementor-33 elementor-location-footer" data-elementor-post-type="elementor_library">
 			<div class="elementor-element elementor-element-66e8cecb e-flex e-con-boxed e-con e-parent" data-id="66e8cecb" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 					<div class="e-con-inner">
@@ -55,17 +55,17 @@
 							<li class="elementor-icon-list-item">
 											<a href="/">
 
-											<span class="elementor-icon-list-text">Telefon: +994 70 8109889</span>
+											<span class="elementor-icon-list-text">Telefon: <?php echo esc_html($C['phone2']); ?></span>
 											</a>
 									</li>
 								<li class="elementor-icon-list-item">
-											<a href="/cdn-cgi/l/email-protection#1d74737b725d7e78737a337c67">
+											<a href="mailto:<?php echo esc_html($C['email']); ?>">
 
-											<span class="elementor-icon-list-text">Mail: <span class="__cf_email__" data-cfemail="6b02050d042b080e050c450a11">[email&#160;protected]</span></span>
+											<span class="elementor-icon-list-text">Mail: <?php echo esc_html($C['email']); ?></span>
 											</a>
 									</li>
 								<li class="elementor-icon-list-item">
-										<span class="elementor-icon-list-text">Ünvan: Bakı, Əhməd Rəcəbli</span>
+										<span class="elementor-icon-list-text">Ünvan: <?php echo esc_html($C['address']); ?></span>
 									</li>
 						</ul>
 						</div>
