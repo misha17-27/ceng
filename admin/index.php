@@ -242,6 +242,14 @@ elseif ($section === 'texts') {
     echo '<label>Синий блок: короткий заголовок</label><textarea name="t[blue_short]">'.$t('blue_short').'</textarea>';
     echo '<label>Синий блок: текст</label><textarea name="t[blue_text]" style="min-height:120px">'.$t('blue_text').'</textarea>';
     echo '<div style="margin-top:16px"><button class="btn">Сохранить тексты</button></div></form>';
+
+    $shown = ['site_short','site_full','site_slogan','hero_title','blue_short','blue_text','about_title','footer_slogan'];
+    $rest = array_filter($db->query('SELECT k,v FROM texts ORDER BY k')->fetchAll(), fn($r)=>!in_array($r['k'],$shown));
+    if ($rest) {
+        echo '<form method="post" class="panel"><h3>Тексты страниц</h3><p class="muted">Появляются автоматически, когда открывается страница сайта. Ключ = где текст находится.</p>'.csrf_field().'<input type="hidden" name="action" value="save">';
+        foreach ($rest as $r) echo '<label>'.e($r['k']).'</label><textarea name="t['.e($r['k']).']">'.e($r['v']).'</textarea>';
+        echo '<div style="margin-top:16px"><button class="btn">Сохранить</button></div></form>';
+    }
 }
 
 elseif ($section === 'contacts') {

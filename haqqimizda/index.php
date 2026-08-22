@@ -126,11 +126,11 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-3a200d04 e-con-full e-flex e-con e-child" data-id="3a200d04" data-element_type="container">
 				<div class="elementor-element elementor-element-523c98cb elementor-widget elementor-widget-heading" data-id="523c98cb" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h3 class="elementor-heading-title elementor-size-default">Şirkət haqqında</h3>				</div>
+					<h3 class="elementor-heading-title elementor-size-default"><?php te('haqq_label','Şirkət haqqında'); ?></h3>				</div>
 				</div>
 				<div class="elementor-element elementor-element-556fe089 elementor-widget elementor-widget-heading" data-id="556fe089" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">CASPIAN ENGINEERING GROUP</h1>				</div>
+					<h1 class="elementor-heading-title elementor-size-default"><?php te('haqq_title','CASPIAN ENGINEERING GROUP'); ?></h1>				</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-237162bd e-con-full e-flex e-con e-child" data-id="237162bd" data-element_type="container">
@@ -164,7 +164,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 							<div class="elementor-cta__content">
 				
 									<h2 class="elementor-cta__title elementor-cta__content-item elementor-content-item">
-						Gələcəyinizi möhkəm əsaslar üzərində qurmaq üçün keyfiyyətli tikinti və mühəndislik həlləri təqdim edirik.					</h2>
+						<?php te('haqq_cta','Gələcəyinizi möhkəm əsaslar üzərində qurmaq üçün keyfiyyətli tikinti və mühəndislik həlləri təqdim edirik.'); ?>					</h2>
 				
 				
 							</div>
