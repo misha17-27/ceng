@@ -118,12 +118,20 @@ $texts = [
    '<p>The Pool House layihəsində CENG hovuz infrastrukturunun qurulması və mühəndislik sistemlərinin quraşdırılmasını həyata keçirib.</p><p>Su hazırlığı, filtrasiya, istilik və havalandırma sistemləri istirahət obyektinin tələblərinə uyğun icra olunub.</p>',
    "Hovuz infrastrukturunun qurulması\nSu hazırlığı və filtrasiya\nİstilik və havalandırma\nElektrik təchizatı\nTamamlama işləri"],
 ];
-$ut = $db->prepare("UPDATE projects SET
-  descr   = IF(descr   IS NULL OR descr='',   ?, descr),
-  content = IF(content IS NULL OR content='', ?, content),
-  scope   = IF(scope   IS NULL OR scope='',   ?, scope)
-  WHERE slug = ?");
-foreach ($texts as $slug => $v) $ut->execute([$v[0], $v[1], $v[2], $slug]);
-$log('✓ project texts ensured (14: descr/content/scope)');
+// "blank" = empty after stripping tags/whitespace (rich editors leave <br>/<p></p> junk)
+$blank = fn($s) => trim(strip_tags((string)$s)) === '' && strpos((string)$s, '<img') === false;
+$sel  = $db->prepare("SELECT descr, content, scope FROM projects WHERE slug = ?");
+$updD = $db->prepare("UPDATE projects SET descr = ? WHERE slug = ?");
+$updC = $db->prepare("UPDATE projects SET content = ? WHERE slug = ?");
+$updS = $db->prepare("UPDATE projects SET scope = ? WHERE slug = ?");
+$n = 0;
+foreach ($texts as $slug => $v) {
+    $sel->execute([$slug]); $cur = $sel->fetch();
+    if (!$cur) continue;
+    if ($blank($cur['descr']))   { $updD->execute([$v[0], $slug]); $n++; }
+    if ($blank($cur['content'])) { $updC->execute([$v[1], $slug]); $n++; }
+    if ($blank($cur['scope']))   { $updS->execute([$v[2], $slug]); $n++; }
+}
+$log("✓ project texts ensured (fields filled: $n)");
 
 $log("\nDONE. Re-runnable. Do NOT delete from the repo (token-protected).");

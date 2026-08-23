@@ -75,11 +75,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if ($p = admin_upload('video_file')) $video = $p;                 // uploaded video overrides
             $gallery = array_values(array_filter(array_map('trim', $_POST['gallery'] ?? []), fn($x)=>$x!==''));
             foreach (admin_upload_multi('gallery_files') as $p) $gallery[] = $p;
+            $content = (string)($_POST['content'] ?? '');
+            if (trim(strip_tags($content)) === '' && strpos($content, '<img') === false
+                && strpos($content, '<iframe') === false && strpos($content, '<video') === false) $content = '';
             $f = [
               'title'=>$_POST['title']??'', 'slug'=>$_POST['slug']??'', 'category_id'=>($_POST['category_id']?:null),
               'year'=>$_POST['year']??'', 'location'=>$_POST['location']??'', 'area'=>$_POST['area']??'',
               'client'=>$_POST['client']??'', 'cover'=>$cover, 'video'=>$video, 'gallery'=>json_encode($gallery, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
-              'descr'=>$_POST['descr']??'', 'content'=>$_POST['content']??'', 'scope'=>$_POST['scope']??'',
+              'descr'=>$_POST['descr']??'', 'content'=>$content, 'scope'=>$_POST['scope']??'',
               'seo_title'=>$_POST['seo_title']??'', 'seo_desc'=>$_POST['seo_desc']??'',
               'robots'=>$_POST['robots']??'index,follow', 'canonical'=>$_POST['canonical']??'',
               'sort'=>(int)($_POST['sort']??0), 'visible'=>isset($_POST['visible'])?1:0,
