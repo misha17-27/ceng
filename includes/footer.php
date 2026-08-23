@@ -155,7 +155,7 @@ window.addEventListener('load', function () {
         allowTouchMove: true,
         freeMode: true,
         speed: 3500,
-        spaceBetween: 30,
+        spaceBetween: 0,
         slidesPerView: 3,
         autoplay: { delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true },
         breakpoints: { 0: { slidesPerView: 3 }, 768: { slidesPerView: 4 }, 1024: { slidesPerView: 5 } }
