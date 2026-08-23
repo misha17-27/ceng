@@ -88,8 +88,16 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $content = (string)($_POST['content'] ?? '');
             if (trim(strip_tags($content)) === '' && strpos($content, '<img') === false
                 && strpos($content, '<iframe') === false && strpos($content, '<video') === false) $content = '';
+            // slug: auto from title when empty, always normalized, kept unique
+            $slug = slugify(trim($_POST['slug'] ?? '') !== '' ? $_POST['slug'] : ($_POST['title'] ?? ''));
+            if ($slug !== '') {
+                $curId = (int)($_POST['id'] ?? 0);
+                $chk = $db->prepare('SELECT id FROM projects WHERE slug=? AND id<>? LIMIT 1');
+                $base = $slug; $n = 2;
+                while (true) { $chk->execute([$slug, $curId]); if (!$chk->fetch()) break; $slug = $base . '-' . $n++; }
+            }
             $f = [
-              'title'=>$_POST['title']??'', 'slug'=>$_POST['slug']??'', 'category_id'=>($_POST['category_id']?:null),
+              'title'=>$_POST['title']??'', 'slug'=>$slug, 'category_id'=>($_POST['category_id']?:null),
               'year'=>$_POST['year']??'', 'location'=>$_POST['location']??'', 'area'=>$_POST['area']??'',
               'client'=>$_POST['client']??'', 'cover'=>$cover, 'video'=>$video, 'gallery'=>json_encode($gallery, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
               'descr'=>$_POST['descr']??'', 'content'=>$content, 'scope'=>$_POST['scope']??'',
@@ -678,8 +686,9 @@ function render_projects(PDO $db): void {
         foreach ($rows as $r) {
             $cover = $r['cover'] ?: ($r['image'] ?? '');
             $seo = trim((string)($r['seo_title'] ?? '')) !== '' ? '#011640' : '#cbd3d1';
-            echo '<tr><td><b>'.e($r['title']).'</b><br><span class="muted" style="font-size:12px">'.e($r['slug']).'</span></td>';
-            echo '<td>'.($cover ? '<img src="'.e($cover).'" style="width:74px;height:48px;object-fit:cover;border-radius:6px">' : '—').'</td>';
+            echo '<tr><td><a href="index.php?section=projects&edit='.$r['id'].'" style="color:#011640;text-decoration:none"><b>'.e($r['title']).'</b></a><br>'
+                .'<a class="muted" href="/'.e(ltrim((string)$r['slug'],'/')).'/" target="_blank" style="font-size:12px;text-decoration:none">/'.e($r['slug']).'/</a></td>';
+            echo '<td>'.($cover ? '<a href="/'.e(ltrim((string)$r['slug'],'/')).'/" target="_blank"><img src="'.e($cover).'" style="width:74px;height:48px;object-fit:cover;border-radius:6px"></a>' : '—').'</td>';
             echo '<td><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'.$seo.'"></span></td>';
             echo '<td class="right" style="white-space:nowrap">';
             echo '<a class="btn sm ghost" href="index.php?section=projects&edit='.$r['id'].'">Редактировать</a> ';
@@ -700,9 +709,12 @@ function render_projects(PDO $db): void {
     echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field();
     echo '<input type="hidden" name="action" value="save"><input type="hidden" name="id" value="'.e($p['id']).'">';
     echo '<h3>'.($mode==='edit' ? 'Редактировать: '.e($p['title']) : 'Новый проект').'</h3>';
-
-    echo '<div class="row"><div><label>Название</label><input type="text" name="title" value="'.e($p['title']).'"></div>';
-    echo '<div><label>Slug (URL)</label><input type="text" name="slug" value="'.e($p['slug']).'"></div></div>';
+    if ($mode === 'edit' && $p['slug'] !== '') {
+        $host = 'https://' . ($_SERVER['HTTP_HOST'] ?? '');
+        echo '<p class="muted" style="margin:2px 0 12px">Постоянная ссылка: <a href="/'.e($p['slug']).'/" target="_blank" style="color:#1b4b8f;font-weight:600">'.e($host.'/'.$p['slug'].'/').'</a></p>';
+    }
+    echo '<div class="row"><div><label>Название</label><input type="text" id="projTitle" name="title" value="'.e($p['title']).'"></div>';
+    echo '<div><label>Slug (URL)</label><input type="text" id="projSlug" name="slug" value="'.e($p['slug']).'" placeholder="авто из названия"></div></div>';
 
     echo '<label>Обложка, путь</label><input type="text" name="cover" value="'.e($cover).'">';
     if ($cover) echo '<div style="margin-top:8px"><img src="'.e($cover).'" style="max-width:200px;border-radius:8px"></div>';
@@ -763,6 +775,13 @@ function projects_js(): string {
 .rtarea{border:1px solid #cfd8d6;border-radius:0 0 9px 9px;min-height:140px;padding:12px;background:#fff}
 .gitem input{width:100%;border:1px solid #cfd8d6;border-radius:6px;padding:5px}</style>
 <script>
+var slugTouched = (document.getElementById('projSlug')||{value:''}).value !== '';
+function jsSlug(s){var m={'ə':'e','Ə':'e','ı':'i','İ':'i','ö':'o','Ö':'o','ü':'u','Ü':'u','ç':'c','Ç':'c','ş':'s','Ş':'s','ğ':'g','Ğ':'g'};
+  s=s.replace(/./g,function(ch){return m[ch]!==undefined?m[ch]:ch;});
+  return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+var tEl=document.getElementById('projTitle'), sEl=document.getElementById('projSlug');
+if(tEl&&sEl){ sEl.addEventListener('input',function(){slugTouched=this.value!=='';});
+  tEl.addEventListener('input',function(){ if(!slugTouched) sEl.value=jsSlug(this.value); }); }
 function rt(e,cmd){e.preventDefault();document.execCommand(cmd,false,null);document.getElementById('rt').focus();}
 function rtLink(e){e.preventDefault();var u=prompt('URL ссылки:','https://');if(u)document.execCommand('createLink',false,u);}
 function syncRT(){document.getElementById('rtsrc').value=document.getElementById('rt').innerHTML;}

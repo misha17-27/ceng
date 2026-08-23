@@ -27,6 +27,26 @@ function text_label(string $k): string {
 }
 function redirect(string $to): void { header('Location: ' . $to); exit; }
 
+/* URL slug from a title: Azerbaijani + Russian transliteration, then a-z0-9- */
+function slugify(string $s): string {
+    static $map = [
+        'ə'=>'e','Ə'=>'E','ı'=>'i','İ'=>'I','ö'=>'o','Ö'=>'O','ü'=>'u','Ü'=>'U',
+        'ç'=>'c','Ç'=>'C','ş'=>'s','Ş'=>'S','ğ'=>'g','Ğ'=>'G',
+        'а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'yo','ж'=>'zh','з'=>'z',
+        'и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r',
+        'с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'ts','ч'=>'ch','ш'=>'sh','щ'=>'sch',
+        'ъ'=>'','ы'=>'y','ь'=>'','э'=>'e','ю'=>'yu','я'=>'ya',
+        'А'=>'A','Б'=>'B','В'=>'V','Г'=>'G','Д'=>'D','Е'=>'E','Ё'=>'Yo','Ж'=>'Zh','З'=>'Z',
+        'И'=>'I','Й'=>'Y','К'=>'K','Л'=>'L','М'=>'M','Н'=>'N','О'=>'O','П'=>'P','Р'=>'R',
+        'С'=>'S','Т'=>'T','У'=>'U','Ф'=>'F','Х'=>'H','Ц'=>'Ts','Ч'=>'Ch','Ш'=>'Sh','Щ'=>'Sch',
+        'Ъ'=>'','Ы'=>'Y','Ь'=>'','Э'=>'E','Ю'=>'Yu','Я'=>'Ya',
+    ];
+    $s = strtr($s, $map);
+    $s = strtolower($s);
+    $s = preg_replace('/[^a-z0-9]+/', '-', $s);
+    return trim($s, '-');
+}
+
 function boot_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
         session_set_cookie_params(['httponly'=>true, 'samesite'=>'Lax',

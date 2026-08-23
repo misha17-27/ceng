@@ -28,6 +28,7 @@ function i18n_switcher(): string {
 
 function i18n_dict(string $lang): array {
     if ($lang === 'az') return [
+        'Постоянная ссылка:' => 'Daimi keçid:', 'авто из названия' => 'addan avtomatik',
         'ОСНОВНОЕ' => 'ƏSAS', 'КОНТЕНТ' => 'MƏZMUN', 'НАСТРОЙКИ' => 'AYARLAR',
         'Обзор' => 'İcmal', 'Тексты сайта' => 'Sayt mətnləri', 'Страницы' => 'Səhifələr', 'Услуги' => 'Xidmətlər',
         'Проекты' => 'Layihələr', 'Партнёры' => 'Partnyorlar', 'Изображения' => 'Şəkillər',
@@ -123,6 +124,7 @@ function i18n_dict(string $lang): array {
         'призыв (нижний блок)' => 'çağırış (aşağı blok)', 'текст' => 'mətn', 'фото' => 'şəkil',
     ];
     return [
+        'Постоянная ссылка:' => 'Permalink:', 'авто из названия' => 'auto from the name',
         'ОСНОВНОЕ' => 'MAIN', 'КОНТЕНТ' => 'CONTENT', 'НАСТРОЙКИ' => 'SETTINGS',
         'Обзор' => 'Overview', 'Тексты сайта' => 'Site texts', 'Страницы' => 'Pages', 'Услуги' => 'Services',
         'Проекты' => 'Projects', 'Партнёры' => 'Partners', 'Изображения' => 'Images',
