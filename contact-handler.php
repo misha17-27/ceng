@@ -25,13 +25,30 @@ if (is_file($dbfile)) {
     } catch (Throwable $e) { /* ignore, still send mail */ }
 }
 
-$to      = 'info@ceng.az';
-$subject = '=?UTF-8?B?' . base64_encode('Yeni muraciet - ceng.az') . '?=';
-$body    = "Ad: $name\nTelefon: $phone\nEmail: $email\nMesaj:\n$msg\n";
-$headers = "From: website@ceng.az\r\n";
-if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) { $headers .= "Reply-To: $email\r\n"; }
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-@mail($to, $subject, $body, $headers);
+// Recipient from admin -> SEO ("Почта для заявок"); SMTP when configured, mail() otherwise.
+$to = 'info@ceng.az';
+$sent = false;
+$libfile = __DIR__ . '/admin/lib.php';
+if (is_file($libfile)) {
+    try {
+        require_once $libfile;
+        $ne = kv_get('settings', 'notify_email');
+        if ($ne !== '' && filter_var($ne, FILTER_VALIDATE_EMAIL)) $to = $ne;
+        $plain = "Ad: $name\nTelefon: $phone\nEmail: $email\nMesaj:\n$msg\n";
+        if (kv_get('settings', 'smtp_host') !== '') {
+            $err = '';
+            $sent = smtp_send($to, 'Yeni muraciet - ceng.az', $plain, $err);
+        }
+    } catch (Throwable $e) { /* fall back to mail() below */ }
+}
+if (!$sent) {
+    $subject = '=?UTF-8?B?' . base64_encode('Yeni muraciet - ceng.az') . '?=';
+    $body    = "Ad: $name\nTelefon: $phone\nEmail: $email\nMesaj:\n$msg\n";
+    $headers = "From: website@ceng.az\r\n";
+    if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) { $headers .= "Reply-To: $email\r\n"; }
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    @mail($to, $subject, $body, $headers);
+}
 
 header('Location: /elaqe/?sent=1#contact');
 exit;

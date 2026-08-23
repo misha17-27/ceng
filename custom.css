@@ -31,6 +31,19 @@ img, iframe, video, .swiper { max-width: 100%; }
   .proj-gallery img { height: 140px; }
   .proj-scope { grid-template-columns: 1fr; }
 }
+.proj-pagination { display: flex; gap: 8px; justify-content: center; margin: 34px 0 10px; flex-wrap: wrap; }
+.proj-pagination a, .proj-pagination .cur { min-width: 40px; height: 40px; display: inline-flex; align-items: center;
+  justify-content: center; border-radius: 10px; border: 1px solid #d7dedc; color: #011640; font-weight: 700;
+  text-decoration: none; padding: 0 12px; }
+.proj-pagination a:hover { background: #eef2f7; }
+.proj-pagination .cur { background: #011640; color: #fff; border-color: #011640; }
+
+/* Floating WhatsApp button */
+#wa-float { position: fixed; right: 22px; bottom: 22px; z-index: 9980; width: 56px; height: 56px;
+  border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,.25); transition: transform .2s ease; }
+#wa-float:hover { transform: scale(1.08); }
+#wa-float svg { width: 30px; height: 30px; fill: #fff; }
 
 /* Partners carousel — framed logo cards, continuous ticker */
 .elementor-widget-image-carousel .swiper-wrapper { transition-timing-function: linear !important; align-items: stretch; }

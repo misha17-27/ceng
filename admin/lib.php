@@ -180,6 +180,7 @@ const PAGE_FIELDS = [
         ['home_about_btn',      'Блок «О компании» · текст кнопки', 'text'],
         ['home_about_btn_url',  'Блок «О компании» · ссылка кнопки', 'text'],
         ['home_gallery_title',  'Заголовок секции «Qalereya»', 'text'],
+        ['home_adv_title',      'Заголовок блока «Üstünlüklərimiz»', 'text'],
         ['home_projects_title', 'Заголовок секции «Layihələr»', 'text'],
         ['home_projects_text',  'Секция «Layihələr» · текст', 'rich'],
         ['home_projects_btn',   'Секция «Layihələr» · текст кнопки', 'text'],
@@ -216,6 +217,7 @@ const PAGE_FIELDS = [
 
 function layout_top(string $active, string $title): void {
     $admin = current_admin();
+    ob_start();
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8">';
     echo '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'.e($title).' — CENG admin</title>';
     echo '<style>'.admin_css().'</style></head><body><div class="wrap">';
@@ -231,11 +233,15 @@ function layout_top(string $active, string $title): void {
     }
     echo '</nav><div class="who">Вы вошли как<br><b>'.e($admin['name'] ?: ($admin['email'] ?? '')).'</b></div></aside>';
     echo '<main><header class="bar"><h1>'.e($title).'</h1><div>';
+    echo i18n_switcher();
     echo '<a class="btn ghost" href="/" target="_blank">Открыть сайт</a> ';
     echo '<a class="btn" href="index.php?section=logout">Выйти</a></div></header><div class="body">';
     echo flash_render();
 }
-function layout_bottom(): void { echo '</div></main></div></body></html>'; }
+function layout_bottom(): void {
+    echo '</div></main></div></body></html>';
+    echo i18n_apply(ob_get_clean());
+}
 
 function admin_css(): string {
     return <<<CSS
@@ -274,3 +280,5 @@ textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:16p
 @media(max-width:820px){.side{width:64px}.side .brand b,.side nav a span,.who{display:none}.side nav a{justify-content:center;padding:14px 0}.row{grid-template-columns:1fr}}
 CSS;
 }
+
+require_once __DIR__ . '/i18n.php';

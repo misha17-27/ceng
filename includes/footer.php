@@ -98,13 +98,21 @@ $__dbf = $_SERVER['DOCUMENT_ROOT'] . '/admin/db.php';
 if (is_file($__dbf)) {
     try {
         $__p = require $__dbf;
-        $__r = $__p->query("SELECT k,v FROM contacts WHERE k LIKE 'soc%'")->fetchAll(PDO::FETCH_KEY_PAIR);
-        for ($i = 1; $i <= 4; $i++) {
-            $n = trim($__r['soc'.$i.'_name'] ?? '');
-            $u = trim($__r['soc'.$i.'_url']  ?? '');
+        $__r = $__p->query("SELECT k,v FROM contacts")->fetchAll(PDO::FETCH_KEY_PAIR);
+        foreach ([['soc_linkedin','LinkedIn'],['soc_instagram','Instagram'],['soc_facebook','Facebook'],
+                  ['soc_youtube','YouTube'],['soc_x','X'],
+                  ['soc1_url','soc1_name'],['soc2_url','soc2_name'],['soc3_url','soc3_name'],['soc4_url','soc4_name']] as $__pair) {
+            if (strpos($__pair[0], 'soc_') === 0) { $u = trim($__r[$__pair[0]] ?? ''); $n = $__pair[1]; }
+            else { $u = trim($__r[$__pair[0]] ?? ''); $n = trim($__r[$__pair[1]] ?? ''); }
             if ($n !== '' && $u !== '' && $u !== '#') {
+                if (!preg_match('~^https?://~', $u)) $u = 'https://' . $u;
                 $__soc .= '<a href="'.htmlspecialchars($u, ENT_QUOTES).'" target="_blank" rel="noopener">'.htmlspecialchars($n, ENT_QUOTES).'</a>';
             }
+        }
+        $__wa = preg_replace('/[^0-9]/', '', trim($__r['whatsapp'] ?? ''));
+        if ($__wa !== '') {
+            echo '<a id="wa-float" href="https://wa.me/'.$__wa.'" target="_blank" rel="noopener" aria-label="WhatsApp">'
+               . '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 29l8.2-1.5c1.2.5 2.5.8 3.8.8 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-1.2 0-2.4-.3-3.5-.8l-.6-.3-4.9.9 1-4.7-.4-.6c-1-1.6-1.5-3.4-1.5-5.3 0-5.5 4.4-9.9 9.9-9.9s9.9 4.4 9.9 9.9-4.4 9.8-9.9 9.8zm5.4-7.4c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.2.2 2.3 3.6 5.6 5 .8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.8-.7 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.4z"/></svg></a>';
         }
     } catch (Throwable $e) {}
 }

@@ -5,6 +5,13 @@ boot_session();
 
 $section = preg_replace('/[^a-z_]/', '', $_GET['section'] ?? 'overview');
 
+/* ---- admin UI language switch (?lang=az|ru|en, stored in a cookie) ---- */
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['ru','az','en'], true)) {
+    setcookie('alang', $_GET['lang'], time() + 86400 * 365, '/admin/');
+    $_COOKIE['alang'] = $_GET['lang'];
+    redirect('index.php?section=' . $section);
+}
+
 /* ---- logout ---- */
 if ($section === 'logout') { logout(); redirect('index.php?section=login'); }
 
@@ -19,8 +26,10 @@ if ($section === 'login') {
         elseif (attempt_login($_POST['email'] ?? '', $_POST['password'] ?? '')) redirect('index.php');
         else $err = 'Неверный e-mail или пароль.';
     }
+    ob_start();
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход — CENG admin</title><style>'.admin_css().'</style></head><body>';
     echo '<div class="login"><form class="box" method="post">';
+    echo '<div style="display:flex;justify-content:flex-end;margin-bottom:6px">'.i18n_switcher().'</div>';
     echo '<div style="margin-bottom:14px"><img src="/admin/logo.png" alt="CENG" style="max-height:46px;max-width:220px"></div>';
     echo '<h2>Вход в панель</h2><div class="sub">Управление контентом сайта</div>';
     if ($err) echo '<div style="background:#b91c1c;color:#fff;padding:10px;border-radius:8px;margin-bottom:12px">'.e($err).'</div>';
@@ -31,6 +40,7 @@ if ($section === 'login') {
     echo '<div style="margin-top:14px;display:flex;justify-content:center">'; turnstile_widget(); echo '</div>';
     echo '<button class="btn" style="width:100%;margin-top:20px" type="submit">Войти</button>';
     echo '</form></div></body></html>';
+    echo i18n_apply(ob_get_clean());
     exit;
 }
 
@@ -50,8 +60,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         flash('Тексты сохранены.'); redirect('index.php?section=texts');
     }
     if ($section === 'contacts' && $act === 'save') {
-        foreach (['phone','phone2','email','address','hours','map',
-                  'soc1_name','soc1_url','soc2_name','soc2_url','soc3_name','soc3_url','soc4_name','soc4_url'] as $k)
+        foreach (['phone','phone2','email','address','hours','map','whatsapp',
+                  'soc_linkedin','soc_instagram','soc_facebook','soc_youtube','soc_x'] as $k)
             kv_set('contacts',$k,(string)($_POST[$k]??''));
         flash('Контакты сохранены.'); redirect('index.php?section=contacts');
     }
@@ -104,14 +114,29 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         } elseif ($act === 'del') { $db->prepare('DELETE FROM projects WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); redirect('index.php?section=projects'); }
     }
     if ($section === 'partners') {
+        if (!empty($_POST['delete_id'])) {
+            $db->prepare('DELETE FROM partners WHERE id=?')->execute([(int)$_POST['delete_id']]);
+            flash('Партнёр удалён.'); redirect('index.php?section=partners');
+        }
+        if ($act === 'add') {
+            $img = trim($_POST['image'] ?? '');
+            if ($p = admin_upload('logo_file')) $img = $p;
+            if ($img === '') flash('Добавь файл логотипа или путь к нему.', 'err');
+            else {
+                $db->prepare('INSERT INTO partners (name,image,url,sort,visible) VALUES (?,?,?,?,1)')
+                   ->execute([trim($_POST['name'] ?? ''), $img, trim($_POST['url'] ?? ''), (int)($_POST['sort'] ?? 0)]);
+                flash('Партнёр добавлен.');
+            }
+            redirect('index.php?section=partners');
+        }
         if ($act === 'save') {
-            if ($_POST['id']) { $db->prepare('UPDATE partners SET name=?,image=?,url=?,sort=? WHERE id=?')
-                ->execute([$_POST['name'],$_POST['image'],$_POST['url'],(int)$_POST['sort'],(int)$_POST['id']]); }
-            else { $db->prepare('INSERT INTO partners (name,image,url,sort) VALUES (?,?,?,?)')
-                ->execute([$_POST['name'],$_POST['image'],$_POST['url'],(int)$_POST['sort']]); }
-            flash('Партнёр сохранён.');
-        } elseif ($act === 'del') { $db->prepare('DELETE FROM partners WHERE id=?')->execute([(int)$_POST['id']]); flash('Удалено.'); }
-        redirect('index.php?section=partners');
+            foreach (($_POST['p'] ?? []) as $id => $row) {
+                $db->prepare('UPDATE partners SET name=?, url=?, sort=?, visible=? WHERE id=?')
+                   ->execute([trim($row['name'] ?? ''), trim($row['url'] ?? ''), (int)($row['sort'] ?? 0),
+                              isset($row['visible']) ? 1 : 0, (int)$id]);
+            }
+            flash('Изменения сохранены.'); redirect('index.php?section=partners');
+        }
     }
     if ($section === 'pages' && $act === 'save') {
         $slug = $_POST['slug'] ?? '';
@@ -128,13 +153,26 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
            ->execute([$slug, $_POST['seo_title']??'', $_POST['seo_desc']??'', $_POST['robots']??'index,follow', $_POST['canonical']??'']);
         flash('Страница сохранена.'); redirect('index.php?section=pages');
     }
-    if ($section === 'seo' && $act === 'save') {
-        $u = $db->prepare('UPDATE seo_pages SET title=?, descr=? WHERE slug=?');
-        foreach (($_POST['title'] ?? []) as $slug=>$title) $u->execute([$title, $_POST['descr'][$slug] ?? '', $slug]);
-        flash('SEO сохранён.'); redirect('index.php?section=seo');
+    if ($section === 'seo') {
+        if ($act === 'global') {
+            $og = trim($_POST['og_image'] ?? '');
+            if ($p = admin_upload('og_file')) $og = $p;
+            kv_set('settings', 'og_image', $og);
+            kv_set('settings', 'search_visible', ($_POST['search_visible'] ?? '1') === '0' ? '0' : '1');
+            $ne = trim($_POST['notify_email'] ?? '');
+            if ($ne === '' || filter_var($ne, FILTER_VALIDATE_EMAIL)) kv_set('settings', 'notify_email', $ne);
+            else flash('Почта для заявок: некорректный адрес.', 'err');
+            flash('Настройки SEO сохранены.'); redirect('index.php?section=seo');
+        }
+        if ($act === 'save') {
+            $u = $db->prepare('UPDATE seo_pages SET title=?, descr=? WHERE slug=?');
+            foreach (($_POST['title'] ?? []) as $slug=>$title) $u->execute([$title, $_POST['descr'][$slug] ?? '', $slug]);
+            flash('SEO сохранён.'); redirect('index.php?section=seo');
+        }
     }
     if ($section === 'submissions') {
         if ($act === 'read') { $db->prepare('UPDATE submissions SET is_read=1 WHERE id=?')->execute([(int)$_POST['id']]); }
+        elseif ($act === 'read_all') { $db->exec('UPDATE submissions SET is_read=1'); flash('Все заявки отмечены прочитанными.'); }
         elseif ($act === 'del') { $db->prepare('DELETE FROM submissions WHERE id=?')->execute([(int)$_POST['id']]); flash('Заявка удалена.'); }
         redirect('index.php?section=submissions');
     }
@@ -263,11 +301,22 @@ elseif ($section === 'contacts') {
     echo '<label>Адрес</label><input type="text" name="address" value="'.$g('address').'">';
     echo '<label>Часы работы</label><input type="text" name="hours" value="'.$g('hours').'">';
     echo '<label>Google Maps embed URL</label><input type="text" name="map" value="'.$g('map').'">';
-    for ($i=1;$i<=4;$i++) {
-        echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#011640;font-weight:700">Соцсеть '.$i.'</legend>';
-        echo '<div class="row"><div><label>Название</label><input type="text" name="soc'.$i.'_name" value="'.$g('soc'.$i.'_name').'"></div>';
-        echo '<div><label>URL</label><input type="text" name="soc'.$i.'_url" value="'.$g('soc'.$i.'_url').'"></div></div></fieldset>';
+    $wa = kv_get('contacts','whatsapp');
+    $waDigits = preg_replace('/[^0-9]/', '', $wa !== '' ? $wa : kv_get('contacts','phone'));
+    echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#011640;font-weight:700">WhatsApp</legend>';
+    echo '<p class="muted">Номер для круглой кнопки в правом нижнем углу сайта. В ссылку уйдут только цифры. Пусто — кнопка не показывается.</p>';
+    echo '<div class="row"><div><label>Номер WhatsApp</label><input type="text" name="whatsapp" value="'.e($wa).'" placeholder="+994 ..."></div>';
+    echo '<div><label>Ссылка получится такой</label><input type="text" readonly value="'.($waDigits ? 'https://wa.me/'.e($waDigits) : '—').'"></div></div></fieldset>';
+    echo '<fieldset style="border:1px solid #e6ebea;border-radius:10px;padding:12px 16px;margin-top:14px"><legend style="color:#011640;font-weight:700">Социальные сети</legend>';
+    echo '<p class="muted">Показываются внизу мобильного меню. Заполняй только те, что есть.</p>';
+    foreach ([['soc_linkedin','LinkedIn','https://www.linkedin.com/company/...'],
+              ['soc_instagram','Instagram','https://www.instagram.com/...'],
+              ['soc_facebook','Facebook','https://www.facebook.com/...'],
+              ['soc_youtube','YouTube','https://www.youtube.com/@...'],
+              ['soc_x','X (Twitter)','https://x.com/...']] as [$k,$l,$ph]) {
+        echo '<label>'.$l.'</label><input type="text" name="'.$k.'" value="'.$g($k).'" placeholder="'.$ph.'">';
     }
+    echo '</fieldset>';
     echo '<div style="margin-top:18px"><button class="btn">Сохранить контакты</button></div></form>';
 }
 
@@ -293,8 +342,32 @@ elseif ($section === 'services') {
 
 elseif ($section === 'projects') { render_projects($db); }
 
-elseif ($section === 'partners') { crud_list($db,'partners','Партнёр',
-    ['name'=>'Название','image'=>'Логотип (URL)','url'=>'Ссылка','sort'=>'Порядок'], ['name','sort']); }
+elseif ($section === 'partners') {
+    $maxs = (int)($db->query("SELECT COALESCE(MAX(sort),-1) m FROM partners")->fetch()['m']) + 1;
+    echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field().'<input type="hidden" name="action" value="add">';
+    echo '<h3>Добавить партнёра</h3><p class="muted">Лучше всего — логотип на прозрачном фоне (PNG/SVG/WebP).</p>';
+    echo '<div class="row3"><div><label>Название</label><input type="text" name="name" placeholder="Например: Siemens"></div>';
+    echo '<div><label>Ссылка на сайт (необязательно)</label><input type="text" name="url" placeholder="https://..."></div>';
+    echo '<div><label>Порядок</label><input type="number" name="sort" value="'.$maxs.'"></div></div>';
+    echo '<label>Файл логотипа</label><input type="file" name="logo_file" accept="image/*">';
+    echo '<label>или путь к картинке</label><input type="text" name="image" placeholder="/wp-content/uploads/...">';
+    echo '<div style="margin-top:16px"><button class="btn">Добавить партнёра</button></div></form>';
+
+    $rows = $db->query('SELECT * FROM partners ORDER BY sort,id')->fetchAll();
+    echo '<form method="post" class="panel"><h3>Список партнёров</h3><p class="muted">Логотипы показываются бегущей лентой на сайте. Порядок — по числу.</p>'
+        .csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<table><tr><th>Логотип</th><th>Название</th><th>Ссылка</th><th>Порядок</th><th>Показывать</th><th></th></tr>';
+    if (!$rows) echo '<tr><td colspan="6" class="muted">Пока нет партнёров.</td></tr>';
+    foreach ($rows as $r) {
+        echo '<tr><td><img src="'.e($r['image']).'" style="width:86px;height:46px;object-fit:contain;background:#fff;border:1px solid #eef2f1;border-radius:8px;padding:4px"></td>';
+        echo '<td><input type="text" name="p['.$r['id'].'][name]" value="'.e($r['name']).'" style="width:150px"></td>';
+        echo '<td><input type="text" name="p['.$r['id'].'][url]" value="'.e($r['url']).'" style="width:170px"></td>';
+        echo '<td><input type="number" name="p['.$r['id'].'][sort]" value="'.e($r['sort']).'" style="width:70px"></td>';
+        echo '<td style="text-align:center"><input type="checkbox" name="p['.$r['id'].'][visible]" '.((int)($r['visible'] ?? 1)?'checked':'').'></td>';
+        echo '<td class="right"><button class="btn sm red" name="delete_id" value="'.$r['id'].'" formnovalidate onclick="return confirm(\'Удалить партнёра?\')">Удалить</button></td></tr>';
+    }
+    echo '</table><div style="margin-top:16px"><button class="btn">Сохранить изменения</button></div></form>';
+}
 
 elseif ($section === 'pages') {
     $mkurl = fn($slug) => ($u = '/'.ltrim((string)$slug,'/')) === '/' ? '/' : rtrim($u,'/').'/';
@@ -363,8 +436,25 @@ elseif ($section === 'pages') {
 }
 
 elseif ($section === 'seo') {
+    $og = kv_get('settings','og_image'); $sv = kv_get('settings','search_visible','1'); $ne = kv_get('settings','notify_email','info@ceng.az');
+    echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field().'<input type="hidden" name="action" value="global">';
+    echo '<h3>Поисковая оптимизация</h3><p class="muted">Эти данные видят Google и соцсети при отправке ссылки.</p>';
+    echo '<label>Картинка для соцсетей (OG)</label>';
+    echo '<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">';
+    if ($og) echo '<img src="'.e($og).'" style="width:160px;height:84px;object-fit:contain;background:#f4f6f6;border-radius:8px">';
+    echo '<div style="flex:1;min-width:240px"><input type="text" name="og_image" value="'.e($og).'" placeholder="/wp-content/uploads/...">';
+    echo '<div class="muted" style="margin:6px 0 2px">Загрузить новый файл (заменит ссылку):</div><input type="file" name="og_file" accept="image/*">';
+    echo '<p class="muted" style="margin-top:6px">Показывается, когда ссылку на сайт отправляют в мессенджере или соцсети. Лучше 1200×630 px.</p></div></div>';
+    echo '<label>Видимость в поиске</label><select name="search_visible">';
+    echo '<option value="1"'.($sv!=='0'?' selected':'').'>Открыт для поисковиков</option>';
+    echo '<option value="0"'.($sv==='0'?' selected':'').'>Закрыт (noindex)</option></select>';
+    echo '<p class="muted">Закрывайте только на время работ — закрытый сайт выпадает из выдачи.</p>';
+    echo '<label>Почта для заявок с формы</label><input type="text" name="notify_email" value="'.e($ne).'">';
+    echo '<p class="muted">Куда приходят сообщения из формы обратной связи.</p>';
+    echo '<div style="margin-top:14px"><button class="btn">Сохранить</button></div></form>';
+
     $rows = $db->query('SELECT * FROM seo_pages ORDER BY slug')->fetchAll();
-    echo '<form method="post" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save">';
+    echo '<form method="post" class="panel"><h3>SEO по страницам</h3>'.csrf_field().'<input type="hidden" name="action" value="save">';
     foreach ($rows as $r) {
         echo '<div style="border-bottom:1px solid #eef2f1;padding-bottom:14px;margin-bottom:14px"><b>/'.e(ltrim($r['slug'],'/')).'</b>';
         echo '<label>Title</label><input type="text" name="title['.e($r['slug']).']" value="'.e($r['title']).'">';
@@ -375,15 +465,27 @@ elseif ($section === 'seo') {
 
 elseif ($section === 'submissions') {
     $rows = $db->query('SELECT * FROM submissions ORDER BY created_at DESC')->fetchAll();
-    echo '<div class="panel"><table><tr><th>Дата</th><th>Имя</th><th>Телефон</th><th>Email</th><th>Сообщение</th><th></th></tr>';
-    if (!$rows) echo '<tr><td colspan="6" class="muted">Пока нет заявок.</td></tr>';
+    $ne = kv_get('settings', 'notify_email', 'info@ceng.az');
+    echo '<div class="panel"><h3>Сообщения из формы обратной связи</h3>';
+    echo '<p class="muted">Всего: '.count($rows).($ne !== '' ? '. Заявки также дублируются на почту <b>'.e($ne).'</b>.' : '').'</p>';
+    echo '<form method="post" style="display:inline">'.csrf_field().'<input type="hidden" name="action" value="read_all"><button class="btn ghost">Отметить все прочитанными</button></form>';
+    echo '</div>';
+    if (!$rows) echo '<div class="panel"><p class="muted">Пока заявок нет.</p></div>';
     foreach ($rows as $r) {
-        $b = $r['is_read'] ? '' : ' style="background:#eafaf4"';
-        echo '<tr'.$b.'><td class="muted">'.e($r['created_at']).'</td><td>'.e($r['name']).'</td><td>'.e($r['phone']).'</td><td>'.e($r['email']).'</td><td>'.nl2br(e($r['message'])).'</td><td class="right" style="white-space:nowrap">';
-        if (!$r['is_read']) echo '<form method="post" style="display:inline">'.csrf_field().'<input type="hidden" name="action" value="read"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm ghost">Прочитано</button></form> ';
-        echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Удалить заявку?\')">'.csrf_field().'<input type="hidden" name="action" value="del"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm red">✕</button></form></td></tr>';
+        $new = !(int)$r['is_read'];
+        echo '<div class="panel" style="'.($new ? 'border-left:4px solid #011640;' : '').'display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap">';
+        echo '<div style="flex:1;min-width:260px">';
+        echo '<div style="font-weight:800;font-size:16px">'.e($r['name'] !== '' ? $r['name'] : '(без имени)')
+            .($new ? ' <span style="font-size:11px;background:#dbe6f5;color:#011640;padding:2px 10px;border-radius:20px;vertical-align:middle">новая</span>' : '').'</div>';
+        echo '<div class="muted" style="margin:4px 0 10px">'.e($r['created_at']).($r['ip'] ? ' · IP '.e($r['ip']) : '').'</div>';
+        if ($r['phone']) echo '<div><b>Телефон:</b> '.e($r['phone']).'</div>';
+        if ($r['email']) echo '<div><b>E-mail:</b> '.e($r['email']).'</div>';
+        if (trim((string)$r['message']) !== '') echo '<div style="background:#f4f6f6;border-radius:8px;padding:10px 14px;margin-top:10px">'.nl2br(e($r['message'])).'</div>';
+        echo '</div><div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">';
+        if ($new) echo '<form method="post">'.csrf_field().'<input type="hidden" name="action" value="read"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm ghost">Прочитано</button></form>';
+        echo '<form method="post" onsubmit="return confirm(\'Удалить заявку?\')">'.csrf_field().'<input type="hidden" name="action" value="del"><input type="hidden" name="id" value="'.$r['id'].'"><button class="btn sm red">Удалить</button></form>';
+        echo '</div></div>';
     }
-    echo '</table></div>';
 }
 
 elseif ($section === 'images') {

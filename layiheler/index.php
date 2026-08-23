@@ -110,7 +110,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 <noscript>
 <style id="wpr-lazyload-bg-nostyle"></style>
 </noscript>
-<script type="application/javascript">const rocket_pairs = []; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=12">
+<script type="application/javascript">const rocket_pairs = []; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=13">
 </head>
 <body class="page-template-default page page-id-264 wp-custom-logo wp-embed-responsive theme-default elementor-default elementor-kit-13 elementor-page elementor-page-264">
 
@@ -153,218 +153,33 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				</div>
 				<div class="elementor-element elementor-element-1b67a68 elementor-grid-3 elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-posts--thumbnail-top elementor-widget elementor-widget-posts" data-id="1b67a68" data-element_type="widget" data-settings="{&quot;classic_row_gap&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;50&quot;,&quot;sizes&quot;:[]},&quot;pagination_type&quot;:&quot;numbers&quot;,&quot;classic_columns&quot;:&quot;3&quot;,&quot;classic_columns_tablet&quot;:&quot;2&quot;,&quot;classic_columns_mobile&quot;:&quot;1&quot;,&quot;classic_row_gap_tablet&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]},&quot;classic_row_gap_mobile&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]}}" data-widget_type="posts.classic">
 				<div class="elementor-widget-container">
-							<div class="elementor-posts-container elementor-posts elementor-posts--skin-classic elementor-grid">
-				<article class="elementor-post elementor-grid-item post-525 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/bine-stadium/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img fetchpriority="high" decoding="async" width="675" height="450" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20675%20450'%3E%3C/svg%3E" class="attachment-full size-full wp-image-526" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/img_22141_slide2.jpg 675w, /wp-content/uploads/2025/04/img_22141_slide2-300x200.jpg 300w" data-lazy-sizes="(max-width: 675px) 100vw, 675px" data-lazy-src="/wp-content/uploads/2025/04/img_22141_slide2.jpg" /><noscript><img fetchpriority="high" decoding="async" width="675" height="450" src="/wp-content/uploads/2025/04/img_22141_slide2.jpg" class="attachment-full size-full wp-image-526" alt="" srcset="/wp-content/uploads/2025/04/img_22141_slide2.jpg 675w, /wp-content/uploads/2025/04/img_22141_slide2-300x200.jpg 300w" sizes="(max-width: 675px) 100vw, 675px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/bine-stadium/" >
-				Bine Stadium			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/bine-stadium/" aria-label="Read more about Bine Stadium" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-516 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/bakcell-arena/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="637" height="400" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20637%20400'%3E%3C/svg%3E" class="attachment-full size-full wp-image-523" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg 637w, /wp-content/uploads/2025/04/160634_bn12v7ezit-300x188.jpg 300w" data-lazy-sizes="(max-width: 637px) 100vw, 637px" data-lazy-src="/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg" /><noscript><img decoding="async" width="637" height="400" src="/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg" class="attachment-full size-full wp-image-523" alt="" srcset="/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg 637w, /wp-content/uploads/2025/04/160634_bn12v7ezit-300x188.jpg 300w" sizes="(max-width: 637px) 100vw, 637px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/bakcell-arena/" >
-				Bakcell Arena			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/bakcell-arena/" aria-label="Read more about Bakcell Arena" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-514 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/sr-group-co/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="800" height="800" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20800%20800'%3E%3C/svg%3E" class="attachment-full size-full wp-image-522" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/srgroup.jpg 800w, /wp-content/uploads/2025/04/srgroup-300x300.jpg 300w, /wp-content/uploads/2025/04/srgroup-150x150.jpg 150w, /wp-content/uploads/2025/04/srgroup-768x768.jpg 768w" data-lazy-sizes="(max-width: 800px) 100vw, 800px" data-lazy-src="/wp-content/uploads/2025/04/srgroup.jpg" /><noscript><img decoding="async" width="800" height="800" src="/wp-content/uploads/2025/04/srgroup.jpg" class="attachment-full size-full wp-image-522" alt="" srcset="/wp-content/uploads/2025/04/srgroup.jpg 800w, /wp-content/uploads/2025/04/srgroup-300x300.jpg 300w, /wp-content/uploads/2025/04/srgroup-150x150.jpg 150w, /wp-content/uploads/2025/04/srgroup-768x768.jpg 768w" sizes="(max-width: 800px) 100vw, 800px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/sr-group-co/" >
-				SR Group CO			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/sr-group-co/" aria-label="Read more about SR Group CO" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-515 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/wyndham-garden-baku/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="859" height="483" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20859%20483'%3E%3C/svg%3E" class="attachment-full size-full wp-image-518" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/Screenshot_5.webp 859w, /wp-content/uploads/2025/04/Screenshot_5-300x169.webp 300w, /wp-content/uploads/2025/04/Screenshot_5-768x432.webp 768w" data-lazy-sizes="(max-width: 859px) 100vw, 859px" data-lazy-src="/wp-content/uploads/2025/04/Screenshot_5.webp" /><noscript><img loading="lazy" decoding="async" width="859" height="483" src="/wp-content/uploads/2025/04/Screenshot_5.webp" class="attachment-full size-full wp-image-518" alt="" srcset="/wp-content/uploads/2025/04/Screenshot_5.webp 859w, /wp-content/uploads/2025/04/Screenshot_5-300x169.webp 300w, /wp-content/uploads/2025/04/Screenshot_5-768x432.webp 768w" sizes="(max-width: 859px) 100vw, 859px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/wyndham-garden-baku/" >
-				Wyndham Garden Baku			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/wyndham-garden-baku/" aria-label="Read more about Wyndham Garden Baku" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-505 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/agsu-dairy-factory/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="730" height="368" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20730%20368'%3E%3C/svg%3E" class="attachment-full size-full wp-image-512" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/0003.jpg 730w, /wp-content/uploads/2025/04/0003-300x151.jpg 300w" data-lazy-sizes="(max-width: 730px) 100vw, 730px" data-lazy-src="/wp-content/uploads/2025/04/0003.jpg" /><noscript><img loading="lazy" decoding="async" width="730" height="368" src="/wp-content/uploads/2025/04/0003.jpg" class="attachment-full size-full wp-image-512" alt="" srcset="/wp-content/uploads/2025/04/0003.jpg 730w, /wp-content/uploads/2025/04/0003-300x151.jpg 300w" sizes="(max-width: 730px) 100vw, 730px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/agsu-dairy-factory/" >
-				Agsu dairy factory			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/agsu-dairy-factory/" aria-label="Read more about Agsu dairy factory" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-506 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/grand-park-plaza/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="575" height="332" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20575%20332'%3E%3C/svg%3E" class="attachment-full size-full wp-image-510" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/Picture19.jpg 575w, /wp-content/uploads/2025/04/Picture19-300x173.jpg 300w" data-lazy-sizes="(max-width: 575px) 100vw, 575px" data-lazy-src="/wp-content/uploads/2025/04/Picture19.jpg" /><noscript><img loading="lazy" decoding="async" width="575" height="332" src="/wp-content/uploads/2025/04/Picture19.jpg" class="attachment-full size-full wp-image-510" alt="" srcset="/wp-content/uploads/2025/04/Picture19.jpg 575w, /wp-content/uploads/2025/04/Picture19-300x173.jpg 300w" sizes="(max-width: 575px) 100vw, 575px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/grand-park-plaza/" >
-				Grand Park Plaza			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/grand-park-plaza/" aria-label="Read more about Grand Park Plaza" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-507 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/mogan-hotel-baku/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="550" height="427" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20550%20427'%3E%3C/svg%3E" class="attachment-full size-full wp-image-508" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/getlstd-property-pho.jpg 550w, /wp-content/uploads/2025/04/getlstd-property-pho-300x233.jpg 300w" data-lazy-sizes="(max-width: 550px) 100vw, 550px" data-lazy-src="/wp-content/uploads/2025/04/getlstd-property-pho.jpg" /><noscript><img loading="lazy" decoding="async" width="550" height="427" src="/wp-content/uploads/2025/04/getlstd-property-pho.jpg" class="attachment-full size-full wp-image-508" alt="" srcset="/wp-content/uploads/2025/04/getlstd-property-pho.jpg 550w, /wp-content/uploads/2025/04/getlstd-property-pho-300x233.jpg 300w" sizes="(max-width: 550px) 100vw, 550px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/mogan-hotel-baku/" >
-				Mogan Hotel Baku			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/mogan-hotel-baku/" aria-label="Read more about Mogan Hotel Baku" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-502 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/socar-midstream-office/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="1200" height="800" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%20800'%3E%3C/svg%3E" class="attachment-full size-full wp-image-503" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/bp-xezer-centre.jpg 1200w, /wp-content/uploads/2025/04/bp-xezer-centre-300x200.jpg 300w, /wp-content/uploads/2025/04/bp-xezer-centre-1024x683.jpg 1024w, /wp-content/uploads/2025/04/bp-xezer-centre-768x512.jpg 768w" data-lazy-sizes="(max-width: 1200px) 100vw, 1200px" data-lazy-src="/wp-content/uploads/2025/04/bp-xezer-centre.jpg" /><noscript><img loading="lazy" decoding="async" width="1200" height="800" src="/wp-content/uploads/2025/04/bp-xezer-centre.jpg" class="attachment-full size-full wp-image-503" alt="" srcset="/wp-content/uploads/2025/04/bp-xezer-centre.jpg 1200w, /wp-content/uploads/2025/04/bp-xezer-centre-300x200.jpg 300w, /wp-content/uploads/2025/04/bp-xezer-centre-1024x683.jpg 1024w, /wp-content/uploads/2025/04/bp-xezer-centre-768x512.jpg 768w" sizes="(max-width: 1200px) 100vw, 1200px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/socar-midstream-office/" >
-				Socar Midstream Office			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/socar-midstream-office/" aria-label="Read more about Socar Midstream Office" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-489 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/intercontinental-hotel-baku/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="1000" height="500" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201000%20500'%3E%3C/svg%3E" class="attachment-full size-full wp-image-500" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1.webp 1000w, /wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1-300x150.webp 300w, /wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1-768x384.webp 768w" data-lazy-sizes="(max-width: 1000px) 100vw, 1000px" data-lazy-src="/wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1.webp" /><noscript><img loading="lazy" decoding="async" width="1000" height="500" src="/wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1.webp" class="attachment-full size-full wp-image-500" alt="" srcset="/wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1.webp 1000w, /wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1-300x150.webp 300w, /wp-content/uploads/2025/04/intercontinental-baku-7096431446-2x1-1-768x384.webp 768w" sizes="(max-width: 1000px) 100vw, 1000px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/intercontinental-hotel-baku/" >
-				InterContinental Hotel Baku			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/intercontinental-hotel-baku/" aria-label="Read more about InterContinental Hotel Baku" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-490 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/qalaalti-hotel/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="2048" height="1167" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%202048%201167'%3E%3C/svg%3E" class="attachment-full size-full wp-image-498" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/1563191831.2.jpg 2048w, /wp-content/uploads/2025/04/1563191831.2-300x171.jpg 300w, /wp-content/uploads/2025/04/1563191831.2-1024x584.jpg 1024w, /wp-content/uploads/2025/04/1563191831.2-768x438.jpg 768w, /wp-content/uploads/2025/04/1563191831.2-1536x875.jpg 1536w" data-lazy-sizes="(max-width: 2048px) 100vw, 2048px" data-lazy-src="/wp-content/uploads/2025/04/1563191831.2.jpg" /><noscript><img loading="lazy" decoding="async" width="2048" height="1167" src="/wp-content/uploads/2025/04/1563191831.2.jpg" class="attachment-full size-full wp-image-498" alt="" srcset="/wp-content/uploads/2025/04/1563191831.2.jpg 2048w, /wp-content/uploads/2025/04/1563191831.2-300x171.jpg 300w, /wp-content/uploads/2025/04/1563191831.2-1024x584.jpg 1024w, /wp-content/uploads/2025/04/1563191831.2-768x438.jpg 768w, /wp-content/uploads/2025/04/1563191831.2-1536x875.jpg 1536w" sizes="(max-width: 2048px) 100vw, 2048px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/qalaalti-hotel/" >
-				Qalaalti Hotel			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/qalaalti-hotel/" aria-label="Read more about Qalaalti Hotel" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-487 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/khazar-residence/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="1200" height="1200" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%201200'%3E%3C/svg%3E" class="attachment-full size-full wp-image-494" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/3893-1724920571cfqF6.jpg 1200w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-300x300.jpg 300w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-1024x1024.jpg 1024w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-150x150.jpg 150w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-768x768.jpg 768w" data-lazy-sizes="(max-width: 1200px) 100vw, 1200px" data-lazy-src="/wp-content/uploads/2025/04/3893-1724920571cfqF6.jpg" /><noscript><img loading="lazy" decoding="async" width="1200" height="1200" src="/wp-content/uploads/2025/04/3893-1724920571cfqF6.jpg" class="attachment-full size-full wp-image-494" alt="" srcset="/wp-content/uploads/2025/04/3893-1724920571cfqF6.jpg 1200w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-300x300.jpg 300w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-1024x1024.jpg 1024w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-150x150.jpg 150w, /wp-content/uploads/2025/04/3893-1724920571cfqF6-768x768.jpg 768w" sizes="(max-width: 1200px) 100vw, 1200px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/khazar-residence/" >
-				Khazar Residence			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/khazar-residence/" aria-label="Read more about Khazar Residence" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-488 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/savalan-winers/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="1456" height="492" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201456%20492'%3E%3C/svg%3E" class="attachment-full size-full wp-image-491" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/main_factory_img.webp 1456w, /wp-content/uploads/2025/04/main_factory_img-300x101.webp 300w, /wp-content/uploads/2025/04/main_factory_img-1024x346.webp 1024w, /wp-content/uploads/2025/04/main_factory_img-768x260.webp 768w" data-lazy-sizes="(max-width: 1456px) 100vw, 1456px" data-lazy-src="/wp-content/uploads/2025/04/main_factory_img.webp" /><noscript><img loading="lazy" decoding="async" width="1456" height="492" src="/wp-content/uploads/2025/04/main_factory_img.webp" class="attachment-full size-full wp-image-491" alt="" srcset="/wp-content/uploads/2025/04/main_factory_img.webp 1456w, /wp-content/uploads/2025/04/main_factory_img-300x101.webp 300w, /wp-content/uploads/2025/04/main_factory_img-1024x346.webp 1024w, /wp-content/uploads/2025/04/main_factory_img-768x260.webp 768w" sizes="(max-width: 1456px) 100vw, 1456px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/savalan-winers/" >
-				Savalan Winers			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/savalan-winers/" aria-label="Read more about Savalan Winers" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-484 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/skywell-showroom/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="1440" height="823" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201440%20823'%3E%3C/svg%3E" class="attachment-full size-full wp-image-485" alt="" data-lazy-srcset="/wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n.jpg 1440w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-300x171.jpg 300w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-1024x585.jpg 1024w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-768x439.jpg 768w" data-lazy-sizes="(max-width: 1440px) 100vw, 1440px" data-lazy-src="/wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n.jpg" /><noscript><img loading="lazy" decoding="async" width="1440" height="823" src="/wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n.jpg" class="attachment-full size-full wp-image-485" alt="" srcset="/wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n.jpg 1440w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-300x171.jpg 300w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-1024x585.jpg 1024w, /wp-content/uploads/2025/04/363004021_17898058946839303_1293916128108342644_n-768x439.jpg 768w" sizes="(max-width: 1440px) 100vw, 1440px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/skywell-showroom/" >
-				Skywell Showroom			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/skywell-showroom/" aria-label="Read more about Skywell Showroom" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				<article class="elementor-post elementor-grid-item post-91 post type-post status-publish format-standard has-post-thumbnail hentry category-layiler">
-				<a class="elementor-post__thumbnail__link" href="/the-pool-house/" tabindex="-1" >
-			<div class="elementor-post__thumbnail"><img decoding="async" width="2000" height="1000" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%202000%201000'%3E%3C/svg%3E" class="attachment-full size-full wp-image-466" alt="" data-lazy-srcset="/wp-content/uploads/2025/03/204119242.webp 2000w, /wp-content/uploads/2025/03/204119242-300x150.webp 300w, /wp-content/uploads/2025/03/204119242-1024x512.webp 1024w, /wp-content/uploads/2025/03/204119242-768x384.webp 768w, /wp-content/uploads/2025/03/204119242-1536x768.webp 1536w" data-lazy-sizes="(max-width: 2000px) 100vw, 2000px" data-lazy-src="/wp-content/uploads/2025/03/204119242.webp" /><noscript><img loading="lazy" decoding="async" width="2000" height="1000" src="/wp-content/uploads/2025/03/204119242.webp" class="attachment-full size-full wp-image-466" alt="" srcset="/wp-content/uploads/2025/03/204119242.webp 2000w, /wp-content/uploads/2025/03/204119242-300x150.webp 300w, /wp-content/uploads/2025/03/204119242-1024x512.webp 1024w, /wp-content/uploads/2025/03/204119242-768x384.webp 768w, /wp-content/uploads/2025/03/204119242-1536x768.webp 1536w" sizes="(max-width: 2000px) 100vw, 2000px" /></noscript></div>
-		</a>
-				<div class="elementor-post__text">
-				<h3 class="elementor-post__title">
-			<a href="/the-pool-house/" >
-				Badamdar hotel			</a>
-		</h3>
-		
-		<a class="elementor-post__read-more" href="/the-pool-house/" aria-label="Read more about Badamdar hotel" tabindex="-1" >
-			Property Details		</a>
-
-				</div>
-				</article>
-				</div>
+							<?php
+$__per = 18;
+$__pg = max(1, (int)($_GET['pg'] ?? 1));
+$__total = site_projects_count();
+$__pages = max(1, (int)ceil($__total / $__per));
+if ($__pg > $__pages) $__pg = $__pages;
+$__rows = site_projects($__per, ($__pg - 1) * $__per);
+?>
+<div class="elementor-posts-container elementor-posts elementor-posts--skin-classic elementor-grid">
+<?php foreach ($__rows as $__pr): $__pu = '/' . $__pr['slug'] . '/'; ?>
+	<article class="elementor-post elementor-grid-item">
+		<a class="elementor-post__thumbnail__link" href="<?php echo esc_html($__pu); ?>" tabindex="-1"><div class="elementor-post__thumbnail"><?php if (!empty($__pr['cover'])): ?><img src="<?php echo esc_html($__pr['cover']); ?>" loading="lazy" alt="<?php echo esc_html($__pr['title']); ?>" style="width:100%;height:230px;object-fit:cover"><?php endif; ?></div></a>
+		<div class="elementor-post__text">
+			<h3 class="elementor-post__title"><a href="<?php echo esc_html($__pu); ?>"><?php echo esc_html($__pr['title']); ?></a></h3>
+			<a class="elementor-post__read-more" href="<?php echo esc_html($__pu); ?>">Ətraflı</a>
+		</div>
+	</article>
+<?php endforeach; ?>
+</div>
+<?php if ($__pages > 1): ?>
+<nav class="proj-pagination">
+<?php for ($__i = 1; $__i <= $__pages; $__i++): ?>
+<?php if ($__i === $__pg): ?><span class="cur"><?php echo $__i; ?></span>
+<?php else: ?><a href="/layiheler/?pg=<?php echo $__i; ?>"><?php echo $__i; ?></a><?php endif; ?>
+<?php endfor; ?>
+</nav>
+<?php endif; ?>
 		
 						</div>
 				</div>

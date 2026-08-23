@@ -24,6 +24,32 @@ function add_col(PDO $db, callable $log, string $t, string $c, string $d): void 
 $log('projects columns:');
 add_col($db, $log, 'projects', 'video', 'VARCHAR(500) NULL');
 
+$log('partners columns:');
+add_col($db, $log, 'partners', 'visible', 'TINYINT DEFAULT 1');
+
+// seed partners from the original carousel logos (only when the table is empty)
+$pc = (int)$db->query("SELECT COUNT(*) c FROM partners")->fetch()['c'];
+if ($pc === 0) {
+    $logos = ['/wp-content/uploads/2025/03/Picture18.png','/wp-content/uploads/2025/03/Screenshot_6.png',
+      '/wp-content/uploads/2025/03/Picture9.jpg.webp','/wp-content/uploads/2025/03/Picture4.png.webp',
+      '/wp-content/uploads/2025/03/Picture5.jpg','/wp-content/uploads/2025/03/Picture6.png.webp',
+      '/wp-content/uploads/2025/03/Picture7.png','/wp-content/uploads/2025/03/Picture8.png.webp',
+      '/wp-content/uploads/2025/03/Picture10.png.webp','/wp-content/uploads/2025/03/Picture11.png',
+      '/wp-content/uploads/2025/03/Picture12.png','/wp-content/uploads/2025/03/Picture13.png',
+      '/wp-content/uploads/2025/03/Picture14.png','/wp-content/uploads/2025/03/Picture15.png.webp',
+      '/wp-content/uploads/2025/03/Picture16.png','/wp-content/uploads/2025/03/Picture17.png'];
+    $ip = $db->prepare("INSERT INTO partners (name,image,url,sort,visible) VALUES (?,?,?,?,1)");
+    foreach ($logos as $i => $u) $ip->execute(['Partnyor ' . ($i + 1), $u, '', $i]);
+    $log('✓ partners seeded (16 logos from the original carousel)');
+} else $log("· partners table already has $pc rows");
+
+// settings + contacts keys for SEO panel / WhatsApp / named socials
+$is2 = $db->prepare("INSERT IGNORE INTO settings (k,v) VALUES (?,?)");
+foreach (['notify_email'=>'info@ceng.az','search_visible'=>'1','og_image'=>''] as $k=>$v) $is2->execute([$k,$v]);
+$ic2 = $db->prepare("INSERT IGNORE INTO contacts (k,v) VALUES (?,?)");
+foreach (['whatsapp'=>'','soc_linkedin'=>'','soc_instagram'=>'','soc_facebook'=>'','soc_youtube'=>'','soc_x'=>''] as $k=>$v) $ic2->execute([$k,$v]);
+$log('✓ settings/contacts keys ensured');
+
 /* re-seed covers + SEO if still empty (safe) */
 $covers = [
  'bine-stadium'=>'/wp-content/uploads/2025/04/img_22141_slide2.jpg','bakcell-arena'=>'/wp-content/uploads/2025/04/160634_bn12v7ezit.jpg',
