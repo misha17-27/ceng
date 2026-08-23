@@ -105,3 +105,18 @@ function apply_search_visibility(): void {
     } catch (Throwable $e) {}
 }
 apply_search_visibility();
+
+/* Per-page SEO (title/description) from the seo_pages table, with fallbacks. */
+function page_seo(string $slug, string $defTitle, string $defDescr = ''): array {
+    $out = ['title' => $defTitle, 'descr' => $defDescr];
+    $pdo = _site_pdo();
+    if ($pdo) { try {
+        $st = $pdo->prepare('SELECT title, descr FROM seo_pages WHERE slug = ? LIMIT 1');
+        $st->execute([$slug]);
+        if ($r = $st->fetch()) {
+            if (trim((string)$r['title']) !== '') $out['title'] = (string)$r['title'];
+            if (trim((string)$r['descr']) !== '') $out['descr'] = (string)$r['descr'];
+        }
+    } catch (Throwable $e) {} }
+    return $out;
+}

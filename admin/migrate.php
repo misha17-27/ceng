@@ -160,4 +160,32 @@ foreach ($texts as $slug => $v) {
 }
 $log("✓ project texts ensured (fields filled: $n)");
 
+// Page SEO (title + description, AZ). Title is upgraded only while it still
+// carries the auto default "X - Ceng.az"; description fills only when empty.
+$pageSeo = [
+ '/' => ['CENG — Tikinti və Mühəndislik Şirkəti | Caspian Engineering Group',
+   'Caspian Engineering Group — Azərbaycanda layihələndirmə, tikinti, mühəndislik sistemləri və avadanlıq təchizatı üzrə kompleks xidmətlər. 50+ uğurlu layihə.'],
+ 'haqqimizda' => ['Haqqımızda — Caspian Engineering Group | CENG',
+   'CENG Azərbaycanın tikinti və mühəndislik bazarında layihələndirici, podratçı və avadanlıq təchizatçısı kimi fəaliyyət göstərən aparıcı şirkətdir.'],
+ 'xidmetlerimiz' => ['Xidmətlərimiz — layihələndirmə, tikinti, mühəndislik | CENG',
+   'Layihələndirmə, tikinti-quraşdırma, mühəndislik sistemləri, xüsusi torpaq işləri və sənaye avadanlığının təchizatı — CENG-in kompleks xidmətləri.'],
+ 'layiheler' => ['Layihələr — CENG portfoliosu | Caspian Engineering Group',
+   'CENG-in həyata keçirdiyi layihələr: stadionlar, otellər, yaşayış kompleksləri və sənaye obyektləri. Portfolio ilə tanış olun.'],
+ 'elaqe' => ['Əlaqə — CENG | Caspian Engineering Group',
+   'CENG ilə əlaqə: telefon, e-mail və ünvan. Layihəniz üçün bizimlə əlaqə saxlayın — kompleks tikinti və mühəndislik həlləri təklif edirik.'],
+];
+$selP = $db->prepare("SELECT title, descr FROM seo_pages WHERE slug=?");
+$updT = $db->prepare("UPDATE seo_pages SET title=? WHERE slug=?");
+$updDs = $db->prepare("UPDATE seo_pages SET descr=? WHERE slug=?");
+$insP = $db->prepare("INSERT IGNORE INTO seo_pages (slug,title,descr) VALUES (?,?,?)");
+$np = 0;
+foreach ($pageSeo as $slug => $v) {
+    $selP->execute([$slug]); $cur = $selP->fetch();
+    if (!$cur) { $insP->execute([$slug, $v[0], $v[1]]); $np += 2; continue; }
+    $t0 = trim((string)$cur['title']);
+    if ($t0 === '' || preg_match('/ - Ceng\.az$/u', $t0)) { $updT->execute([$v[0], $slug]); $np++; }
+    if (trim((string)$cur['descr']) === '') { $updDs->execute([$v[1], $slug]); $np++; }
+}
+$log("✓ page SEO ensured (fields filled: $np)");
+
 $log("\nDONE. Re-runnable. Do NOT delete from the repo (token-protected).");

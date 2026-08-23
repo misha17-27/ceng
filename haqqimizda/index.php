@@ -11,7 +11,8 @@
 <link rel="alternate" hreflang="x-default" href="/haqqimizda/" />
 
 	<!-- This site is optimized with the Yoast SEO Premium plugin v24.8 (Yoast SEO v24.8) - https://yoast.com/wordpress/plugins/seo/ -->
-	<title>Haqqımızda - Ceng.az</title>
+	<?php $__seo = page_seo('haqqimizda', 'Haqqımızda - Ceng.az'); ?><title><?php echo esc_html($__seo['title']); ?></title>
+	<meta name="description" content="<?php echo esc_html($__seo['descr']); ?>" />
 	<link rel="canonical" href="/haqqimizda/" />
 	<meta property="og:locale" content="az_AZ" />
 	<meta property="og:type" content="article" />
