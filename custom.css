@@ -38,6 +38,14 @@ img, iframe, video, .swiper { max-width: 100%; }
 .proj-pagination a:hover { background: #eef2f7; }
 .proj-pagination .cur { background: #011640; color: #fff; border-color: #011640; }
 
+/* Footer social icons (BİZİMLƏ ƏLAQƏ block) */
+.footer-socials { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.footer-socials a { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.28); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+.footer-socials a:hover { background: #ef7f1a; border-color: #ef7f1a; transform: translateY(-2px); }
+.footer-socials svg { width: 19px; height: 19px; display: block; }
+
 /* Floating WhatsApp button */
 #wa-float { position: fixed; right: 22px; bottom: 22px; z-index: 9980; width: 56px; height: 56px;
   border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center;

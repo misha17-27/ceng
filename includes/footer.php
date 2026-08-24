@@ -68,6 +68,29 @@
 										<span class="elementor-icon-list-text">Ünvan: <?php echo esc_html($C['address']); ?></span>
 									</li>
 						</ul>
+<?php
+/* Social icons under the contacts block: render only networks with a URL set
+   in admin -> Контакты и соцсети (plus WhatsApp when the number is set). */
+$__ficons = [
+ 'LinkedIn'  => ['soc_linkedin',  '<path fill="currentColor" d="M6.5 8.5H3.8V20h2.7zM5.1 3.5a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM20.2 20h-2.7v-5.7c0-1.4-.5-2.3-1.7-2.3-1 0-1.5.7-1.7 1.3-.1.2-.1.6-.1.9V20h-2.7V8.5h2.7v1.2c.4-.6 1.1-1.4 2.7-1.4 2 0 3.5 1.3 3.5 4.1z"/>'],
+ 'Instagram' => ['soc_instagram', '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/>'],
+ 'Facebook'  => ['soc_facebook',  '<path fill="currentColor" d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2-.1-2.1 0-3.5 1.3-3.5 3.6V11H8.5v3h2.4v7z"/>'],
+ 'YouTube'   => ['soc_youtube',   '<rect x="2.5" y="6" width="19" height="12" rx="3.5" fill="currentColor"/><polygon points="10,9.3 15.6,12 10,14.7" fill="#011640"/>'],
+ 'X'         => ['soc_x',         '<path fill="currentColor" d="M4 4l6.2 8L4 20h2.4l5-6.3L16.2 20H20l-6.6-8.5L19.6 4h-2.4l-4.5 5.7L7.8 4z"/>'],
+];
+$__frow = '';
+foreach ($__ficons as $__fn => $__fi) {
+    $__fu = trim((string)($C[$__fi[0]] ?? ''));
+    if ($__fu === '' || $__fu === '#') continue;
+    if (!preg_match('~^https?://~', $__fu)) $__fu = 'https://' . $__fu;
+    $__frow .= '<a href="' . esc_html($__fu) . '" target="_blank" rel="noopener" aria-label="' . $__fn . '" title="' . $__fn . '"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' . $__fi[1] . '</svg></a>';
+}
+$__fwa = preg_replace('/[^0-9]/', '', (string)($C['whatsapp'] ?? ''));
+if ($__fwa !== '') {
+    $__frow .= '<a href="https://wa.me/' . $__fwa . '" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 29l8.2-1.5c1.2.5 2.5.8 3.8.8 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-1.2 0-2.4-.3-3.5-.8l-.6-.3-4.9.9 1-4.7-.4-.6c-1-1.6-1.5-3.4-1.5-5.3 0-5.5 4.4-9.9 9.9-9.9s9.9 4.4 9.9 9.9-4.4 9.8-9.9 9.8zm5.4-7.4c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.2.2 2.3 3.6 5.6 5 .8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.8-.7 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.4z"/></svg></a>';
+}
+if ($__frow !== '') echo '<div class="footer-socials">' . $__frow . '</div>';
+?>
 						</div>
 				</div>
 				</div>
