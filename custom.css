@@ -120,7 +120,7 @@ img, iframe, video, .swiper { max-width: 100%; }
     width: 100vw !important; height: 100vh !important; height: 100dvh !important;
     max-height: 100dvh !important; background: #fff !important; z-index: 9990 !important;
     display: flex !important; flex-direction: column !important;
-    padding: 84px 20px 24px !important; overflow-y: auto !important; border: 0 !important;
+    padding: 26px 20px 24px !important; overflow-y: auto !important; border: 0 !important;
   }
   body.mobmenu-open .elementor-location-header .elementor-nav-menu--dropdown .elementor-nav-menu { width: 100%; }
   body.mobmenu-open .elementor-location-header .elementor-nav-menu--dropdown .elementor-item {
@@ -130,14 +130,14 @@ img, iframe, video, .swiper { max-width: 100%; }
   header.elementor-location-header { position: relative; z-index: 9995; }
   .elementor-menu-toggle { z-index: 9996; position: relative; }
   /* logo at the top of the open menu */
-  body.mobmenu-open #mob-logo { display: block; margin: 0 auto 18px; max-height: 46px; max-width: 180px; }
+  body.mobmenu-open #mob-logo { display: block; margin: 4px auto 28px; max-height: 54px; max-width: 200px; }
   /* socials pinned to the bottom of the open menu (round icons) */
   #mob-socials { margin-top: auto; display: flex; gap: 14px; justify-content: center;
     align-items: center; padding: 22px 0 6px; flex-wrap: wrap; }
-  #mob-socials a { width: 44px; height: 44px; border: 1px solid rgba(1,22,64,.25); border-radius: 50%;
+  #mob-socials a { width: 50px; height: 50px; border: 1.5px solid rgba(1,22,64,.3); border-radius: 50%;
     display: inline-flex; align-items: center; justify-content: center; color: #011640; text-decoration: none;
     transition: background .2s ease, border-color .2s ease, color .2s ease; }
   #mob-socials a:hover { background: #ef7f1a; border-color: #ef7f1a; color: #fff; }
-  #mob-socials svg { width: 20px; height: 20px; display: block; }
+  #mob-socials svg { width: 26px; height: 26px; display: block; shape-rendering: geometricPrecision; }
 }
 
