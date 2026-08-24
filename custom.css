@@ -39,9 +39,11 @@ img, iframe, video, .swiper { max-width: 100%; }
 .proj-pagination .cur { background: #011640; color: #fff; border-color: #011640; }
 
 /* Footer social icons (BİZİMLƏ ƏLAQƏ block) */
-.footer-socials { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-.footer-socials a { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.28); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; color: #fff;
+.footer-socials { display: flex !important; flex-direction: row !important; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.footer-socials a { width: 40px !important; max-width: 40px !important; min-width: 40px;
+  height: 40px !important; flex: 0 0 40px !important;
+  border: 1px solid rgba(255,255,255,.28); border-radius: 50%;
+  display: inline-flex !important; align-items: center; justify-content: center; color: #fff;
   transition: background .2s ease, border-color .2s ease, transform .2s ease; }
 .footer-socials a:hover { background: #ef7f1a; border-color: #ef7f1a; transform: translateY(-2px); }
 .footer-socials svg { width: 19px; height: 19px; display: block; }

@@ -114,7 +114,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 <noscript>
 <style id="wpr-lazyload-bg-nostyle"></style>
 </noscript>
-<script type="application/javascript">const rocket_pairs = []; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=18">
+<script type="application/javascript">const rocket_pairs = []; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=19">
 </head>
 <body class="page-template page-template-elementor_header_footer page page-id-50 wp-custom-logo wp-embed-responsive theme-default elementor-default elementor-template-full-width elementor-kit-13 elementor-page elementor-page-50">
 
