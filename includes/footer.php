@@ -121,7 +121,7 @@ if ($__soc !== '') echo '<div id="mob-socials" style="display:none">'.$__soc.'</
 <script>
 (function () {
   var toggle = document.querySelector('.elementor-menu-toggle');
-  var dd = document.querySelector('.elementor-nav-menu--dropdown');
+  var dd = document.querySelector('.elementor-location-header .elementor-nav-menu--dropdown');
   if (!toggle || !dd) return;
   if (!document.getElementById('mob-logo')) {
     var lg = document.createElement('img');
@@ -139,6 +139,7 @@ if ($__soc !== '') echo '<div id="mob-socials" style="display:none">'.$__soc.'</
   document.addEventListener('click', function (e) {
     if (e.target.closest('.elementor-nav-menu--dropdown .elementor-item')) {
       document.body.classList.remove('mobmenu-open');
+      if (soc) soc.style.display = 'none';
     }
   });
 })();

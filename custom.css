@@ -99,18 +99,21 @@ img, iframe, video, .swiper { max-width: 100%; }
   .elementor-element-8bceabb .elementor-counter-title { font-size: 10px !important; line-height: 1.2 !important; text-align: center !important; }
 }
 
+/* The footer nav widget ships a hidden dropdown copy of the menu; never show it */
+.elementor-location-footer .elementor-nav-menu--dropdown { display: none !important; }
+
 /* Full-screen mobile menu popup (menu on top, socials at the bottom) */
 @media (max-width: 1024px) {
   body.mobmenu-open { overflow: hidden; }
-  body.mobmenu-open .elementor-nav-menu--dropdown {
+  body.mobmenu-open .elementor-location-header .elementor-nav-menu--dropdown {
     position: fixed !important; left: 0 !important; top: 0 !important;
     width: 100vw !important; height: 100vh !important; height: 100dvh !important;
     max-height: 100dvh !important; background: #fff !important; z-index: 9990 !important;
     display: flex !important; flex-direction: column !important;
     padding: 84px 20px 24px !important; overflow-y: auto !important; border: 0 !important;
   }
-  body.mobmenu-open .elementor-nav-menu--dropdown .elementor-nav-menu { width: 100%; }
-  body.mobmenu-open .elementor-nav-menu--dropdown .elementor-item {
+  body.mobmenu-open .elementor-location-header .elementor-nav-menu--dropdown .elementor-nav-menu { width: 100%; }
+  body.mobmenu-open .elementor-location-header .elementor-nav-menu--dropdown .elementor-item {
     text-align: center !important; font-size: 20px !important; padding: 18px 0 !important;
   }
   /* keep the header (logo + close X) above the overlay */
