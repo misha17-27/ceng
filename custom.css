@@ -71,6 +71,11 @@ img, iframe, video, .swiper { max-width: 100%; }
 .elementor-widget-image-carousel .swiper-pagination,
 .elementor-widget-image-carousel .elementor-swiper-button { display: none !important; }
 
+/* Decorative corner icon on /layiheler/ lands on the first card's title on small screens */
+@media (max-width: 1024px) {
+  .elementor-element-862ef42 { display: none !important; }
+}
+
 /* Mobile (<=767px) */
 @media (max-width: 767px) {
   /* Projects grid: 1 per row on phones, image fits the card, 18px title */
