@@ -1,9 +1,9 @@
 ---
 deployment:
   tasks:
-    # Deploy into the yeni.ceng.az subdomain document root.
-    # (Adjust DEPLOYPATH if you set a different document root when creating the subdomain.)
-    - export DEPLOYPATH=/home/ceng/yeni.ceng.az/
+    # Deploy into the MAIN domain document root (ceng.az).
+    # Uses cp (no delete), so it overlays files without touching anything else.
+    - export DEPLOYPATH=/home/ceng/public_html/
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/cp -R * $DEPLOYPATH
     - /bin/cp -f .htaccess $DEPLOYPATH

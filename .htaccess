@@ -13,6 +13,11 @@ RedirectMatch 404 /\.git
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # www -> apex (301), main domain only
+  RewriteCond %{HTTP_HOST} ^www\.ceng\.az$ [NC]
+  RewriteRule ^(.*)$ https://ceng.az/$1 [R=301,L]
+
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]

@@ -388,7 +388,8 @@ elseif ($section === 'pages') {
         else {
             $url = $mkurl($pg['slug']);
             echo '<form method="post" enctype="multipart/form-data" class="panel">'.csrf_field().'<input type="hidden" name="action" value="save"><input type="hidden" name="slug" value="'.e($pg['slug']).'">';
-            echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: https://yeni.ceng.az'.e($url).'</p>';
+            $__host = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'ceng.az');
+            echo '<h3>Редактировать: '.e($pg['title']).'</h3><p class="muted">Permalink: <a href="'.e($url).'" target="_blank" style="color:#1b4b8f">'.e($__host.$url).'</a></p>';
             echo '<label>Заголовок / пункт меню</label><input type="text" name="title" value="'.e($pg['title']).'">';
             $fields = PAGE_FIELDS[$pg['slug']] ?? [];
             if ($fields) {
