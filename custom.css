@@ -22,8 +22,8 @@ img, iframe, video, .swiper { max-width: 100%; }
 .proj-lead { font-size: 19px; line-height: 1.55; font-weight: 600; color: #011640; max-width: 900px; margin: 0; }
 .proj-content { font-size: 16px; line-height: 1.7; color: #12211d; max-width: 900px; }
 .proj-content p { margin: 0 0 14px; }
-.proj-scope { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; max-width: 900px; }
-.proj-scope li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.5; }
+.proj-scope { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; max-width: 900px; text-align: left; }
+.proj-scope li { position: relative; padding-left: 26px; font-size: 15px; line-height: 1.5; text-align: left; }
 .proj-scope li::before { content: ''; position: absolute; left: 0; top: 6px; width: 12px; height: 12px;
   background: #ef7f1a; border-radius: 3px; }
 @media (max-width: 767px) {
