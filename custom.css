@@ -10,6 +10,13 @@ img, iframe, video, .swiper { max-width: 100%; }
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
+/* Project CTA cover: keep the background centered and covering, whatever lazyload injects */
+.elementor-element-575eedd {
+  background-position: center center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
 /* Dynamic project pages */
 .proj-body { display: flex; flex-direction: column; gap: 28px; padding: 10px 0 30px; }
 .proj-video-wrap { text-align: center; }
