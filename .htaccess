@@ -6,6 +6,27 @@ AddDefaultCharset UTF-8
 # Deny access to version-control metadata if present
 RedirectMatch 404 /\.git
 
+# Never serve sensitive PHP config directly
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "db.php">
+  Require all denied
+</Files>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  # long immutable cache for static assets
+  <FilesMatch "\.(css|js|webp|png|jpe?g|gif|svg|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
 # IMPORTANT: having RewriteEngine On in this subfolder stops Apache from
 # inheriting the parent WordPress .htaccess rewrite rules, which otherwise
 # catch every /* request and return WordPress's 404 page.
@@ -21,6 +42,9 @@ RedirectMatch 404 /\.git
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
+
+  # Dynamic sitemap
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
   # Projects created in the admin panel (no static folder): /my-project/ -> project-view.php
   RewriteRule ^([a-z0-9-]+)/?$ project-view.php?slug=$1 [L,QSA]

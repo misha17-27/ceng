@@ -1,0 +1,6 @@
+# Uploaded files are static media only — never execute scripts here.
+<FilesMatch "\.(php|phtml|php[0-9]|pl|py|cgi|sh)$">
+  Require all denied
+</FilesMatch>
+RemoveHandler .php .phtml
+RemoveType .php

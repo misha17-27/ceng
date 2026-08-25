@@ -22,9 +22,11 @@ if ($section === 'login') {
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         csrf_check();
         require_once __DIR__ . '/turnstile.php';
-        if (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) $err = 'Подтвердите, что вы не робот.';
-        elseif (attempt_login($_POST['email'] ?? '', $_POST['password'] ?? '')) redirect('index.php');
-        else $err = 'Неверный e-mail или пароль.';
+        $__ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        if (login_locked($__ip)) $err = 'Слишком много попыток входа. Попробуйте через 15 минут.';
+        elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) $err = 'Подтвердите, что вы не робот.';
+        elseif (attempt_login($_POST['email'] ?? '', $_POST['password'] ?? '')) { login_ok($__ip); redirect('index.php'); }
+        else { login_fail($__ip); $err = 'Неверный e-mail или пароль.'; }
     }
     ob_start();
     echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход — CENG admin</title><style>'.admin_css().'</style></head><body>';
@@ -653,6 +655,8 @@ function admin_move(string $tmp, string $name): ?string {
     $ext  = strtolower(pathinfo($name, PATHINFO_EXTENSION));
     if (!in_array($ext, ['jpg','jpeg','png','webp','gif','svg','mp4','webm','ogg','mov'])) return null;
     if (!is_uploaded_file($tmp)) return null;
+    // raster images must really be images (rejects renamed scripts)
+    if (in_array($ext, ['jpg','jpeg','png','webp','gif']) && @getimagesize($tmp) === false) return null;
     $name = time() . '_' . $name;
     return move_uploaded_file($tmp, "$dir/$name") ? '/wp-content/uploads/admin/' . $name : null;
 }

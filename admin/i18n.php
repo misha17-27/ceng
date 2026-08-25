@@ -28,6 +28,7 @@ function i18n_switcher(): string {
 
 function i18n_dict(string $lang): array {
     if ($lang === 'az') return [
+        'Слишком много попыток входа. Попробуйте через 15 минут.' => 'Həddindən çox cəhd. 15 dəqiqədən sonra yenidən yoxlayın.',
         'Постоянная ссылка:' => 'Daimi keçid:', 'авто из названия' => 'addan avtomatik',
         'ОСНОВНОЕ' => 'ƏSAS', 'КОНТЕНТ' => 'MƏZMUN', 'НАСТРОЙКИ' => 'AYARLAR',
         'Обзор' => 'İcmal', 'Тексты сайта' => 'Sayt mətnləri', 'Страницы' => 'Səhifələr', 'Услуги' => 'Xidmətlər',
@@ -124,6 +125,7 @@ function i18n_dict(string $lang): array {
         'призыв (нижний блок)' => 'çağırış (aşağı blok)', 'текст' => 'mətn', 'фото' => 'şəkil',
     ];
     return [
+        'Слишком много попыток входа. Попробуйте через 15 минут.' => 'Too many login attempts. Try again in 15 minutes.',
         'Постоянная ссылка:' => 'Permalink:', 'авто из названия' => 'auto from the name',
         'ОСНОВНОЕ' => 'MAIN', 'КОНТЕНТ' => 'CONTENT', 'НАСТРОЙКИ' => 'SETTINGS',
         'Обзор' => 'Overview', 'Тексты сайта' => 'Site texts', 'Страницы' => 'Pages', 'Услуги' => 'Services',

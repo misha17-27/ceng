@@ -21,6 +21,12 @@ function add_col(PDO $db, callable $log, string $t, string $c, string $d): void 
     else $log("  · $t.$c ok");
 }
 
+$db->exec("CREATE TABLE IF NOT EXISTS login_throttle (
+  ip VARCHAR(64) PRIMARY KEY, fails INT DEFAULT 0,
+  locked_until DATETIME NULL, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$log('✓ login_throttle table');
+
 $log('projects columns:');
 add_col($db, $log, 'projects', 'video', 'VARCHAR(500) NULL');
 

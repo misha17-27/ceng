@@ -74,6 +74,25 @@ function attempt_login(string $email, string $pass): bool {
     }
     return false;
 }
+/* Login throttling: 10 fails per IP -> 15-minute lockout. No-ops if the table is absent. */
+function login_locked(string $ip): bool {
+    try {
+        $st = pdo()->prepare('SELECT locked_until FROM login_throttle WHERE ip=?');
+        $st->execute([$ip]); $r = $st->fetch();
+        return $r && $r['locked_until'] !== null && strtotime((string)$r['locked_until']) > time();
+    } catch (Throwable $e) { return false; }
+}
+function login_fail(string $ip): void {
+    try {
+        pdo()->prepare('INSERT INTO login_throttle (ip, fails) VALUES (?,1)
+            ON DUPLICATE KEY UPDATE fails = fails + 1,
+            locked_until = IF(fails + 1 >= 10, DATE_ADD(NOW(), INTERVAL 15 MINUTE), locked_until)')->execute([$ip]);
+    } catch (Throwable $e) {}
+}
+function login_ok(string $ip): void {
+    try { pdo()->prepare('DELETE FROM login_throttle WHERE ip=?')->execute([$ip]); } catch (Throwable $e) {}
+}
+
 function is_admin(): bool { $a = current_admin(); return ($a['role'] ?? 'admin') === 'admin'; }
 function require_admin(): void { require_login(); if (!is_admin()) { flash('Недостаточно прав (нужна роль Администратор).','err'); redirect('index.php?section=overview'); } }
 function logout(): void { boot_session(); $_SESSION = []; session_destroy(); }

@@ -130,7 +130,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-d0662b6 e-con-full e-flex e-con e-child" data-id="d0662b6" data-element_type="container">
 				<div class="elementor-element elementor-element-3860b13 elementor-widget elementor-widget-heading" data-id="3860b13" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">Layihələr</h2>				</div>
+					<h1 class="elementor-heading-title elementor-size-default">Layihələr</h1>				</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-cd4e90b e-con-full e-flex e-con e-child" data-id="cd4e90b" data-element_type="container">

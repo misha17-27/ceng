@@ -9,19 +9,29 @@ if (is_file($tsfile)) {
     if (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) { header('Location: /elaqe/?captcha=1#contact'); exit; }
 }
 
+// Honeypot: the hidden "website" field is invisible to humans; bots fill it.
+// Pretend success so the bot learns nothing.
+if (trim((string)($_POST['website'] ?? '')) !== '') { header('Location: /elaqe/?sent=1#contact'); exit; }
+
 $f     = isset($_POST['form_fields']) && is_array($_POST['form_fields']) ? $_POST['form_fields'] : array();
-$name  = isset($f['email'])         ? trim($f['email'])         : '';   // "Ad" field (original key)
-$phone = isset($f['field_6f7b0a2']) ? trim($f['field_6f7b0a2']) : '';
-$email = isset($f['field_ded525d']) ? trim($f['field_ded525d']) : '';
-$msg   = isset($f['field_e389c4e']) ? trim($f['field_e389c4e']) : '';
+$clean = function ($v, int $max) { return mb_substr(str_replace(array("\r", "\n"), ' ', trim((string)$v)), 0, $max); };
+$name  = $clean($f['email']         ?? '', 200);   // "Ad" field (original key)
+$phone = $clean($f['field_6f7b0a2'] ?? '', 60);
+$email = $clean($f['field_ded525d'] ?? '', 190);
+$msg   = mb_substr(trim((string)($f['field_e389c4e'] ?? '')), 0, 5000);
 
 // Save the submission to the database (admin panel "Zayavki"), if configured.
 $dbfile = __DIR__ . '/admin/db.php';
 if (is_file($dbfile)) {
     try {
         $pdo = require $dbfile;
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        // Rate limit: max 5 submissions per hour from one IP.
+        $rl = $pdo->prepare('SELECT COUNT(*) c FROM submissions WHERE ip = ? AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+        $rl->execute([$ip]);
+        if ((int)$rl->fetch()['c'] >= 5) { header('Location: /elaqe/?captcha=1#contact'); exit; }
         $st = $pdo->prepare('INSERT INTO submissions (name, phone, email, message, ip, created_at) VALUES (?,?,?,?,?,NOW())');
-        $st->execute([$name, $phone, $email, $msg, $_SERVER['REMOTE_ADDR'] ?? '']);
+        $st->execute([$name, $phone, $email, $msg, $ip]);
     } catch (Throwable $e) { /* ignore, still send mail */ }
 }
 

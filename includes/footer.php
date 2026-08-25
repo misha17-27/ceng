@@ -118,10 +118,9 @@ if ($__frow !== '') echo '<div class="footer-socials">' . $__frow . '</div>';
 <?php
 /* Mobile-menu socials pulled from admin Контакты (soc1..soc4). Hidden container; JS moves it into the open menu. */
 $__soc = '';
-$__dbf = $_SERVER['DOCUMENT_ROOT'] . '/admin/db.php';
-if (is_file($__dbf)) {
+$__p = function_exists('_site_pdo') ? _site_pdo() : null;
+if ($__p) {
     try {
-        $__p = require $__dbf;
         $__r = $__p->query("SELECT k,v FROM contacts")->fetchAll(PDO::FETCH_KEY_PAIR);
         $__soc = $GLOBALS['__soc_row'] ?? '';
         $__wa = preg_replace('/[^0-9]/', '', trim($__r['whatsapp'] ?? ''));

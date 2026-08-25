@@ -156,13 +156,13 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 		<div class="elementor-element elementor-element-5bd1836 e-con-full e-flex e-con e-child" data-id="5bd1836" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 				<div class="elementor-element elementor-element-d45b48a elementor-widget elementor-widget-heading" data-id="d45b48a" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide2_title','NEVV METT'); ?>
-</h1>				</div>
+					<h2 class="elementor-heading-title elementor-size-default"><?php te('home_slide2_title','NEVV METT'); ?>
+</h2>				</div>
 				</div>
 				<div class="elementor-element elementor-element-60ad796 elementor-widget elementor-widget-heading" data-id="60ad796" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide2_text','Get around by train, bus, car, ferry, cruise ship, bicycle, skis, or sleigh.
-Relax and enjoy yourself!'); ?></h1>				</div>
+					<p class="elementor-heading-title elementor-size-default"><?php te('home_slide2_text','Get around by train, bus, car, ferry, cruise ship, bicycle, skis, or sleigh.
+Relax and enjoy yourself!'); ?></p>				</div>
 				</div>
 				<div class="elementor-element elementor-element-d1f1e2b elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="d1f1e2b" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
@@ -185,13 +185,13 @@ Relax and enjoy yourself!'); ?></h1>				</div>
 		<div class="elementor-element elementor-element-eb37385 e-con-full e-flex e-con e-child" data-id="eb37385" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 				<div class="elementor-element elementor-element-d82523f elementor-widget elementor-widget-heading" data-id="d82523f" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide3_title','LAKELAND ROUTES'); ?>
-</h1>				</div>
+					<h2 class="elementor-heading-title elementor-size-default"><?php te('home_slide3_title','LAKELAND ROUTES'); ?>
+</h2>				</div>
 				</div>
 				<div class="elementor-element elementor-element-c742bde elementor-widget elementor-widget-heading" data-id="c742bde" data-element_type="widget" data-widget_type="heading.default">
 				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default"><?php te('home_slide3_text','Explore Helsinki and the Finnish lake on an unforgettable road trip alone or with your loved ones.'); ?>
-</h1>				</div>
+					<p class="elementor-heading-title elementor-size-default"><?php te('home_slide3_text','Explore Helsinki and the Finnish lake on an unforgettable road trip alone or with your loved ones.'); ?>
+</p>				</div>
 				</div>
 				<div class="elementor-element elementor-element-808e5b3 elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="808e5b3" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
@@ -219,7 +219,7 @@ Relax and enjoy yourself!'); ?></h1>				</div>
 		<div class="elementor-element elementor-element-0b56c05 e-con-full e-flex e-con e-child" data-id="0b56c05" data-element_type="container">
 				<div class="elementor-element elementor-element-6af3777 elementor-widget elementor-widget-image" data-id="6af3777" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="1060" height="1064" src="<?php echo t('img_home_about','/wp-content/uploads/2025/04/3-9.webp'); ?>" class="attachment-full size-full wp-image-334" alt="" style="max-width:100%;height:auto">															</div>
+															<img decoding="async" width="1060" height="1064" src="<?php echo t('img_home_about','/wp-content/uploads/2025/04/3-9.webp'); ?>" class="attachment-full size-full wp-image-334" alt="Caspian Engineering Group — şirkət haqqında" style="max-width:100%;height:auto">															</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-698ac41 e-con-full e-flex e-con e-child" data-id="698ac41" data-element_type="container">
@@ -265,19 +265,19 @@ Relax and enjoy yourself!'); ?></h1>				</div>
 		<div class="elementor-element elementor-element-881af2e e-con-full e-flex e-con e-child" data-id="881af2e" data-element_type="container">
 				<div class="elementor-element elementor-element-71531a0 elementor-widget elementor-widget-image" data-id="71531a0" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="671" height="789" src="<?php echo t('img_home_gal1','/wp-content/uploads/2025/04/1-11-1.webp'); ?>" class="attachment-full size-full wp-image-355" alt="" style="max-width:100%;height:auto">															</div>
+															<img decoding="async" width="671" height="789" src="<?php echo t('img_home_gal1','/wp-content/uploads/2025/04/1-11-1.webp'); ?>" class="attachment-full size-full wp-image-355" alt="CENG layihə qalereyası — foto 1" style="max-width:100%;height:auto">															</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-4dfbcd3 e-con-full e-flex e-con e-child" data-id="4dfbcd3" data-element_type="container">
 				<div class="elementor-element elementor-element-dd3d0f4 elementor-widget elementor-widget-image" data-id="dd3d0f4" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="672" height="906" src="<?php echo t('img_home_gal2','/wp-content/uploads/2025/04/2-10-1.webp'); ?>" class="attachment-full size-full wp-image-356" alt="" style="max-width:100%;height:auto">															</div>
+															<img decoding="async" width="672" height="906" src="<?php echo t('img_home_gal2','/wp-content/uploads/2025/04/2-10-1.webp'); ?>" class="attachment-full size-full wp-image-356" alt="CENG layihə qalereyası — foto 2" style="max-width:100%;height:auto">															</div>
 				</div>
 				</div>
 		<div class="elementor-element elementor-element-6217418 e-con-full e-flex e-con e-child" data-id="6217418" data-element_type="container">
 				<div class="elementor-element elementor-element-5a8af16 elementor-widget elementor-widget-image" data-id="5a8af16" data-element_type="widget" data-widget_type="image.default">
 				<div class="elementor-widget-container">
-															<img decoding="async" width="671" height="789" src="<?php echo t('img_home_gal3','/wp-content/uploads/2025/04/3-8-1.webp'); ?>" class="attachment-full size-full wp-image-358" alt="" style="max-width:100%;height:auto">															</div>
+															<img decoding="async" width="671" height="789" src="<?php echo t('img_home_gal3','/wp-content/uploads/2025/04/3-8-1.webp'); ?>" class="attachment-full size-full wp-image-358" alt="CENG layihə qalereyası — foto 3" style="max-width:100%;height:auto">															</div>
 				</div>
 				</div>
 					</div>
