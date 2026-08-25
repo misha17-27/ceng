@@ -81,6 +81,29 @@ img, iframe, video, .swiper { max-width: 100%; }
 .elementor-widget-image-carousel .swiper-pagination,
 .elementor-widget-image-carousel .elementor-swiper-button { display: none !important; }
 
+/* Project cards (DB-driven grids): fully self-styled so the old theme card
+   CSS (absolute thumbnails + bottom-pinned text) cannot stretch them */
+.elementor-posts-container.elementor-grid article.elementor-post {
+  display: flex !important; flex-direction: column !important;
+  height: auto !important; min-height: 0 !important;
+  overflow: hidden; background: #fff; border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(1, 22, 64, 0.06);
+}
+.elementor-posts-container.elementor-grid .elementor-post__thumbnail__link {
+  display: block !important; height: auto !important; padding: 0 !important; margin: 0 !important; position: static !important;
+}
+.elementor-posts-container.elementor-grid .elementor-post__thumbnail {
+  height: 240px !important; padding: 0 !important; position: static !important; overflow: hidden;
+}
+.elementor-posts-container.elementor-grid .elementor-post__thumbnail img {
+  width: 100% !important; height: 100% !important; object-fit: cover !important;
+  position: static !important; display: block;
+}
+.elementor-posts-container.elementor-grid .elementor-post__text {
+  margin: 0 !important; padding: 16px 14px 18px !important;
+}
+.elementor-posts-container.elementor-grid .elementor-post__title { margin: 0 0 6px !important; }
+
 /* Decorative corner icon on /layiheler/ lands on the first card's title on small screens */
 @media (max-width: 1024px) {
   .elementor-element-862ef42 { display: none !important; }
