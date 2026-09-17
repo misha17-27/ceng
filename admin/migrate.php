@@ -166,6 +166,19 @@ foreach ($texts as $slug => $v) {
 }
 $log("✓ project texts ensured (fields filled: $n)");
 
+// Button URLs: '#' placeholders (auto-registered on first render) become real
+// links. Only the placeholder is upgraded — hand-entered URLs are kept.
+$btnUrls = [
+ 'home_slide1_btn_url' => '/haqqimizda/',
+ 'home_slide2_btn_url' => '/xidmetlerimiz/',
+ 'home_slide3_btn_url' => '/layiheler/',
+ 'home_about_btn_url'  => '/haqqimizda/',
+];
+$ub = $db->prepare("UPDATE texts SET v=? WHERE k=? AND (v='#' OR v='')");
+$nb = 0;
+foreach ($btnUrls as $k => $v) { $ub->execute([$v, $k]); $nb += $ub->rowCount(); }
+$log("✓ button URLs upgraded from '#' ($nb)");
+
 // Page SEO (title + description, AZ). Title is upgraded only while it still
 // carries the auto default "X - Ceng.az"; description fills only when empty.
 $pageSeo = [

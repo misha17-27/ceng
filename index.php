@@ -138,7 +138,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 				<div class="elementor-element elementor-element-3afbade elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="3afbade" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide1_btn_url','#')); ?>">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide1_btn_url','/haqqimizda/')); ?>">
 						<span class="elementor-button-content-wrapper">
 									<span class="elementor-button-text"><?php te('home_slide1_btn','Daha ətraflı'); ?></span>
 					</span>
@@ -167,7 +167,7 @@ Relax and enjoy yourself!'); ?></p>				</div>
 				<div class="elementor-element elementor-element-d1f1e2b elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="d1f1e2b" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide2_btn_url','#')); ?>">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide2_btn_url','/xidmetlerimiz/')); ?>">
 						<span class="elementor-button-content-wrapper">
 									<span class="elementor-button-text"><?php te('home_slide2_btn','Daha ətraflı'); ?></span>
 					</span>
@@ -196,7 +196,7 @@ Relax and enjoy yourself!'); ?></p>				</div>
 				<div class="elementor-element elementor-element-808e5b3 elementor-tablet-align-center elementor-widget elementor-widget-button" data-id="808e5b3" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide3_btn_url','#')); ?>">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_slide3_btn_url','/layiheler/')); ?>">
 						<span class="elementor-button-content-wrapper">
 									<span class="elementor-button-text"><?php te('home_slide3_btn','Daha ətraflı'); ?></span>
 					</span>
@@ -239,7 +239,7 @@ Relax and enjoy yourself!'); ?></p>				</div>
 				<div class="elementor-element elementor-element-60095c5 elementor-widget elementor-widget-button" data-id="60095c5" data-element_type="widget" data-widget_type="button.default">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_about_btn_url','#')); ?>">
+					<a class="elementor-button elementor-button-link elementor-size-sm" href="<?php echo esc_html(t('home_about_btn_url','/haqqimizda/')); ?>">
 						<span class="elementor-button-content-wrapper">
 						<span class="elementor-button-icon">
 				<svg aria-hidden="true" class="e-font-icon-svg e-fas-angle-double-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"></path></svg>			</span>
