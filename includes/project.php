@@ -134,7 +134,7 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 <noscript>
 <style id="wpr-lazyload-bg-nostyle">.elementor-30 .elementor-element.elementor-element-575eedd:not(.elementor-motion-effects-element-type-background), .elementor-30 .elementor-element.elementor-element-575eedd > .elementor-motion-effects-container > .elementor-motion-effects-layer{--wpr-bg-8a83a789-73ba-4a7e-b49d-d8d6643253a0: url('<?php echo esc_html($P['cover']); ?>');}</style>
 </noscript>
-<script type="application/javascript">const rocket_pairs = [{"selector":".elementor-30 .elementor-element.elementor-element-575eedd:not(.elementor-motion-effects-element-type-background), .elementor-30 .elementor-element.elementor-element-575eedd > .elementor-motion-effects-container > .elementor-motion-effects-layer","style":".elementor-30 .elementor-element.elementor-element-575eedd:not(.elementor-motion-effects-element-type-background), .elementor-30 .elementor-element.elementor-element-575eedd > .elementor-motion-effects-container > .elementor-motion-effects-layer{--wpr-bg-8a83a789-73ba-4a7e-b49d-d8d6643253a0: url('<?php echo str_replace('/', '\\/', esc_html($P['cover'])); ?>');}","hash":"8a83a789-73ba-4a7e-b49d-d8d6643253a0","url":"<?php echo str_replace('/', '\\/', esc_html($P['cover'])); ?>"}]; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=23">
+<script type="application/javascript">const rocket_pairs = [{"selector":".elementor-30 .elementor-element.elementor-element-575eedd:not(.elementor-motion-effects-element-type-background), .elementor-30 .elementor-element.elementor-element-575eedd > .elementor-motion-effects-container > .elementor-motion-effects-layer","style":".elementor-30 .elementor-element.elementor-element-575eedd:not(.elementor-motion-effects-element-type-background), .elementor-30 .elementor-element.elementor-element-575eedd > .elementor-motion-effects-container > .elementor-motion-effects-layer{--wpr-bg-8a83a789-73ba-4a7e-b49d-d8d6643253a0: url('<?php echo str_replace('/', '\\/', esc_html($P['cover'])); ?>');}","hash":"8a83a789-73ba-4a7e-b49d-d8d6643253a0","url":"<?php echo str_replace('/', '\\/', esc_html($P['cover'])); ?>"}]; const rocket_excluded_pairs = [];</script><meta name="generator" content="WP Rocket 3.18.3" data-wpr-features="wpr_lazyload_css_bg_img wpr_minify_js wpr_lazyload_images wpr_minify_css" /><link rel="stylesheet" href="/custom.css?v=24">
 </head>
 <body class="post-template-default single single-post postid-490 single-format-standard wp-custom-logo wp-embed-responsive theme-default elementor-default elementor-kit-13 elementor-page-30">
 
@@ -198,6 +198,68 @@ var wpml_cookies = {"wp-wpml_current_language":{"value":"az","expires":1,"path":
 <?php if (trim(strip_tags((string)$P['content'])) !== ''): ?><div class="proj-content"><?php echo $P['content']; ?></div><?php endif; ?>
 <?php if ($SCOPE): ?><ul class="proj-scope"><?php foreach ($SCOPE as $__s): ?><li><?php echo esc_html($__s); ?></li><?php endforeach; ?></ul><?php endif; ?>
 </div>
+<?php if ($GALLERY): ?>
+<script>
+/* Gallery lightbox: click opens an overlay, arrows / keys / swipe navigate. */
+(function () {
+	var links = Array.prototype.slice.call(document.querySelectorAll('.proj-gallery a'));
+	if (!links.length) return;
+	var srcs = links.map(function (a) { return a.getAttribute('href'); });
+	var alt = <?php echo json_encode($P['title'], JSON_UNESCAPED_UNICODE); ?>;
+	var ov = null, img, count, idx = 0;
+	function build() {
+		ov = document.createElement('div');
+		ov.className = 'plb-overlay';
+		ov.innerHTML = '<button type="button" class="plb-close" aria-label="Bağla">&#10005;</button>' +
+			'<button type="button" class="plb-btn plb-prev" aria-label="Əvvəlki">&#10094;</button>' +
+			'<img alt="">' +
+			'<button type="button" class="plb-btn plb-next" aria-label="Növbəti">&#10095;</button>' +
+			'<div class="plb-count"></div>';
+		document.body.appendChild(ov);
+		img = ov.querySelector('img');
+		img.alt = alt;
+		count = ov.querySelector('.plb-count');
+		ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+		ov.querySelector('.plb-close').addEventListener('click', close);
+		ov.querySelector('.plb-prev').addEventListener('click', function () { show(idx - 1); });
+		ov.querySelector('.plb-next').addEventListener('click', function () { show(idx + 1); });
+		var tx = null;
+		ov.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+		ov.addEventListener('touchend', function (e) {
+			if (tx === null) return;
+			var dx = e.changedTouches[0].clientX - tx; tx = null;
+			if (dx > 40) show(idx - 1); else if (dx < -40) show(idx + 1);
+		}, { passive: true });
+	}
+	function show(i) {
+		idx = (i + srcs.length) % srcs.length;
+		img.src = srcs[idx];
+		count.textContent = (idx + 1) + ' / ' + srcs.length;
+		new Image().src = srcs[(idx + 1) % srcs.length]; // preload the next one
+	}
+	function onKey(e) {
+		if (e.key === 'Escape') close();
+		else if (e.key === 'ArrowLeft') show(idx - 1);
+		else if (e.key === 'ArrowRight') show(idx + 1);
+	}
+	function open(i) {
+		if (!ov) build();
+		show(i);
+		ov.classList.add('open');
+		document.documentElement.style.overflow = 'hidden';
+		document.addEventListener('keydown', onKey);
+	}
+	function close() {
+		ov.classList.remove('open');
+		document.documentElement.style.overflow = '';
+		document.removeEventListener('keydown', onKey);
+	}
+	links.forEach(function (a, i) {
+		a.addEventListener('click', function (e) { e.preventDefault(); open(i); });
+	});
+})();
+</script>
+<?php endif; ?>
 </div>
 				</div>
 				<div class="elementor-element elementor-element-4ca7d20 elementor-widget__width-auto elementor-absolute elementor-view-default elementor-widget elementor-widget-icon" data-id="4ca7d20" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="icon.default">

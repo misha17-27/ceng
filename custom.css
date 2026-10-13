@@ -10,10 +10,10 @@ img, iframe, video, .swiper { max-width: 100%; }
 #mob-logo { display: none; }
 #mob-socials { display: none; }
 
-/* Project CTA cover: keep the background centered and covering, whatever lazyload injects */
+/* Project CTA cover: show the whole photo (no cropping), whatever lazyload injects */
 .elementor-element-575eedd {
   background-position: center center !important;
-  background-size: cover !important;
+  background-size: contain !important;
   background-repeat: no-repeat !important;
 }
 
@@ -37,6 +37,31 @@ img, iframe, video, .swiper { max-width: 100%; }
   .proj-gallery { grid-template-columns: repeat(2, 1fr); }
   .proj-gallery img { height: 140px; }
   .proj-scope { grid-template-columns: 1fr; }
+}
+
+/* Gallery lightbox (project pages) */
+.plb-overlay { position: fixed; inset: 0; z-index: 99999; display: none;
+  align-items: center; justify-content: center; background: rgba(1,10,30,.93);
+  -webkit-tap-highlight-color: transparent; }
+.plb-overlay.open { display: flex; }
+.plb-overlay img { max-width: 92vw; max-height: 86vh; object-fit: contain;
+  border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.5); user-select: none; }
+.plb-btn, .plb-close { border: 0; border-radius: 50%; background: rgba(255,255,255,.14);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease; font-family: inherit; }
+.plb-btn:hover, .plb-close:hover { background: #ef7f1a; }
+.plb-btn { position: absolute; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px; font-size: 24px; }
+.plb-prev { left: 18px; }
+.plb-next { right: 18px; }
+.plb-close { position: absolute; top: 14px; right: 18px; width: 46px; height: 46px; font-size: 20px; }
+.plb-count { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  color: #fff; font-size: 14px; letter-spacing: .5px; opacity: .85; }
+@media (max-width: 767px) {
+  .plb-btn { width: 42px; height: 42px; font-size: 20px; }
+  .plb-prev { left: 8px; }
+  .plb-next { right: 8px; }
+  .plb-overlay img { max-width: 97vw; }
 }
 .proj-pagination { display: flex; gap: 8px; justify-content: center; margin: 34px 0 10px; flex-wrap: wrap; }
 .proj-pagination a, .proj-pagination .cur { min-width: 40px; height: 40px; display: inline-flex; align-items: center;
